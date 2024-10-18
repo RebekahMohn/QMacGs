@@ -338,7 +338,7 @@ for(j in 1:12){
         coord_cartesian(xlim = c(0, NA), ylim=c(0,55),expand = FALSE)#xlim(c(0,NA))
       
       ####Raw d_f in the window
-      dfpoint<-ggplot(data=subset(D_All,chr2==j&windowMid>i-300000&windowMid<i+300000))+
+      dfpoint<-ggplot(data=subset(D_All,chr2==j&windowMid>i-450000&windowMid<i+450000))+
         geom_rect(data=subset(Dmse_highregions_chr,chr2==j),aes(ymin=-1,ymax=1,xmin=windowstart/1000000,xmax=windowend/1000000),fill="darkgray",alpha=.25)+
         geom_rect(mapping=aes(ymin=-1,ymax=1,xmin=(i-250000)/1000000,xmax=(i+250000)/1000000),color="red",fill=NA)+
         coord_cartesian(xlim=c((i-450000)/1000000,(i+450000)/1000000), ylim=c(-1,1),expand = FALSE)+
