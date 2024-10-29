@@ -1,0 +1,13 @@
+#!/bin/bash
+#SBATCH --ntasks=1
+#SBATCH --mem=20G
+#SBATCH -c 20
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=rmohn@mortonarb.org
+
+
+
+#module load bcftools
+module load VCFtools
+vcftools --gzvcf /cwork/ram163/OAK_GENOMES/14_MAPPING/03_CALLED/ALL_LIST.gvcf.gz --keep /hpc/group/manoslab/QMACROCARPA_GENOMES/00a_SUBSETS/SubsetFullSTR.txt --max-alleles 2 --max-missing 0.80 --remove-indels --thin 10000 --plink --out /cwork/ram163/OAK_GENOMES/14_MAPPING/03_CALLED/ALLSTR_LIST_FILTER10000 --temp /scratch
+plink --file /cwork/ram163/OAK_GENOMES/14_MAPPING/03_CALLED/ALLSTR_LIST_FILTER10000 --recode12 --out /cwork/ram163/OAK_GENOMES/14_MAPPING/03_CALLED/ALLSTR_LIST_FILTER10000

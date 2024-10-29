@@ -1,0 +1,34 @@
+#!/bin/bash
+#SBATCH --ntasks=1
+#SBATCH --mem=30G
+#SBATCH -c 40
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=rmohn@mortonarb.org
+#SBATCH -e slurm_%A_%a.err
+#SBATCH -o slurm_%A_%a.out
+#SBATCH --array=6-18
+
+
+### Done else previously 
+## Done in str_prep or str_subset script
+
+
+
+#module load bcftools
+#module load VCFtools
+###vcftools --vcf /cwork/ram163/OAK_GENOMES/14_MAPPING/03_CALLED/ALL_LIST.gvcf.gz --max-alleles 2 --max-missing 0.75 --plink --out /cwork/ram163/OAK_GENOMES/14_MAPPING/03_CALLED/All_LIST.ped --temp /scratch
+###plink --file /cwork/ram163/OAK_GENOMES/14_MAPPING/03_CALLED/ALL_LIST_FILTER.ped --recode12 --out /cwork/ram163/OAK_GENOMES/14_MAPPING/03_CALLED/ALL_LIST_FILTER.ped
+###admixture --cv /cwork/ram163/OAK_GENOMES/14_MAPPING/03_CALLED/All_LIST_FILTER10000.ped ${SLURM_ARRAY_TASK_ID} -j50 | tee log_ALLFILTER_S${SLURM_ARRAY_TASK_ID}.out
+
+
+##vcftools --gzvcf /cwork/ram163/OAK_GENOMES/14_MAPPING/03_CALLED/ALL_LIST.gvcf.gz --keep /hpc/group/manoslab/QMACROCARPA_GENOMES/00a_SUBSETS/SubsetFullSTR.txt --max-alleles 2 --max-missing 0.80 --remove-indels --thin 10000 --plink --out /cwork/ram163/OAK_GENOMES/14_MAPPING/03_CALLED/ALLSTR_LIST_FILTER10000 --temp /scratch
+##plink --file /cwork/ram163/OAK_GENOMES/14_MAPPING/03_CALLED/ALLSTR_LIST_FILTER10000 --recode12 --out /cwork/ram163/OAK_GENOMES/14_MAPPING/03_CALLED/ALLSTR_LIST_FILTER10000
+admixture --cv /cwork/ram163/OAK_GENOMES/14_MAPPING/03_CALLED/ALLSTR_LIST_FILTER10000.ped ${SLURM_ARRAY_TASK_ID} -j40 | tee log_STRFILTER_S${SLURM_ARRAY_TASK_ID}.out
+
+##vcftools --gzvcf /cwork/ram163/OAK_GENOMES/14_MAPPING/03_CALLED/ALL_LIST.gvcf.gz --keep /hpc/group/manoslab/QMACROCARPA_GENOMES/00a_SUBSETS/Subset20Species.txt --max-alleles 2 --max-missing 0.80 --remove-indels --thin 10000 --plink --out /cwork/ram163/OAK_GENOMES/14_MAPPING/03_CALLED/SS20_LIST_FILTER10000 --temp /scratch
+##plink --file /cwork/ram163/OAK_GENOMES/14_MAPPING/03_CALLED/SS20_LIST_FILTER10000 --recode12 --out /cwork/ram163/OAK_GENOMES/14_MAPPING/03_CALLED/SS20_LIST_FILTER10000
+##admixture --cv /cwork/ram163/OAK_GENOMES/14_MAPPING/03_CALLED/SS20_LIST_FILTER10000.ped ${SLURM_ARRAY_TASK_ID} -j40 | tee log_SS20FILTER_S${SLURM_ARRAY_TASK_ID}.out
+
+##vcftools --gzvcf /cwork/ram163/OAK_GENOMES/14_MAPPING/03_CALLED/ALL_LIST.gvcf.gz --keep /hpc/group/manoslab/QMACROCARPA_GENOMES/00a_SUBSETS/Subset10Species.txt --max-alleles 2 --max-missing 0.80 --remove-indels --thin 10000 --plink --out /cwork/ram163/OAK_GENOMES/14_MAPPING/03_CALLED/SS10_LIST_FILTER10000 --temp /scratch
+##plink --file /cwork/ram163/OAK_GENOMES/14_MAPPING/03_CALLED/SS10_LIST_FILTER10000 --recode12 --out /cwork/ram163/OAK_GENOMES/14_MAPPING/03_CALLED/SS10_LIST_FILTER10000
+##admixture --cv /cwork/ram163/OAK_GENOMES/14_MAPPING/03_CALLED/SS10_LIST_FILTER10000.ped ${SLURM_ARRAY_TASK_ID} -j40 | tee log_SS10FILTER_S${SLURM_ARRAY_TASK_ID}.out

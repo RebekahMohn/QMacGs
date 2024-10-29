@@ -1,0 +1,15 @@
+#!/bin/bash
+#SBATCH --ntasks=1
+#SBATCH --mem=30G
+#SBATCH -c 20
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=rmohn@mortonarb.org
+#SBATCH -e slurm_%A_%a.err
+#SBATCH -o slurm_%A_%a.out
+#SBATCH --array=1-6
+
+
+
+#module load bcftools
+#module load VCFtools
+admixture --cv /cwork/ram163/OAK_GENOMES/14_MAPPING/03_CALLED/Mue60_FILTER10000.ped ${SLURM_ARRAY_TASK_ID} -j20 | tee log_Mue60FILTER_S${SLURM_ARRAY_TASK_ID}.out
