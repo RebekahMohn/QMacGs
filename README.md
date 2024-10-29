@@ -10,3 +10,5 @@ This repository is to collect the scripts that I use to analyze my genomic data 
 The scripts will be:
 bash scripts - for submitting jobs on my data
 Rscripts - for visualizing my results
+
+DsuiteMaps.R -- An R script for visualizing the genomic and landscape mosaic of introgression.
