@@ -1,0 +1,17 @@
+#!/bin/bash
+mkdir /work/ram163/OAK_GENOMES/02_CLEAN_DATA/
+mkdir /work/ram163/OAK_GENOMES/02_CLEAN_DATA/01_TRIMMED
+mkdir /work/ram163/OAK_GENOMES/02_CLEAN_DATA/00_SCRIPTS
+mkdir /work/ram163/OAK_GENOMES/02_CLEAN_DATA/02_CHLOROPLAST_FILTERED
+i=1
+for file in /work/ram163/OAK_GENOMES/01_COMBINED_DATA/*_1.fq.gz;
+do
+	fq=`basename ${file} _1.fq.gz`
+	echo "fastp -i /work/ram163/OAK_GENOMES/01_COMBINED_DATA/${fq}_1.fq.gz -I /work/ram163/OAK_GENOMES/01_COMBINED_DATA/${fq}_2.fq.gz -o /work/ram163/OAK_GENOMES/02_CLEAN_DATA/01_TRIMMED/${fq}_trimmed_1.fq.gz -O /work/ram163/OAK_GENOMES/02_CLEAN_DATA/01_TRIMMED/${fq}_trimmed_2.fq.gz -l 30 -x -g -5 -3 -w 15 --html fastp_S${i}.html" > /work/ram163/OAK_GENOMES/02_CLEAN_DATA/00_SCRIPTS/trim_filter_S${i}
+#	echo "fastqc /work/ram163/OAK_GENOMES/02_CLEAN_DATA/01_TRIMMED/${fq}_trimmed_1.fq.gz /work/ram163/OAK_GENOMES/02_CLEAN_DATA/01_TRIMMED/${fq}_trimmed_2.fq.gz -t 5 -o /work/ram163/OAK_GENOMES/02_CLEANED_DATA/01_TRIMMED/00_FASTQC/ --noextract" >> /work/ram163/OAK_GENOMES/02_CLEAN_DATA/00_SCRIPTS/trim_fastp_S${i}
+        echo "module load Bowtie2">>/work/ram163/OAK_GENOMES/02_CLEAN_DATA/00_SCRIPTS/trim_filter_S${i}
+        echo "cd /work/ram163/OAK_GENOMES/02_CLEAN_DATA/02_CHLOROPLAST_FILTERED">>/work/ram163/OAK_GENOMES/02_CLEAN_DATA/00_SCRIPTS/trim_filter_S${i}
+        echo "python /hpc/group/manoslab/ram163/phylogenomic_dataset_construction/scripts/filter_organelle_reads.py /work/ram163/OAK_GENOMES/00a_REFERENCES/Plastomes_Q_alba.fa /work/ram163/OAK_GENOMES/02_CLEAN_DATA/01_TRIMMED/${fq}_trimmed_1.fq.gz /work/ram163/OAK_GENOMES/02_CLEAN_DATA/01_TRIMMED/${fq}_trimmed_2.fq.gz 10 /work/ram163/OAK_GENOMES/02_CLEAN_DATA/02_CHLOROPLAST_FILTERED/" >> /work/ram163/OAK_GENOMES/02_CLEAN_DATA/00_SCRIPTS/trim_filter_S${i}
+	((i=i+1))
+done
+
