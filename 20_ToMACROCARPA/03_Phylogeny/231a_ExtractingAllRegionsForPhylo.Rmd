@@ -1,0 +1,86 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+plot(cars)
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+
+```{r}
+csome_dims<-read_excel(path="C:/Users/rmohn/Desktop/10_Analysis/20_MacGenomeRegions/mac_csome_dims.xlsx",sheet = "Sheet1")
+k=1
+for(j in 1:12){
+  i=50001
+  while(i <= csome_dims[j,3]){
+    if(j<10){
+      chr<-paste("Chr0",j,sep="")
+    }else{
+      chr<-paste("Chr",j,sep="")
+    }
+    region<-paste(k,"_",chr,"_",(i-50000),"-",i,sep="")
+    #load programs
+    cat(paste("module load bcftools\n","module load IQ-TREE\n",sep=""), 
+        file=paste("C:/Users/rmohn/Desktop/10_Analysis/20_MacGenomeRegions/phyCMDs/phy",k,".cmd",sep=""),append=TRUE)
+    
+    #extract region
+    cat(paste("bcftools view -M2 -i 'TYPE!=\"indel\" & QUAL>10 & FMT/DP>8 & FMT/DP<100' -o /cwork/ram163/GENOME_REGIONS/all/",region,".vcf  /hpc/group/manoslab/QMACROCARPA_GENOMES/24_VARIANTS_MONGOLICA/SP5_MACREF.gvcf.gz -r ",
+              chr,":",(i-50000),"-",i,"\n",sep=""), 
+        file=paste("C:/Users/rmohn/Desktop/10_Analysis/20_MacGenomeRegions/phyCMDs/phy",k,".cmd",sep=""),append=TRUE)
+    
+   #change working directory
+     cat(paste("cd /cwork/ram163/GENOME_REGIONS/all/\n",sep=""), 
+        file=paste("C:/Users/rmohn/Desktop/10_Analysis/20_MacGenomeRegions/phyCMDs/phy",k,".cmd",sep=""),append=TRUE)
+   
+    #convert to fasta
+    cat(paste("vcf2phylip.py -i /cwork/ram163/GENOME_REGIONS/all/",region,".vcf --output-prefix ",region," -m 20 -f\n",sep=""), 
+        file=paste("C:/Users/rmohn/Desktop/10_Analysis/20_MacGenomeRegions/phyCMDs/phy",k,".cmd",sep=""),append=TRUE)
+    
+    #run IQ-TREE
+    cat(paste("iqtree2 -s ",region,".min20.phy -nt 5 -pre ",region," -B 1000 -mem 10G\n",sep=""), 
+        file=paste("C:/Users/rmohn/Desktop/10_Analysis/20_MacGenomeRegions/phyCMDs/phy",k,".cmd",sep=""),append=TRUE)
+    
+    #root tree
+    cat(paste(" pxrr -t ", region,".treefile -g SRR24768763.bam,SRR24768723.bam,SRR24768754.bam,SRR24768716.bam,SRR24768736.bam -o /cwork/ram163/GENOME_REGIONS/all/rooted/", region,".rooted.tre\n",sep=""), 
+        file=paste("C:/Users/rmohn/Desktop/10_Analysis/20_MacGenomeRegions/phyCMDS/phy",k,".cmd",sep=""),append=TRUE)
+    k<-k+1
+    i<-i+50000
+  }
+}
+```
+
+
+```{r}
+csome_dims<-read_excel(path="C:/Users/rmohn/Desktop/10_Analysis/20_MacGenomeRegions/mac_csome_dims.xlsx",sheet = "Sheet1")
+k=1
+for(j in 1:12){
+  i=150001
+  while(i <= csome_dims[j,3]){
+    if(j<10){
+      chr<-paste("Chr0",j,sep="")
+    }else{
+      chr<-paste("Chr",j,sep="")
+    }
+    region<-paste(k,"_",chr,"_",(i-150000),"-",i,sep="")
+    #load programs
+    cat(paste("module load bcftools\n","module load IQ-TREE\nbcftools view -M2 -i 'TYPE!=\"indel\" & QUAL>10 & FMT/DP>8 & FMT/DP<100' -o /cwork/ram163/GENOME_REGIONS/all/",region,".vcf  /hpc/group/manoslab/QMACROCARPA_GENOMES/24_VARIANTS_MONGOLICA/SP5_MACREF.gvcf.gz -r ",
+              chr,":",(i-150000),"-",i,"\ncd /cwork/ram163/GENOME_REGIONS/all/\nvcf2phylip.py -i /cwork/ram163/GENOME_REGIONS/all/",region,".vcf --output-prefix ",region," -m 20 -f\niqtree2 -s ",region,".min20.phy -nt 5 -pre ",region," -B 1000 -mem 10G\npxrr -t ", region,".treefile -g SRR24768763.bam,SRR24768723.bam,SRR24768754.bam,SRR24768716.bam,SRR24768736.bam -o /cwork/ram163/GENOME_REGIONS/all/rooted/", region,".rooted.tre\n",sep=""), 
+        file=paste("C:/Users/rmohn/Desktop/10_Analysis/20_MacGenomeRegions/phyCMDs150/phy",k,".cmd",sep=""),append=TRUE)
+    
+    
+    k<-k+1
+    i<-i+150000
+  }
+}
+```
+
