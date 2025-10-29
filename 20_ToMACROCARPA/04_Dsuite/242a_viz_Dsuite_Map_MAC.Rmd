@@ -1,0 +1,962 @@
+---
+title: "DsuiteMap_MAC"
+author: "Rebekah Mohn"
+date: "2025-01-28"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+###alb
+```{r}
+#combining all dstatistics and metadata for Q. alb
+library(dplyr)
+library(plyr)
+library(readxl)
+meta_pop<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_DSuite_MACREF/Pops.txt")
+Dalb_All<-data.frame(pop=character(),chr=character(),windowStart=integer(),windowEnd=integer(),D=double(),f_d=double(),f_dM=double(),d_f=double(),lat=double(),long=double(),windowmid=integer())
+
+for(i in 1:length(meta_pop$Pop)){
+  pop<-meta_pop$Pop[i]
+  lat<-meta_pop$latitude.orig[i]
+  long<-meta_pop$longitude.orig[i]
+  if(file.exists(paste("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/bic_mac_",pop,"_alb_localFstats__1000_750.txt",sep=""))){
+    Dalb_pop<-subset(read.delim(paste("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/bic_mac_",pop,"_alb_localFstats__1000_750.txt",sep="")),chr=="Chr01"|chr=="Chr02"|chr=="Chr03"|chr=="Chr04"|chr=="Chr05"|chr=="Chr06"|chr=="Chr07"|chr=="Chr08"|chr=="Chr09"|chr=="Chr10"|chr=="Chr11"|chr=="Chr12")
+    Dalb_pop$pop<-rep(pop,length(Dalb_pop$chr))
+    Dalb_pop$lat<-rep(lat,length(Dalb_pop$chr))
+    Dalb_pop$long<-rep(long,length(Dalb_pop$chr))
+    Dalb_pop$windowmid<-round_any(rowMeans(Dalb_pop[,2:3]),500000)
+    Dalb_All<-rbind(Dalb_All,Dalb_pop)
+  }
+  #Dalb_pop$Loc<-paste(Dalb_pop$CHROM,Dalb_pop$BIN_START,sep="_")
+  
+}
+Dalb_All$chr2<-Dalb_All$chr
+Dalb_All<-Dalb_All %>%
+  dplyr::mutate(across('chr2',str_replace,'Chr',''))
+Dalb_All$chr3<-as.numeric(Dalb_All$chr2)
+
+write.table(Dalb_All,file="C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/bic_mac_alb.txt",row.names=FALSE,quote=FALSE,sep="\t")
+#I don't know that window number is the best method
+
+```
+
+
+
+####MUE
+```{r}
+#combining all dstatistics and metadata for Q. mue
+library(plyr)
+meta_pop<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_DSuite_MACREF/Pops.txt")
+#macABF_mue<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/bic_mac_ABF_mue_localFstats__1000_750.txt")
+Dmue_All<-data.frame(pop=character(),chr=character(),windowStart=integer(),windowEnd=integer(),D=double(),f_d=double(),f_dM=double(),d_f=double(),lat=double(),long=double(),windowmid=integer())
+
+for(i in 1:length(meta_pop$Pop)){
+  pop<-meta_pop$Pop[i]
+  lat<-meta_pop$latitude.orig[i]
+  long<-meta_pop$longitude.orig[i]
+  if(file.exists(paste("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/bic_mac_",pop,"_mue_localFstats__1000_750.txt",sep=""))){
+    Dmue_pop<-subset(read.delim(paste("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/bic_mac_",pop,"_mue_localFstats__1000_750.txt",sep="")),chr=="Chr01"|chr=="Chr02"|chr=="Chr03"|chr=="Chr04"|chr=="Chr05"|chr=="Chr06"|chr=="Chr07"|chr=="Chr08"|chr=="Chr09"|chr=="Chr10"|chr=="Chr11"|chr=="Chr12")
+    Dmue_pop$pop<-rep(pop,length(Dmue_pop$chr))
+    Dmue_pop$lat<-rep(lat,length(Dmue_pop$chr))
+    Dmue_pop$long<-rep(long,length(Dmue_pop$chr))
+    Dmue_pop$windowmid<-round_any(rowMeans(Dmue_pop[,2:3]),500000)
+    Dmue_All<-rbind(Dmue_All,Dmue_pop)
+  }
+  #Dmue_pop$Loc<-paste(Dmue_pop$CHROM,Dmue_pop$BIN_START,sep="_")
+  
+}
+
+Dmue_All$chr2<-Dmue_All$chr
+Dmue_All<-Dmue_All %>%
+  dplyr::mutate(across('chr2',str_replace,'Chr',''))
+Dmue_All$chr3<-as.numeric(Dmue_All$chr2)
+
+write.table(Dmue_All,file="C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/bic_mac_mue.txt",row.names=FALSE,quote=FALSE,sep="\t")
+#I don't know that window number is the best method
+
+```
+
+
+
+##STE
+```{r}
+#combining all dstatistics and metadata for Q. ste
+library(plyr)
+meta_pop<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_DSuite_MACREF/Pops.txt")
+#macABF_ste<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/bic_mac_ABF_ste_localFstats__1000_750.txt")
+Dste_All<-data.frame(pop=character(),chr=character(),windowStart=integer(),windowEnd=integer(),D=double(),f_d=double(),f_dM=double(),d_f=double(),lat=double(),long=double(),windowmid=integer())
+
+for(i in 1:length(meta_pop$Pop)){
+  pop<-meta_pop$Pop[i]
+  lat<-meta_pop$latitude.orig[i]
+  long<-meta_pop$longitude.orig[i]
+  if(file.exists(paste("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/bic_mac_",pop,"_ste_localFstats__1000_750.txt",sep=""))){
+    Dste_pop<-subset(read.delim(paste("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/bic_mac_",pop,"_ste_localFstats__1000_750.txt",sep="")),chr=="Chr01"|chr=="Chr02"|chr=="Chr03"|chr=="Chr04"|chr=="Chr05"|chr=="Chr06"|chr=="Chr07"|chr=="Chr08"|chr=="Chr09"|chr=="Chr10"|chr=="Chr11"|chr=="Chr12")
+    Dste_pop$pop<-rep(pop,length(Dste_pop$chr))
+    Dste_pop$lat<-rep(lat,length(Dste_pop$chr))
+    Dste_pop$long<-rep(long,length(Dste_pop$chr))
+    Dste_pop$windowmid<-round_any(rowMeans(Dste_pop[,2:3]),500000)
+    Dste_All<-rbind(Dste_All,Dste_pop)
+  }
+  #Dste_pop$Loc<-paste(Dste_pop$CHROM,Dste_pop$BIN_START,sep="_")
+  
+}
+Dste_All$chr2<-Dste_All$chr
+Dste_All<-Dste_All %>%
+  dplyr::mutate(across('chr2',str_replace,'Chr',''))
+Dste_All$chr3<-as.numeric(Dste_All$chr2)
+
+write.table(Dste_All,file="C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/bic_mac_ste.txt",row.names=FALSE,quote=FALSE,sep="\t")
+#I don't know that window number is the best method
+
+
+
+```
+
+
+####LOB
+```{r}
+#combining all dstatistics and metadata for Q. lob
+library(plyr)
+meta_pop<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_DSuite_MACREF/Pops.txt")
+#macABF_lob<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/bic_mac_ABF_lob_localFstats__1000_750.txt")
+Dlob_All<-data.frame(pop=character(),chr=character(),windowStart=integer(),windowEnd=integer(),D=double(),f_d=double(),f_dM=double(),d_f=double(),lat=double(),long=double(),windowmid=integer())
+
+for(i in 1:length(meta_pop$Pop)){
+  pop<-meta_pop$Pop[i]
+  lat<-meta_pop$latitude.orig[i]
+  long<-meta_pop$longitude.orig[i]
+  if(file.exists(paste("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/bic_mac_",pop,"_lob_localFstats__1000_750.txt",sep=""))){
+    Dlob_pop<-subset(read.delim(paste("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/bic_mac_",pop,"_lob_localFstats__1000_750.txt",sep="")),chr=="Chr01"|chr=="Chr02"|chr=="Chr03"|chr=="Chr04"|chr=="Chr05"|chr=="Chr06"|chr=="Chr07"|chr=="Chr08"|chr=="Chr09"|chr=="Chr10"|chr=="Chr11"|chr=="Chr12")
+    Dlob_pop$pop<-rep(pop,length(Dlob_pop$chr))
+    Dlob_pop$lat<-rep(lat,length(Dlob_pop$chr))
+    Dlob_pop$long<-rep(long,length(Dlob_pop$chr))
+    Dlob_pop$windowmid<-round_any(rowMeans(Dlob_pop[,2:3]),500000)
+    Dlob_All<-rbind(Dlob_All,Dlob_pop)
+  }
+  #Dlob_pop$Loc<-paste(Dlob_pop$CHROM,Dlob_pop$BIN_START,sep="_")
+  
+}
+
+Dlob_All$chr2<-Dlob_All$chr
+Dlob_All<-Dlob_All %>%
+  dplyr::mutate(across('chr2',str_replace,'Chr',''))
+Dlob_All$chr3<-as.numeric(Dlob_All$chr2)
+write.table(Dlob_All,file="C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/bic_mac_lob.txt",row.names=FALSE,quote=FALSE,sep="\t")
+#I don't know that window number is the best method
+
+```
+
+
+###bic/lyr
+```{r}
+#combining all dstatistics and metadata for Q. lyr and Q. bic
+library(plyr)
+meta_pop<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_DSuite_MACREF/Pops.txt")
+#macABF_biclyr<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/bic_lyr_mac_ABF_localFstats__1000_750.txt")
+Dbiclyr_All<-data.frame(pop=character(),chr=character(),windowStart=integer(),windowEnd=integer(),D=double(),f_d=double(),f_dM=double(),d_f=double(),lat=double(),long=double(),windowmid=integer())
+
+for(i in 1:length(meta_pop$Pop)){
+  pop<-meta_pop$Pop[i]
+  lat<-meta_pop$latitude.orig[i]
+  long<-meta_pop$longitude.orig[i]
+  if(file.exists(paste("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/lyr_bic_mac_",pop,"_localFstats__1000_750.txt",sep=""))){
+    Dbiclyr_pop<-subset(read.delim(paste("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/lyr_bic_mac_",pop,"_localFstats__1000_750.txt",sep="")),chr=="Chr01"|chr=="Chr02"|chr=="Chr03"|chr=="Chr04"|chr=="Chr05"|chr=="Chr06"|chr=="Chr07"|chr=="Chr08"|chr=="Chr09"|chr=="Chr10"|chr=="Chr11"|chr=="Chr12")
+    Dbiclyr_pop$pop<-rep(pop,length(Dbiclyr_pop$chr))
+    Dbiclyr_pop$lat<-rep(lat,length(Dbiclyr_pop$chr))
+    Dbiclyr_pop$long<-rep(long,length(Dbiclyr_pop$chr))
+    Dbiclyr_pop$windowmid<-round_any(rowMeans(Dbiclyr_pop[,2:3]),500000)
+    Dbiclyr_All<-rbind(Dbiclyr_All,Dbiclyr_pop)
+  }
+  #Dbiclyr_pop$Loc<-paste(Dbiclyr_pop$CHROM,Dbiclyr_pop$BIN_START,sep="_")
+  
+}
+
+Dbiclyr_All$chr2<-Dbiclyr_All$chr
+Dbiclyr_All<-Dbiclyr_All %>%
+  dplyr::mutate(across('chr2',str_replace,'Chr',''))
+Dbiclyr_All$chr3<-as.numeric(Dbiclyr_All$chr2)
+write.table(Dbiclyr_All,file="C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/lyr_bic_mac.txt",row.names=FALSE,quote=FALSE,sep="\t")
+#I don't know that window number is the best method
+
+```
+
+
+```{r}
+#combining all species dstatistics+metadata into one spreadsheet for all species
+Dbi_All<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/lyr_bic_mac.txt",sep="\t")
+Dbi_All$species<-rep("bic",length(Dbi_All$chr))
+Dlob_All<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/bic_mac_lob.txt",sep="\t")
+Dlob_All$species<-rep("lob",length(Dlob_All$chr))
+Dalb_All<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/bic_mac_alb.txt",sep="\t")
+Dalb_All$species<-rep("alb",length(Dalb_All$chr))
+Dste_All<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/bic_mac_ste.txt",sep="\t")
+Dste_All$species<-rep("ste",length(Dste_All$chr))
+Dmue_All<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/bic_mac_mue.txt",sep="\t")
+Dmue_All$species<-rep("mue",length(Dmue_All$chr))
+Dly_All<-Dbi_All
+Dly_All$d_f<-(-Dbi_All$d_f)
+Dly_All$species<-rep("lyr",length(Dly_All$chr))
+
+
+D_All<-rbind(Dalb_All,Dbi_All,Dlob_All,Dly_All,Dmue_All,Dste_All)
+D_All$windowMid<-rowMeans(D_All[,2:3])
+D_All$chr2<-D_All$chr
+D_All<-D_All %>%
+  dplyr::mutate(across('chr2',str_replace,'Chr',''))
+D_All$chr3<-as.numeric(D_All$chr2)
+write.table(D_All,file="C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/Dall_mac.txt",row.names=FALSE,quote=FALSE,sep="\t")
+
+# Dbi_All$chr2<-Dbi_All$chr
+# Dbi_All<-Dbi_All %>%
+#   dplyr::mutate(across('chr2',str_replace,'Chr',''))
+# Dbi_All$chr3<-as.numeric(Dbi_All$chr2)
+
+##for 500,000 bp windows, saiving the max d_f for each population (this helps with visualizing)
+
+Dsp_All<-data.frame(pop=character(),chr=character(),windowStart=integer(),windowEnd=integer(),D=double(),f_d=double(),f_dM=double(),d_f=double(),lat=double(),long=double(),windowmid=integer(),species=character(),chr2=character(),chr3=integer())
+for(j in 1:12){
+  i=min(D_All$windowmid)
+  while(i <= max(D_All$windowmid)){
+    if(i %in% subset(Dbi_All,chr3==j)$windowmid){
+      Dwind<-rbind(subset(Dalb_All,windowmid==i&chr3==j),subset(Dbi_All,windowmid==i&chr3==j),subset(Dlob_All,windowmid==i&chr3==j),subset(Dly_All,windowmid==i&chr3==j),subset(Dmue_All,windowmid==i&chr3==j),subset(Dste_All,windowmid==i&chr3==j))
+      Dsp_All<-rbind(Dsp_All,(Dwind %>% group_by(pop) %>% top_n(1, d_f)))
+    }
+    i=i+500000
+  }
+}
+
+write.table(Dsp_All,file="C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/DspMax5E5_mac.txt",row.names=FALSE,quote=FALSE,sep="\t")
+
+```
+
+
+```{r}
+D_All<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/Dall_mac.txt",header = TRUE)
+
+library(goft)
+ggplot()+
+geom_histogram(mapping=aes(x=D_All$d_f,y =..density..),binwidth = 0.02)+
+stat_function(fun = dcauchy, args = list(location = 0, scale= (sd(D_All$d_f)/2)),color="red")+
+theme_light()
+
+ggplot()+
+geom_histogram(mapping=aes(x=D_All$d_f,y =..density..),binwidth = 0.02)+
+stat_function(fun = dnorm, args = list(x, scale= (sd(D_All$d_f)/2)),color="red")+
+theme_light()
+
+shapiro.test(sample(D_All$d_f,size=5000,replace = F)) ### It is not normal
+#cauchy_test(x=D_All$d_f)
+
+
+
+quantile(x=D_All$d_f,probs = c(0.0001,0.9999))
+HighDALL<-subset(D_All,d_f>0.88)
+```
+
+###Calculating DMSE for 150,000 bp windows
+```{r}
+library(dplyr)
+library(data.table)
+library(readxl)
+
+D_All<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/Dall_mac.txt",header = TRUE)
+
+DWindMSE<-data.frame(chr=integer(),window=integer(),alb=double(),bic=double(),lob=double(),lyr=double(),mue=double(),ste=double())
+
+for(j in 1:12){
+  i=75000
+  while(i <= max(subset(D_All,chr==paste("Chr",j,sep=""))$windowMid)){
+    DallWind<-subset(D_All,windowMid>i-75000&windowMid<i+75000&chr==paste("Chr",j,sep="")) %>% group_by(pop,species) %>% top_n(1, d_f)
+    if(length(subset(DallWind,species=="alb")$d_f)>8|length(subset(DallWind,species=="bic")$d_f)>8|length(subset(DallWind,species=="lob")$d_f)>8|length(subset(DallWind,species=="mue")$d_f)>8|length(subset(DallWind,species=="mue")$d_f)>8){
+      if(length(subset(DallWind,species=="alb")$d_f)>8){
+        MSEalb<- mean(summary(lm(data=subset(DallWind,species=="alb"),d_f~windowMid))$residuals^2)
+      }else{MSEalb<-NA}
+      if(length(subset(DallWind,species=="bic")$d_f)>8){
+        MSEbic<- mean(summary(lm(data=subset(DallWind,species=="bic"),d_f~windowMid))$residuals^2)
+        MSElyr<- mean(summary(lm(data=subset(DallWind,species=="lyr"),d_f~windowMid))$residuals^2)
+      }else{
+        MSEbic<-NA
+        MSElyr<-NA
+      }
+      if(length(subset(DallWind,species=="lob")$d_f)>8){
+        MSElob<- mean(summary(lm(data=subset(DallWind,species=="lob"),d_f~windowMid))$residuals^2)
+      }else{MSElob<-NA}
+      if(length(subset(DallWind,species=="mue")$d_f)>8){
+        MSEmue<- mean(summary(lm(data=subset(DallWind,species=="mue"),d_f~windowMid))$residuals^2)
+      }else{MSEmue<-NA}
+      if(length(subset(DallWind,species=="ste")$d_f)>8){
+        MSEste<- mean(summary(lm(data=subset(DallWind,species=="ste"),d_f~windowMid))$residuals^2)
+      }else{MSEste<-NA}
+      MSE<-data.frame(chr=j,window=i,alb=MSEalb,bic=MSEbic,lob=MSElob,lyr=MSElyr,mue=MSEmue,ste=MSEste)
+      DWindMSE<-rbind(DWindMSE,MSE)
+    }
+    i=i+75000
+  }
+}
+
+
+write.table(DWindMSE,file="C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/Dmse_all_mac.txt",row.names=FALSE,quote=FALSE,sep="\t")
+```
+
+###Calculate windows of high DMSE
+```{r}
+DMSE_All<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/Dmse_all_mac.txt",header = TRUE)
+DMSE99<-quantile(c(DMSE_All$alb,DMSE_All$bic,DMSE_All$lob,DMSE_All$lyr,DMSE_All$mue,DMSE_All$ste),probs=c(0.99),na.rm=TRUE)
+
+#DMSE_highpoints<-subset(DMSE_All,alb>=DMSE99|bic>=DMSE99|lob>=DMSE99|lyr>=DMSE99|mue>=DMSE99|ste>=DMSE99)
+
+DMSE_highregions<-data.frame(chr=integer(),window=integer(),alb=double(),bic=double(),lob=double(),lyr=double(),mue=double(),ste=double(),windowstart=integer(),windowend=integer(),species=character())
+for(j in 1:12){
+  i<-1
+  while(i < length(DMSE_All$window)){
+    if(max(DMSE_All[i,j])>=DMSE99&!is.na(DMSE_All[i,j])){
+      DMSE_highregions<-rbind(DMSE_highregions, cbind(DMSE_All[i,],windowstart=DMSE_All[i,2]-75000,windowend=DMSE_All[i,2]+75000,species=names(DMSE_All)[j]))
+      #i=i+1
+      k=0
+      
+      while(max(DMSE_All[i,j])>=DMSE99|is.na(DMSE_All[i,j])|k<3){
+        i=i+1
+        if(max(DMSE_All[i,j])>=DMSE99&!is.na(DMSE_All[i,j])){
+          DMSE_highregions$windowend[length(DMSE_highregions$windowend)]<-DMSE_All[i,2]+75000
+        }else{k=k+1}
+      }
+    }else{
+      i=i+1
+    }
+  }
+  
+}
+write.table(DMSE_highregions,"C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/DMSE_High_mac.txt",row.names=FALSE,quote=FALSE,sep="\t") 
+
+```
+
+
+```{r}
+#install.packages("ggpubr")
+library(ggpubr)
+library(dplyr)
+library(ggplot2)
+library(ggmap)
+library(maps)
+library(mapdata)
+library(adegenet)
+library(data.table)
+library(readxl)
+library(stringr)
+states <- map_data("state")
+counties <- map_data('county')
+Canada<-map_data("world", "Canada")
+
+D_All<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/Dall_mac.txt",header = TRUE)
+# D_All$chr2<-D_All$chr
+# D_All<-D_All %>%
+#   dplyr::mutate(across('chr2',str_replace,'Chr',''))
+# D_All$chr2<-as.numeric(D_All$chr2)
+Dsp_All<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/DspMax5E5_mac.txt",header = TRUE)
+# Dsp_All$chr2<-Dsp_All$chr
+# Dsp_All<-Dsp_All %>%
+#   dplyr::mutate(across('chr2',str_replace,'Chr',''))
+# Dsp_All$chr2<-as.numeric(Dsp_All$chr2)
+group.colors<-c(lyr="#000000",bic="#88CCEE",lob="#116644",mue="#AA5599",ste="#E69F00",alb="#332288")
+
+# highTD<-read_excel("C:/Users/rmohn/Desktop/10_Analysis/001_subsets/highTajima.D.xlsx",sheet = "Sheet1",col_names = TRUE,na = "NA")
+# highTD$chr<-highTD$CHROM
+# highTD$chr2<-highTD$CHROM
+# highTD<-highTD %>%
+#   dplyr::mutate(across('chr2',str_replace,'Chr',''))
+# highTD$numpops<-rowSums(highTD[,7:50])
+
+# Dmse_highregions<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/DMSE_High_mac.txt",header=TRUE) 
+# Dmse_highregions_chr<-Dmse_highregions
+# Dmse_highregions_chr$chr2<-Dmse_highregions_chr$chr
+# Dmse_highregions_chr$chr<-paste("Chr",Dmse_highregions_chr$chr2,sep="")
+
+#making the figure legend
+leg<-cbind(percentile=c("<95%",">95%",">99%",">99.9%"),perc=c(94,96,99.5,99.99),long=c(-80,-85,-90,-95),lat=c(40,40,40,40))
+leg2<-ggplot()+
+  geom_point(data=leg,mapping=aes(x=long, y=lat,shape=percentile,size=percentile))+
+  scale_shape_manual(values=c(17,16, 21, 21))+
+  scale_size_manual(values=c(0.75,1,2.5,4))+
+  theme(text = element_text(size = 8))+
+  theme_light()
+  
+  
+# genes<-subset(read.delim(file = "C:/Users/rmohn/Downloads/Quercus_mongolica_gff3.gff3",sep="\t",header = FALSE),(V1=="Chr01"|V1=="Chr02"|V1=="Chr03"|V1=="Chr04"|V1=="Chr05"|V1=="Chr06"|V1=="Chr07"|V1=="Chr08"|V1=="Chr09"|V1=="Chr10"|V1=="Chr11"|V1=="Chr12")&V3=="CDS")
+# genes$chr<-genes$V1
+# genes$chr2<-genes$V1
+# genes<-genes %>%
+#   dplyr::mutate(across('chr2',str_replace,'Chr',''))
+
+cents<-read_excel("C:/Users/rmohn/Desktop/10_Analysis/20_MacGenomeRegions/MacGenomeRegionsB.xlsx",sheet = "Sheet1")
+cents$chr2<-cents$scaffold
+cents<-cents %>%
+  dplyr::mutate(across('chr2',str_replace,'Chr',''))
+cents$chr3<-as.numeric(cents$chr2)
+  
+
+# pdf(file="C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/Max_figs.pdf",height=4.5,width=8)
+for(j in 1:12){
+  pdf(file=paste("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/FigsC",j,".pdf",sep=""),height=4.5,width=8)
+  i=min(subset(Dsp_All,chr3==j)$windowmid)
+  while(i <= max(subset(Dsp_All,chr3==j)$windowmid)){
+    if(i %in% subset(Dsp_All,chr3==j)$windowmid){
+      DwindMax<-subset(Dsp_All,windowmid==i&chr3==j)
+      sp_fig<-ggplot()+
+        geom_polygon(data = counties, aes(x = long, y = lat, group = group),fill = 'white', color = "white", lwd = 0.1)+
+        geom_polygon(data = states, aes(x = long, y = lat, group = group),
+                     fill = NA, color = "gray85")+
+        geom_polygon(data = Canada, aes(x = long, y = lat, group = group),
+                     fill = "white", color = "gray85")+
+        coord_map(xlim = c(-105,-68),ylim = c(29,50))+
+        scale_size(limits=c(.1,1),range=c(2,8))+
+        geom_point(data=subset(DwindMax,d_f>=.24),mapping=aes(x=long, y=lat, color = species),size = 1, shape= 16)+
+        geom_point(data=subset(DwindMax,d_f>.50),mapping=aes(x=long, y=lat, color = species),size = 2.5, shape= 21)+
+        geom_point(data=subset(DwindMax,d_f>.79),mapping=aes(x=long, y=lat, color = species),size = 4, shape= 21)+
+        #geom_point(data=subset(DwindMax,d_f>.75),mapping=aes(x=long, y=lat, color = species),size = 5.5, shape= 21)+
+        geom_point(data=subset(DwindMax,d_f<.24),mapping=aes(x=long, y=lat), color = "black",size = .5,shape=17)+
+        scale_color_manual(values=group.colors)+
+        theme(axis.title = element_blank(),text = element_text(size = 8))+
+        labs(caption=paste("Chr ",j,": ",i,sep=""))+
+        guides(color="none",size="none",shape="none")
+      
+      
+      Csome_fig<-ggplot(data=Dsp_All)+
+        #geom_rect(data=Dsd_highregions_chr,aes(ymin=-10,ymax=0,xmin=window,xmax=windowend),fill="#F0E442",alpha=.5)+
+        geom_histogram(data=subset(Dsp_All,d_f>.5),mapping=aes(x=windowmid/1000000,fill=species),width=.5,binwidth = .5,position = "stack")+
+        #geom_col(data=subset(highTD,chr=="Chr01"|chr=="Chr02"|chr=="Chr03"|chr=="Chr04"|chr=="Chr5"|chr=="Chr06"),mapping=aes(x=as.integer(START),y=-numpops),width=500000,alpha=.3)+
+        geom_vline(data=subset(Dsp_All,chr3==j),mapping=aes(xintercept=i/1000000),color="red")+
+        geom_blank(data=Dsp_All,aes(x=windowmid/1000000))+
+        scale_fill_manual(values=group.colors)+
+        facet_grid(.~as.numeric(chr2), scales = "free_x",space="free_x")+
+        theme_light()+
+        labs(x="Genomic window (Mbp)",y="Pops")+
+        scale_x_continuous(breaks = seq(0,100,20)) +
+        theme(panel.grid.major.x=element_blank(),panel.grid.minor.x=element_blank(),panel.grid.minor.y=element_blank(),panel.spacing.x=unit(0, "lines"),strip.text = element_blank(),text = element_text(size = 8),panel.border = element_rect(color = "black", fill = NA, linewidth = .5))+
+        coord_cartesian(xlim = c(0, NA), ylim=c(0,55),expand = FALSE)#xlim(c(0,NA))
+      
+      
+      dfpoint<-ggplot(data=subset(D_All,chr3==j&windowMid>i-450000&windowMid<i+450000))+
+        #geom_rect(data=subset(Dmse_highregions_chr,chr2==j),aes(ymin=-1,ymax=1,xmin=windowstart/1000000,xmax=windowend/1000000),fill="darkgray",alpha=.25)+
+        geom_rect(mapping=aes(ymin=-1,ymax=1,xmin=(i-250000)/1000000,xmax=(i+250000)/1000000),color="red",fill=NA)+
+        coord_cartesian(xlim=c((i-450000)/1000000,(i+450000)/1000000), ylim=c(-1,1),expand = FALSE)+
+        scale_color_manual(values=group.colors)+
+        facet_grid(species~.)+
+        geom_point(aes(x=windowMid/1000000,y=d_f,group=pop,color=species),size=.5)+
+        #geom_vline(data=subset(D_All,chr==paste("Chr",j,sep="")),mapping=aes(xintercept=i),color="red")+
+      #geom_line(aes(x=windowMid,y=d_f,color=species,group=pop))+
+        theme_light()+
+        theme(panel.spacing.y=unit(0.5, "lines"),strip.text = element_blank(),text = element_text(size = 8))+
+        guides(color="none")+
+        ylab(bquote(d[f]))+
+        xlab("window (Mbp)")
+      
+      legmap<-as_ggplot(get_legend(leg2))
+      
+      # gen_dens<-ggplot(data=subset(genes,chr2==j))+
+      #   geom_rect(data=subset(cents,chr2==j),mapping=aes(ymin=0,ymax=.035,xmin=centStart/1000000,xmax=centEnd/1000000),fill="lightblue",color="lightblue")+
+      #   geom_vline(xintercept=i/1000000,color="red",linetype="dashed")+
+      #   geom_density(data=subset(genes,chr2==j),aes(x=V4/1000000),bw=.5)+
+      #   theme_light()+
+      #   labs(x="window (Mbp)",y="gene density")+
+      #   scale_x_continuous(breaks = seq(0,100,20)) +
+      #     theme(panel.grid.major.x=element_blank(),panel.grid.minor.x=element_blank(),panel.grid.minor.y=element_blank(),text = element_text(size = 8))+
+      #   coord_cartesian( ylim=c(0,.035),expand = FALSE)+
+      #   theme(text = element_text(size = 8))+
+      #   guides(color="none")
+      print(
+        ggarrange(Csome_fig,
+                  ggarrange(dfpoint,sp_fig,
+                            ggarrange(legmap,ncol=1,heights=c(2,1)),
+                            nrow=1,ncol=3,widths = c(1.3,3,1)),             
+                  heights=c(1,3),ncol=1,nrow=2,common.legend = TRUE, legend = "right"))
+      #ggsave(sp_fig,filename=paste("df_max_S",j,"_",i,".jpg",sep=""),device="jpeg",height=4,width=6,units="in")
+    }
+    i=i+500000
+  }
+  dev.off()
+}
+
+
+
+```
+
+```{r}
+csome_dims<-read_excel("C:/Users/rmohn/Desktop/10_Analysis/20_MacGenomeRegions/mac_csome_dims.xlsx")
+csome2<-ggplot(data=Dsp_All)+
+        geom_rect(data=csome_dims,mapping=aes(ymin=0,ymax=44,xmin=start/10000000,xmax=stop/1000000),fill="gray90")+
+        geom_histogram(data=subset(Dsp_All,d_f>.5),mapping=aes(x=windowmid/1000000,fill=species),width=.5,binwidth = .5,position = "stack")+
+        #geom_col(data=subset(highTD,chr=="Chr01"|chr=="Chr02"|chr=="Chr03"|chr=="Chr04"|chr=="Chr5"|chr=="Chr06"),mapping=aes(x=as.integer(START),y=-numpops),width=500000,alpha=.3)+
+        #geom_vline(data=subset(Dsp_All,chr3==j),mapping=aes(xintercept=i/1000000),color="red")+
+        geom_blank(data=Dsp_All,aes(x=windowmid/1000000))+
+        scale_fill_manual(values=group.colors)+
+        facet_grid(chr~., scales = "free_x",space="free_x")+
+        theme_light()+
+        labs(x="Genomic window (Mbp)",y="Pops")+
+        scale_x_continuous(breaks = seq(0,100,20)) +
+        theme(panel.grid.major.x=element_blank(),panel.grid.minor.x=element_blank(),panel.grid.minor.y=element_blank(),panel.grid.major.y=element_blank(),panel.spacing.x=unit(0, "lines"),text = element_text(size = 10),panel.border = element_rect(color = "white", fill = NA, linewidth = .5),strip.placement = "top")+
+        coord_cartesian(xlim = c(0, NA), expand = FALSE)#xlim(c(0,NA))
+
+pdf("C:/Users/rmohn/Desktop/10_Analysis/107_DSuite_MACREF/DPOPS/csome2.pdf",width = 6.5, height=6.5)
+print(csome2)
+dev.off()
+```
+
+
+
+```{r}
+csome_dims<-read_excel("C:/Users/rmohn/Desktop/10_Analysis/20_MacGenomeRegions/mac_csome_dims.xlsx")
+ggplot(data=Dsp_All)+
+        geom_rect(data=csome_dims,mapping=aes(ymin=0,ymax=44,xmin=start/10000000,xmax=stop/1000000),color="gray")+
+        geom_histogram(data=subset(Dsp_All,d_f>.5),mapping=aes(x=windowmid/1000000,fill=species),width=.5,binwidth = .5,position = "stack")+
+        #geom_col(data=subset(highTD,chr=="Chr01"|chr=="Chr02"|chr=="Chr03"|chr=="Chr04"|chr=="Chr5"|chr=="Chr06"),mapping=aes(x=as.integer(START),y=-numpops),width=500000,alpha=.3)+
+        #geom_vline(data=subset(Dsp_All,chr3==j),mapping=aes(xintercept=i/1000000),color="red")+
+        geom_blank(data=Dsp_All,aes(x=windowmid/1000000))+
+        scale_fill_manual(values=group.colors)+
+        facet_grid(chr~., scales = "free_x",space="free_x")+
+        theme_light()+
+        labs(x="Genomic window (Mbp)",y="Pops")+
+        scale_x_continuous(breaks = seq(0,100,20)) +
+        theme(panel.grid.major.x=element_blank(),panel.grid.minor.x=element_blank(),panel.grid.minor.y=element_blank(),panel.spacing.x=unit(0, "lines"),text = element_text(size = 10),panel.border = element_rect(color = "black", fill = NA, linewidth = .5))+
+        coord_cartesian(xlim = c(0, NA), expand = FALSE)#xlim(c(0,NA))
+
+
+
+Csome_fig<-ggplot(data=Dsp_All)+
+        #geom_rect(data=Dsd_highregions_chr,aes(ymin=-10,ymax=0,xmin=window,xmax=windowend),fill="#F0E442",alpha=.5)+
+        geom_histogram(data=subset(Dsp_All,d_f>.5),mapping=aes(x=windowmid/1000000,fill=species),width=.5,binwidth = .5)+
+        #geom_col(data=subset(highTD,chr=="Chr01"|chr=="Chr02"|chr=="Chr03"|chr=="Chr04"|chr=="Chr5"|chr=="Chr06"),mapping=aes(x=as.integer(START),y=-numpops),width=500000,alpha=.3)+
+        geom_blank(data=Dsp_All,aes(x=windowmid/1000000))+
+        scale_fill_manual(values=group.colors)+
+        facet_grid(.~as.numeric(chr2), scales = "free_x",space="free_x")+
+        theme_light()+
+        labs(x="Genomic window (Mbp)",y="Pops")+
+        scale_x_continuous(breaks = seq(0,100,25)) +
+        theme(panel.grid.major.x=element_blank(),panel.grid.minor.x=element_blank(),panel.grid.minor.y=element_blank(),panel.spacing.x=unit(0, "lines"),text = element_text(size = 10),panel.border = element_rect(color = "black", fill = NA, linewidth = .5))+
+        coord_cartesian(xlim = c(0, NA), ylim=c(0,55),expand = FALSE)#xlim(c(0,NA))
+
+ggplot(data=Dsp_All)+
+        #geom_rect(data=Dsd_highregions_chr,aes(ymin=-10,ymax=0,xmin=window,xmax=windowend),fill="#F0E442",alpha=.5)+
+        geom_point(data=Dsp_All,mapping=aes(x=as.numeric(chr2),y=windowmid/1000000),size=10)+
+        #geom_col(data=subset(highTD,chr=="Chr01"|chr=="Chr02"|chr=="Chr03"|chr=="Chr04"|chr=="Chr5"|chr=="Chr06"),mapping=aes(x=as.integer(START),y=-numpops),width=500000,alpha=.3)+
+        #geom_blank(data=Dsp_All,aes(x=windowmid/1000000))+
+        #scale_fill_manual(values=group.colors)+
+        #facet_grid(.~as.numeric(chr2), scales = "free_x",space="free_x")+
+        theme_light()+
+        labs(y="Mbps",x="Chromosomes")+
+        scale_x_continuous(breaks = seq(0,12,1)) +
+        theme(panel.grid.major.x=element_blank(),panel.grid.minor.x=element_blank(),panel.grid.minor.y=element_blank(),panel.grid.major.y=element_blank(),text = element_text(size = 10),axis.line=element_blank())#+
+        #coord_cartesian(xlim = c(0, NA), ylim=c(0,55),expand = FALSE)#xlim(c(0,NA))
+
+Csome16_fig<-ggplot(data=subset(Dsp_All,as.numeric(chr2)<7))+
+        #geom_rect(data=Dsd_highregions_chr,aes(ymin=-10,ymax=0,xmin=window,xmax=windowend),fill="#F0E442",alpha=.5)+
+        geom_histogram(data=subset(Dsp_All,as.numeric(chr2)<7&d_f>.5),mapping=aes(x=windowmid/1000000,fill=species),width=.5,binwidth = .5)+
+        #geom_col(data=subset(highTD,chr=="Chr01"|chr=="Chr02"|chr=="Chr03"|chr=="Chr04"|chr=="Chr5"|chr=="Chr06"),mapping=aes(x=as.integer(START),y=-numpops),width=500000,alpha=.3)+
+        geom_blank(data=subset(Dsp_All,as.numeric(chr2)<7),aes(x=windowmid/1000000))+
+        scale_fill_manual(values=group.colors)+
+        facet_grid(.~as.numeric(chr2), scales = "free_x",space="free_x")+
+        theme_light()+
+        labs(x="Genomic window (Mbp)",y="Pops")+
+        scale_x_continuous(breaks = seq(0,100,25)) +
+        theme(panel.grid.major.x=element_blank(),panel.grid.minor.x=element_blank(),panel.grid.minor.y=element_blank(),panel.spacing.x=unit(0, "lines"),text = element_text(size = 10),panel.border = element_rect(color = "black", fill = NA, linewidth = .5))+
+        coord_cartesian(xlim = c(0, NA), ylim=c(0,55),expand = FALSE)#xlim(c(0,NA))
+        
+Csome712_fig<-ggplot(data=subset(Dsp_All,as.numeric(chr2)>6))+
+        #geom_rect(data=Dsd_highregions_chr,aes(ymin=-10,ymax=0,xmin=window,xmax=windowend),fill="#F0E442",alpha=.5)+
+        geom_histogram(data=subset(Dsp_All,as.numeric(chr2)>6&d_f>.5),mapping=aes(x=windowmid/1000000,fill=species),width=.5,binwidth = .5)+
+        #geom_col(data=subset(highTD,chr=="Chr01"|chr=="chr2"|chr=="Chr03"|chr=="Chr04"|chr=="Chr5"|chr=="Chr06"),mapping=aes(x=as.integer(START),y=-numpops),width=500000,alpha=.3)+
+        geom_blank(data=subset(Dsp_All,as.numeric(chr2)>6),aes(x=windowmid/1000000))+
+        scale_fill_manual(values=group.colors)+
+        facet_grid(.~as.numeric(chr2), scales = "free_x",space="free_x")+
+        theme_light()+
+        labs(x="Genomic window (Mbp)",y="Pops")+
+        scale_x_continuous(breaks = seq(0,100,25)) +
+        theme(panel.grid.major.x=element_blank(),panel.grid.minor.x=element_blank(),panel.grid.minor.y=element_blank(),panel.spacing.x=unit(0, "lines"),text = element_text(size = 10),panel.border = element_rect(color = "black", fill = NA, linewidth = .5))+
+        coord_cartesian(xlim = c(0, NA), ylim=c(0,55),expand = FALSE)#xlim(c(0,NA))
+
+Csome1_fig<-ggplot(data=subset(Dsp_All,chr2==1))+
+        #geom_rect(data=Dsd_highregions_chr,aes(ymin=-10,ymax=0,xmin=window,xmax=windowend),fill="#F0E442",alpha=.5)+
+        geom_histogram(data=subset(Dsp_All,chr2==1&d_f>.5),mapping=aes(x=windowmid/1000000,fill=species),width=.5,binwidth = .5)+
+        #geom_col(data=subset(highTD,chr=="Chr01"|chr=="Chr02"|chr=="Chr03"|chr=="Chr04"|chr=="Chr5"|chr=="Chr06"),mapping=aes(x=as.integer(START),y=-numpops),width=500000,alpha=.3)+
+        geom_blank(data=subset(Dsp_All,chr2==1),aes(x=windowmid/1000000))+
+        scale_fill_manual(values=group.colors)+
+        facet_grid(.~as.numeric(chr2), scales = "free_x",space="free_x")+
+        theme_light()+
+        labs(x="Genomic window (Mbp)",y="Pops")+
+        scale_x_continuous(breaks = seq(0,100,25)) +
+        theme(panel.grid.major.x=element_blank(),panel.grid.minor.x=element_blank(),panel.grid.minor.y=element_blank(),panel.spacing.x=unit(0, "lines"),text = element_text(size = 10),panel.border = element_rect(color = "black", fill = NA, linewidth = .5))+
+        coord_cartesian(xlim = c(0, NA), ylim=c(0,55),expand = FALSE)#xlim(c(0,NA))
+
+Csome_fig<-ggplot(data=Dsp_All)+
+        #geom_rect(data=Dsd_highregions_chr,aes(ymin=-10,ymax=0,xmin=window,xmax=windowend),fill="#F0E442",alpha=.5)+
+        geom_histogram(data=subset(Dsp_All,d_f>.5),mapping=aes(x=windowmid/1000000,fill=species),width=.5,binwidth = .5)+
+        #geom_col(data=subset(highTD,chr=="Chr01"|chr=="Chr02"|chr=="Chr03"|chr=="Chr04"|chr=="Chr5"|chr=="Chr06"),mapping=aes(x=as.integer(START),y=-numpops),width=500000,alpha=.3)+
+        geom_blank(data=Dsp_All,aes(x=windowmid/1000000))+
+        scale_fill_manual(values=group.colors)+
+        facet_grid(.~as.numeric(chr2), scales = "free_x",space="free_x")+
+        theme_light()+
+        labs(x="Genomic window (Mbp)",y="Pops")+
+        scale_x_continuous(breaks = seq(0,100,25)) +
+        theme(panel.grid.major.x=element_blank(),panel.grid.minor.x=element_blank(),panel.grid.minor.y=element_blank(),panel.spacing.x=unit(0, "lines"),text = element_text(size = 10),panel.border = element_rect(color = "black", fill = NA, linewidth = .5))+
+        coord_cartesian(xlim = c(0, NA), ylim=c(0,55),expand = FALSE)#xlim(c(0,NA))
+
+
+ggplot(data=D_All)+
+  geom_histogram(mapping=aes(x=d_f),binwidth=.01)+
+  facet_wrap(species~.)+
+  geom_density(mapping=aes(x=d_f,y=..count../100),color="red")
+
+#resample with replacement the d_f and species pairs at random for each population going across the genome
+#map where the max population is greater than 99% on the chromosome
+#what is background due to chance
+#What is significantly clustered or a significant number of populations (versus random not taking into account genome structure)
+
+
+
+
+
+
+```
+
+
+
+
+```{r}
+Dly_All<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/bic_lyr_mac.txt",sep="\t")
+Dly_All$species<-rep("lyr",length(Dly_All$chr))
+Dlob_All<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/bic_mac_lob.txt",sep="\t")
+Dlob_All$species<-rep("lob",length(Dlob_All$chr))
+Dalb_All<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/bic_mac_alb.txt",sep="\t")
+Dalb_All$species<-rep("alb",length(Dalb_All$chr))
+Dste_All<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/bic_mac_ste.txt",sep="\t")
+Dste_All$species<-rep("ste",length(Dste_All$chr))
+Dmue_All<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/bic_mac_mue.txt",sep="\t")
+Dmue_All$species<-rep("mue",length(Dmue_All$chr))
+Dbi_All<-Dly_All
+Dbi_All$d_f<-(-Dbi_All$d_f)
+Dbi_All$species<-rep("bic",length(Dbi_All$chr))
+group.colors<-c(lyr="#000000",bic="#88CCEE",lob="#116644",mue="#AA5599",ste="#E69F00",alb="#332288")
+
+Dsp_All<-data.frame(pop=character(),chr=character(),windowStart=integer(),windowEnd=integer(),D=double(),f_d=double(),f_dM=double(),d_f=double(),lat=double(),long=double(),windowmid=integer(),species=character())
+
+for(j in 1:12){
+  i=min(Dbi_All$windowmid)
+  while(i <= max(Dbi_All$windowmid)){
+    if(i %in% subset(Dbi_All,chr==paste("Chr",j,sep=""))$windowmid){
+      Dwind<-rbind(subset(Dalb_All,windowmid==i&chr==paste("Chr",j,sep="")),subset(Dbi_All,windowmid==i&chr==paste("Chr",j,sep="")),subset(Dlob_All,windowmid==i&chr==paste("Chr",j,sep="")),subset(Dly_All,windowmid==i&chr==paste("Chr",j,sep="")),subset(Dmue_All,windowmid==i&chr==paste("Chr",j,sep="")),subset(Dste_All,windowmid==i&chr==paste("Chr",j,sep="")))
+      Dsp_All<-rbind(Dsp_All,(Dwind %>% group_by(pop) %>% top_n(1, d_f)))
+    }
+    i=i+500000
+  }
+}
+
+ggplot(data=subset(Dsp_All,d_f>.5))+
+  geom_histogram(mapping=aes(x=windowmid,fill=species),width=1,binwidth = 500000)+
+  scale_fill_manual(values=group.colors)+
+  facet_grid(.~chr)+
+  theme_light()+
+  theme(panel.grid.major.x=element_blank(),panel.grid.minor.x=element_blank())#, 
+      # axis.ticks.x=element_blank(), 
+      # axis.text.y=element_blank(), 
+      # axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
+
+
+# ggplot(data=subset(Dsp_All,d_f>.5))+
+#         geom_histogram(mapping=aes(x=windowmid,fill=species),width=1,binwidth = 500000)+
+#         geom_vline(data=subset(Dsp_All,d_f>.5&chr==paste("Chr",j,sep="")),aes(xintercept=i),color="red")+
+#         scale_fill_manual(values=group.colors)+
+#         facet_grid(.~chr, scales = "free_x",space="free_x")+
+#         theme_light()+
+#         theme(panel.grid.major.x=element_blank(),panel.grid.minor.x=element_blank())
+
+
+highTD<-read_excel("C:/Users/rmohn/Desktop/10_Analysis/001_subsets/highTajima.D.xlsx",sheet = "Sheet1",col_names = TRUE,na = "NA")
+highTD$chr<-highTD$CHROM
+highTD$numpops<-rowSums(highTD[,7:50])
+ggplot(data=Dsp_All)+
+  geom_histogram(data=subset(Dsp_All,d_f>.5),mapping=aes(x=windowmid,fill=species),width=1,binwidth = 500000)+
+  geom_col(data=subset(highTD,chr=="Chr01"|chr=="Chr02"|chr=="Chr03"|chr=="Chr04"),mapping=aes(x=as.integer(START),y=-numpops),width=500000,alpha=.3)+
+  scale_fill_manual(values=group.colors)+
+  facet_grid(.~chr, scales = "free_x",space="free_x")+
+  theme_light()+
+  theme(panel.grid.major.x=element_blank(),panel.grid.minor.x=element_blank(),panel.spacing.x=unit(0, "lines"))
+
+```
+
+```{r}
+D_All<-rbind(Dalb_All,Dbi_All,Dlob_All,Dly_All,Dmue_All,Dste_All)
+for(j in 1:12){
+  i=min(subset(D_All,chr==paste("Chr",j,sep=""))$windowmid)
+  while(i <= max(subset(D_All,chr==paste("Chr",j,sep=""))$windowmid)){
+    ggplot(data=subset(D_All,windowStart>i-500000&windowStart<i+500000))+
+      
+     # coord_cartesian(ylim(0.25,1),expand=FALSE)+
+      xlim(i-500000,i+500000)+
+      scale_color_manual(values=group.colors)+
+      facet_grid(species~.)+
+      geom_point(aes(x=windowStart,y=d_f,alpha=lat,group=pop,color=species),size=1)+
+      #geom_line(aes(x=windowStart,y=d_f,color=species,group=pop))+
+      theme_light()
+    p+
+      geom_point(aes(x=windowStart,y=d_f,fill=lat,group=pop),size=1,shape=21)+
+      scale_color_viridis_b()
+    i=i+500000
+  }
+  
+}
+
+```
+
+
+
+```{r}
+
+Dsd_highregions_chr<-Dsd_highregions
+Dsd_highregions_chr$chr<-paste("Chr",Dsd_highregions_chr$chr,sep="")
+ggplot(data=Dsp_All)+
+  geom_rect(data=Dsd_highregions_chr,aes(ymin=-10,ymax=0,xmin=window,xmax=windowend),fill="#F0E442",alpha=.5)+
+  geom_histogram(data=subset(Dsp_All,d_f>.5),mapping=aes(x=windowmid,fill=species),width=1,binwidth = 500000)+
+  geom_col(data=subset(highTD,chr=="Chr01"|chr=="Chr02"|chr=="Chr03"|chr=="Chr04"|chr=="Chr5"|chr=="Chr06"),mapping=aes(x=as.integer(START),y=-numpops),width=500000,alpha=.3)+
+  #geom_vline(data=subset(Dsp_All,chr==paste("Chr",j,sep="")),mapping=aes(xintercept=i),color="red")+
+  
+  scale_fill_manual(values=group.colors)+
+  facet_grid(.~chr, scales = "free_x",space="free_x")+
+  theme_light()+
+  labs(x="Genomic window",y="Pops")+
+  theme(panel.grid.major.x=element_blank(),panel.grid.minor.x=element_blank(),panel.spacing.x=unit(0, "lines"),strip.text = element_blank(),text = element_text(size = 8))+
+  coord_cartesian(xlim = c(0, NA), expand = FALSE)#xlim(c(0,NA))
+```
+
+
+```{r}
+library(stringr)
+library(ggplot2)
+#repEle<-read.delim(file = "C:/Users/rmohn/Downloads/Quercus_mongolica_repetitive_sequences.gff",sep=c("\t",";"),header = FALSE)
+#repEle<-cbind(repEle,strsplit(repEle$V9,';',fixed=TRUE))
+genes<-subset(read.delim(file = "C:/Users/rmohn/Downloads/Quercus_mongolica_gff3.gff3",sep="\t",header = FALSE),(V1=="Chr01"|V1=="Chr02"|V1=="Chr03"|V1=="Chr04"|V1=="Chr5"|V1=="Chr06"|V1=="Chr07"|V1=="Chr08"|V1=="Chr09"|V1=="Chr10"|V1=="Chr11"|V1=="Chr12")&V3=="CDS")
+genes$chr<-genes$V1
+genes$chr2<-genes$V1
+genes<-genes %>%
+  dplyr::mutate(across('chr2',str_replace,'Chr',''))
+
+# ggplot(data=subset(repEle,V1=="Chr01"&V3=="Transposon"))+
+#   geom_density(aes(x=V4/1000000),bw=500000)+
+#   facet_grid(V1~., scales = "free_x",space="free_x")
+
+cents<-read_excel("C:/Users/rmohn/Desktop/10_Analysis/11_GenomeRegions/DstatMSE_241011/Regions/Centromeres.xlsx")
+cents$chr2<-cents$chr...1
+cents$chr<-paste("Chr",cents$chr,sep="")
+Dsp_All$chr2<-Dsp_All$chr
+Dsp_All<-Dsp_All %>%
+  dplyr::mutate(across('chr2',str_replace,'Chr',''))
+
+gene_density<-ggplot(data=genes)+
+  geom_density(data=genes,aes(x=V4/1000000),bw=1)+
+  theme_light()+
+  facet_grid(.~V1, scales = "free_x",space="free_x")+
+  theme(panel.grid.minor.x=element_blank(),panel.spacing.x=unit(0, "lines"),strip.text = element_blank(),text = element_text(size = 8))+
+  coord_cartesian(xlim = c(0, NA), expand = FALSE)#xlim(c(0,NA))
+
+
+Csome_fig<-ggplot(data=Dsp_All)+
+        #geom_rect(data=Dsd_highregions_chr,aes(ymin=-10,ymax=0,xmin=window,xmax=windowend),fill="#F0E442",alpha=.5)+
+        geom_histogram(data=subset(Dsp_All,d_f>.5),mapping=aes(x=windowmid/1000000,fill=species),width=1,binwidth = .5)+
+        geom_blank(data=subset(Dsp_All),mapping=aes(x=windowmid/1000000,fill=species))+
+        #geom_col(data=subset(highTD,chr=="Chr01"|chr=="Chr02"|chr=="Chr03"|chr=="Chr04"|chr=="Chr5"|chr=="Chr06"),mapping=aes(x=as.integer(START),y=-numpops),width=500000,alpha=.3)+
+        
+        scale_fill_manual(values=group.colors)+
+        facet_grid(.~as.numeric(chr2), scales = "free_x",space="free_x")+
+        theme_light()+
+        labs(x="Genomic window (Mbp)",y="Pops")+
+        scale_x_continuous(breaks = seq(0,100,20)) +
+        theme(panel.grid.major.x=element_blank(),panel.grid.minor.x=element_blank(),panel.grid.minor.y=element_blank(),panel.spacing.x=unit(0, "lines"),strip.text = element_blank(),text = element_text(size = 8),panel.border = element_rect(color = "black", fill = NA, linewidth = .5))+
+        coord_cartesian(xlim = c(0, NA), ylim=c(0,55),expand = FALSE)
+
+cents$chr2<-cents$chr...1
+
+gene_density2<-ggplot(data=Dsp_All)+
+        geom_rect(data=subset(cents,!is.na(chr2)),mapping=aes(ymin=0,ymax=.035,xmin=centStart...2/1000000,xmax=centEnd...3/1000000),fill="blue",alpha=.5)+
+        geom_density(data=genes,aes(x=V4/1000000),bw=1)+
+        scale_y_continuous(name="gene density",sec.axis=sec_axis(~.*1000,name="Pops"))+
+        scale_fill_manual(values=group.colors)+
+        facet_grid(.~as.numeric(chr2), scales = "free_x",space="free_x")+
+        theme_light()+
+        labs(x="Genomic window (Mbp)",y="Pops")+
+        scale_x_continuous(breaks = seq(0,100,20)) +
+          theme(panel.grid.major.x=element_blank(),panel.grid.minor.x=element_blank(),panel.grid.minor.y=element_blank(),panel.spacing.x=unit(0, "lines"),axis.text.x = element_blank(),axis.title.x = element_blank(),text = element_text(size = 8),panel.border = element_rect(color = "black", fill = NA, linewidth = .5),axis.ticks.x=element_blank())+
+        coord_cartesian(xlim = c(0, NA), expand = FALSE)#xlim(c(0,NA)))
+
+
+ggarrange(gene_density2,Csome_fig,ncol=1,nrow=2,heights = c(1,2))
+
+
+
+
+ggplot(data=Dsp_All)+
+        #geom_rect(data=Dsd_highregions_chr,aes(ymin=-10,ymax=0,xmin=window,xmax=windowend),fill="#F0E442",alpha=.5)+
+        geom_histogram(data=subset(Dsp_All,d_f>.5),mapping=aes(x=windowmid/1000000, y = (..count..)/1000,fill=species),width=1,binwidth = .5)+
+        geom_density(data=genes,aes(x=V4/1000000),bw=1)+
+        scale_y_continuous(name="gene density",sec.axis=sec_axis(~.*1000,name="Pops"))+
+        scale_fill_manual(values=group.colors)+
+        facet_grid(.~chr, scales = "free_x",space="free_x")+
+        theme_light()+
+        labs(x="Genomic window (Mbp)",y="Pops")+
+        theme(panel.grid.minor.x=element_blank(),panel.spacing.x=unit(0, "lines"),strip.text = element_blank(),text = element_text(size = 8))+
+        coord_cartesian(xlim = c(0, NA), expand = FALSE)#xlim(c(0,NA))
+
+genes$count<-rep(1,length(genes$V1))
+genes$windowmid<-round_any(rowMeans(genes[,4:5]),500000)
+genes5E5<-aggregate(genes$count,by=list(loc=genes$windowmid,chr=genes$chr),FUN=sum)
+genes5E5$loc2<-paste(genes5E5$chr,genes5E5$loc)
+Dsp_Max<-subset(Dsp_All,d_f>.5)
+Dsp_Max$count<-rep(1,length(Dsp_Max$chr))
+Dsp5E5<-aggregate(Dsp_Max$count,by=list(loc=Dsp_Max$windowmid,chr=Dsp_Max$chr),FUN=sum)
+Dsp5E5$loc2<-paste(Dsp5E5$chr,Dsp5E5$loc)
+genesintro<-merge(Dsp5E5,genes5E5,by="loc2",all = TRUE)
+
+Dsp_All$loc2<-paste(Dsp_All$chr,Dsp_All$windowmid)
+genesintro2<-merge(Dsp_All,genes5E5,by="loc2",all = TRUE)
+genesintro2[is.na(genesintro2)] <- 0
+
+ggplot(data=genesintro2,aes(x=d_f,y=as.numeric(x)))+
+  geom_point(size=.2,alpha=.1)+
+  geom_smooth(method = "lm")+
+  labs(x="D_f",y="genes per 500,000 bp")+
+  theme_light()
+
+model<-lm(d_f~x,data=genesintro2)
+summary(model)
+
+cents<-read_excel("C:/Users/rmohn/Desktop/10_Analysis/11_GenomeRegions/DstatMSE_241011/Regions/Centromeres.xlsx")
+cents$Chr01<-cents$chr
+cents$chr<-paste("Chr",cents$Chr01,sep="")
+genesintro[is.na(genesintro)] <- 0
+
+pdf("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/DvGenes.pdf",height=6,width=11)
+print(ggplot(data=Dsp_All)+
+        geom_rect(data=cents,mapping=aes(ymin=-.002,ymax=0,xmin=centStart/1000000,xmax=centEnd/1000000),fill="black",alpha=1)+
+        geom_rect(data=cents,mapping=aes(ymin=0,ymax=0.053,xmin=centStart/1000000,xmax=centEnd/1000000),fill="black",alpha=.3)+
+        geom_rect(data=cents,mapping=aes(ymin=0.05,ymax=0.055,xmin=centStart/1000000,xmax=centEnd/1000000),fill="black",alpha=1)+
+        geom_histogram(data=subset(Dsp_All,d_f>.5),mapping=aes(x=windowmid/1000000, y = (..count..)/1000,fill=species),width=1,binwidth = .5)+
+        geom_density(data=genes,aes(x=V4/1000000),bw=1)+
+        scale_y_continuous(name="gene density",sec.axis=sec_axis(~.*1000,name="Pops"))+
+        scale_fill_manual(values=group.colors)+
+        facet_wrap(.~chr, ncol = 6, scales = "free_x")+
+        theme_light()+
+        labs(x="Genomic window (Mbp)",y="Pops")+
+        theme(panel.grid.minor.x=element_blank(),panel.grid.major.x=element_blank(),panel.grid.minor.y=element_blank(),panel.grid.major.y=element_blank(),panel.spacing.x=unit(0, "lines"),text = element_text(size = 8))+
+        coord_cartesian(xlim = c(0, NA), expand = FALSE))#xlim(c(0,NA)))
+
+model=lm(as.numeric(x.y)~as.numeric(x.x),data=genesintro)
+print(summary(model))
+print(ggplot(data=genesintro,aes(x=as.numeric(x.x),y=as.numeric(x.y)))+
+  geom_point(size=.1)+
+  geom_smooth(method = "lm")+
+  labs(x="populations introgressed",y="genes per 500,000 bp")+
+  theme_light())
+
+print(ggplot(data=genesintro,aes(x=as.numeric(x.x),y=as.numeric(x.y)))+
+  geom_point(size=.1)+
+  geom_smooth(method = "lm")+
+  facet_grid(.~chr.y)+
+  labs(x="populations introgressed",y="genes per 500,000 bp")+
+  theme_light())
+
+print(ggplot(data=genesintro2,aes(x=d_f,y=as.numeric(x)))+
+  geom_point(size=.2,alpha=.1)+
+  geom_smooth(method = "lm")+
+  labs(x="D_f",y="genes per 500,000 bp")+
+  theme_light())
+
+print(ggplot(data=genesintro2,aes(x=d_f,y=as.numeric(x)))+
+  geom_point(size=.2,alpha=.1)+
+  geom_smooth(method = "lm")+
+  facet_wrap(.~chr.y,ncol=6)+
+  labs(x="D_f",y="genes per 500,000 bp")+
+  theme_light())
+
+model<-lm(d_f~x,data=genesintro2)
+summary(model)
+
+dev.off()
+
+
+##Figure of MSE vs. # genes
+#Bin #of genes/ 150000 bp
+genes$count2<-rep(1,length(genes$V1))
+genes$windowmid2<-round_any(rowMeans(genes[,4:5]),150000)
+genes15E4<-aggregate(genes$count2,by=list(loc=genes$windowmid2,chr=genes$chr),FUN=sum)
+genes15E4$loc2<-paste(genes15E4$chr,genes15E4$loc,sep="")
+
+#merge MSE and # of genes
+DMSE_All<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/Dmse_all_mac.txt",header = TRUE)
+DMSE_All$loc2<-paste("Chr",DMSE_All$chr,DMSE_All$window,sep="")
+genesMSE<-merge(DMSE_All,genes15E4,by="loc2",all = TRUE)
+genesMSE[is.na(genesMSE)] <- 0
+#calculate model
+#visualize relationship
+
+# Dsp_Max<-subset(Dsp_All,d_f>.5)
+# Dsp_Max$count<-rep(1,length(Dsp_Max$chr))
+# Dsp5E5<-aggregate(Dsp_Max$count,by=list(loc=Dsp_Max$windowmid,chr=Dsp_Max$chr),FUN=sum)
+# Dsp5E5$loc2<-paste(Dsp5E5$chr,Dsp5E5$loc)
+#genesintro<-merge(Dsp5E5,genes5E5,by="loc2",all = TRUE)
+ggplot(data=genesMSE,aes(x=bic,y=as.numeric(x)))+
+  geom_point(size=.2,alpha=.1)+
+  geom_smooth(method = "lm")+
+  labs(x="D_MSE",y="genes per 150,000 bp")+
+  theme_light()
+
+ggplot(data=genesMSE,aes(x=alb,y=as.numeric(x)))+
+  geom_point(size=.2,alpha=.1)+
+  geom_smooth(method = "lm")+
+  labs(x="D_MSE",y="genes per 150,000 bp")+
+  theme_light()
+
+ggplot(data=genesMSE,aes(x=mue,y=as.numeric(x)))+
+  geom_point(size=.2,alpha=.1)+
+  geom_smooth(method = "lm")+
+  labs(x="D_MSE",y="genes per 150,000 bp")+
+  theme_light()
+
+ggplot(data=genesMSE,aes(x=lob,y=as.numeric(x)))+
+  geom_point(size=.2,alpha=.1)+
+  geom_smooth(method = "lm")+
+  labs(x="D_MSE",y="genes per 150,000 bp")+
+  theme_light()
+
+
+
+
+
+```
+
+```{r}
+D_All<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/Dall_mac.txt",header = TRUE)
+```
+
+
+
