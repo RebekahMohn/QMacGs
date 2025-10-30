@@ -1,0 +1,16 @@
+#!/bin/bash
+#SBATCH --ntasks=1
+#SBATCH --mem=30G
+#SBATCH -c 40
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=rmohn@mortonarb.org
+#SBATCH -e slurm_%A_%a.err
+#SBATCH -o slurm_%A_%a.out
+#SBATCH --array=7-15
+
+
+##With conda environment ADMIXTURE
+#module load bcftools
+#module load VCFtools
+
+admixture --cv /hpc/group/manoslab/QMACROCARPA_GENOMES/24_VARIANTS_MACROCARPA/ALLSTR_LIST_FILTER5000.ped ${SLURM_ARRAY_TASK_ID} -j40 | tee log_STRFILTER_S${SLURM_ARRAY_TASK_ID}.out

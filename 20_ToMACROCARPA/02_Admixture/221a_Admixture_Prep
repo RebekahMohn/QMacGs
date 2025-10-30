@@ -1,0 +1,14 @@
+#!/bin/bash
+#SBATCH --ntasks=1
+#SBATCH --mem=20G
+#SBATCH -c 20
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=rmohn@mortonarb.org
+
+
+##With conda environment ADMIXTURE
+#module load bcftools
+module load VCFtools
+vcftools --gzvcf /hpc/group/manoslab/QMACROCARPA_GENOMES/24_VARIANTS_MACROCARPA/ALLsQUERCUS_MACREF.gvcf.gz --keep /hpc/group/manoslab/QMACROCARPA_GENOMES/00a_SUBSETS/SubsetFullSTR.txt --max-alleles 2 --max-missing 0.80 --remove-indels --thin 5000 --plink --out /hpc/group/manoslab/QMACROCARPA_GENOMES/24_VARIANTS_MACROCARPA/ALLSTR_LIST_FILTER5000 --temp /scratch
+plink --file /hpc/group/manoslab/QMACROCARPA_GENOMES/24_VARIANTS_MACROCARPA/ALLSTR_LIST_FILTER5000 --recode12 --out /hpc/group/manoslab/QMACROCARPA_GENOMES/24_VARIANTS_MACROCARPA/ALLSTR_LIST_FILTER5000
+sbatch str_all
