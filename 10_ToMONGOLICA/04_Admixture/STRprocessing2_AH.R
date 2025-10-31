@@ -69,10 +69,8 @@ All_STR8_se <- All_STR8_se %>%
 
 ## combine SE for macrocarpa V6 & V7
 
-# AH comments:
-# I'm not sure if this is right.
-# SEM = sd / sqrt(n)
 
+# SEM = sd / sqrt(n)
 # so to calc the pooled SEM you do a weighted average:
 # (1) divide each SEM by sample size
 # (2) square the results to get the variance
@@ -83,7 +81,7 @@ All_STR8_se <- All_STR8_se %>%
 # the bootstrap replicates, not individuals or loci), you should be able 
 # to just average the sem's. See my suggested edits below:
 
-# All_STR8_se$macComb <- ((sqrt(All_STR8_se$V6)+sqrt(All_STR8_se$V7))/2)^2
+
 All_STR8_se$macComb <- mean(c(All_STR8_se$V6, All_STR8_se$V7))
 
 All_S8_se_long<-reshape2::melt(All_STR8_se[,-c(6,7)],id.vars =  c("Sample"))
@@ -142,14 +140,6 @@ s8_hyb_wide<-spread(s8_hyb_4wide,key = V1,value=as.numeric(V3))
 for(i in c("alb", "biclyr", "lob", "mac", "micmon", "muepri", "sinstemar")) {
   s8_hyb_wide[[i]] <- as.numeric(s8_hyb_wide[[i]])
 }
-
-# s8_hyb_wide$alb<-as.numeric(s8_hyb_wide$alb)
-# s8_hyb_wide$biclyr<-as.numeric(s8_hyb_wide$biclyr)
-# s8_hyb_wide$lob<-as.numeric(s8_hyb_wide$lob)
-# s8_hyb_wide$mac<-as.numeric(s8_hyb_wide$mac)
-# s8_hyb_wide$micmon<-as.numeric(s8_hyb_wide$micmon)
-# s8_hyb_wide$muepri<-as.numeric(s8_hyb_wide$muepri)
-# s8_hyb_wide$sinstemar<-as.numeric(s8_hyb_wide$sinstemar)
 
 s8_hyb_wide$pureCount <- s8_hyb_wide$hybCount <- 0
 s8_hyb_wide$hyb <- NA
