@@ -1,4 +1,4 @@
-"","sample","alb","biclyr","lob","mac","micmon","muepri","sinstemar","pureCount","hybCount","hyb","sinstemar","muepri","alb","biclyr","lob","mac1","mac2","micmon","macComb"
+"","sample","alb","biclyr","lob","mac","micmon","muepri","sinstemar","pureCount","hybCount","hyb","sinstemar_1","muepri_1","alb_1","biclyr_1","lob_1","mac1_1","mac2_1","micmon_1","macComb"
 "1","SRR14632920","none","none","pure?","none","none","none","none",1,0,"pure",1e-05,1e-05,1e-05,1e-05,0.99993,1e-05,1e-05,1e-05,2e-05
 "2","SRR14632922","none","none","pure?","none","none","none","none",1,0,"pure",1e-05,1e-05,1e-05,1e-05,0.99993,1e-05,1e-05,1e-05,2e-05
 "3","SRR14632924","none","none","pure?","none","none","none","none",1,0,"pure",1e-05,1e-05,1e-05,1e-05,0.999929,1e-05,1.1e-05,1e-05,2.1e-05
@@ -99,7 +99,7 @@
 "98","SYST-MOR-0006797","none","pure?","none","none","none","none","none",1,0,"pure",1e-05,1e-05,1e-05,0.966789,1e-05,1e-05,0.033151,1e-05,0.033161
 "99","SYST-MOR-0006798","none","none","none","pure?","none","none","none",1,0,"pure",1e-05,1e-05,1e-05,1e-05,1e-05,0.052809,0.947131,1e-05,0.99994
 "100","SYST-MOR-0006799","none","none","none","pure?","none","none","none",1,0,"pure",1e-05,1e-05,0.004406,1e-05,1e-05,0.130624,0.864921,1e-05,0.995545
-"101","SYST-MOR-0006800","none","pure?","none","hybrid?","none","none","none",1,1,"uncertainHybrid?",1e-05,1e-05,1e-05,0.947337,1e-05,1e-05,0.052603,1e-05,0.052613
+"101","SYST-MOR-0006800","none","pure?","none","hybrid?","none","none","none",1,1,"uncertain hybrid",1e-05,1e-05,1e-05,0.947337,1e-05,1e-05,0.052603,1e-05,0.052613
 "102","SYST-MOR-0006801","none","none","none","pure?","none","none","none",1,0,"pure",1e-05,1e-05,1e-05,1e-05,1e-05,1e-05,0.99993,1e-05,0.99994
 "103","SYST-MOR-0006802","none","none","none","pure?","none","none","none",1,0,"pure",1e-05,1e-05,1e-05,1e-05,1e-05,0.111205,0.888735,1e-05,0.99994
 "104","SYST-MOR-0006803","none","none","none","pure?","none","none","none",1,0,"pure",1e-05,1e-05,1e-05,1e-05,1e-05,0.84699,0.15295,1e-05,0.99994
@@ -313,7 +313,7 @@
 "312","SYST-MOR-0007011","pure?","none","none","none","none","none","none",1,0,"pure",1e-05,1e-05,0.994447,1e-05,1e-05,0.005493,1e-05,1e-05,0.005503
 "313","SYST-MOR-0007012","none","pure?","none","none","none","none","none",1,0,"pure",1e-05,1e-05,1e-05,0.99993,1e-05,1e-05,1e-05,1e-05,2e-05
 "314","SYST-MOR-0007013","pure?","none","none","none","none","none","none",1,0,"pure",1e-05,1e-05,0.99993,1e-05,1e-05,1e-05,1e-05,1e-05,2e-05
-"315","SYST-MOR-0007014","none","hybrid?","none","pure?","none","none","none",1,1,"uncertainHybrid?",1e-05,1e-05,1e-05,0.02176,1e-05,0.273862,0.704329,1e-05,0.978191
+"315","SYST-MOR-0007014","none","hybrid?","none","pure?","none","none","none",1,1,"uncertain hybrid",1e-05,1e-05,1e-05,0.02176,1e-05,0.273862,0.704329,1e-05,0.978191
 "316","SYST-MOR-0007015","none","none","none","none","none","pure?","none",1,0,"pure",1e-05,0.99993,1e-05,1e-05,1e-05,1e-05,1e-05,1e-05,2e-05
 "317","SYST-MOR-0007016","none","none","none","pure?","none","none","none",1,0,"pure",0.00408,1.1e-05,1e-05,1e-05,1e-05,0.612986,0.382883,1e-05,0.995869
 "318","SYST-MOR-0007017","none","none","none","none","none","pure?","none",1,0,"pure",1e-05,0.99993,1e-05,1e-05,1e-05,1e-05,1e-05,1e-05,2e-05
@@ -348,7 +348,7 @@
 "347","SYST-MOR-0007046","none","none","none","none","none","pure?","none",1,0,"pure",1e-05,0.999927,1e-05,1e-05,1.3e-05,1e-05,1e-05,1e-05,2e-05
 "348","SYST-MOR-0007047","none","hybrid?","none","hybrid?","none","none","none",0,2,"hybrid",1e-05,1e-05,1.3e-05,0.694474,1.1e-05,0.066063,0.23941,1e-05,0.305473
 "349","SYST-MOR-0007048","none","hybrid?","none","hybrid?","none","none","none",0,2,"hybrid",1e-05,1e-05,1e-05,0.088965,1.3e-05,0.195888,0.715094,1e-05,0.910982
-"350","SYST-MOR-0007049","none","hybrid?","none","pure?","none","none","none",1,1,"uncertainHybrid?",1e-05,1e-05,1e-05,0.025527,1e-05,0.270539,0.703884,1e-05,0.974423
+"350","SYST-MOR-0007049","none","hybrid?","none","pure?","none","none","none",1,1,"uncertain hybrid",1e-05,1e-05,1e-05,0.025527,1e-05,0.270539,0.703884,1e-05,0.974423
 "351","SYST-MOR-0007050","none","hybrid?","none","hybrid?","none","none","none",0,2,"hybrid",1e-05,1e-05,1e-05,0.517644,1e-05,0.100724,0.381582,1e-05,0.482306
 "352","SYST-MOR-0007051","pure?","none","none","none","none","none","none",1,0,"pure",1e-05,1e-05,0.99993,1e-05,1e-05,1e-05,1e-05,1e-05,2e-05
 "353","SYST-MOR-0007052","hybrid?","hybrid?","none","none","none","none","none",0,2,"hybrid",1e-05,1e-05,0.257986,0.705869,1e-05,1e-05,0.036095,1e-05,0.036105
@@ -359,7 +359,7 @@
 "358","SYST-MOR-0007057","none","pure?","none","none","none","none","none",1,0,"pure",1e-05,1e-05,1e-05,0.972369,1e-05,1e-05,0.027571,1e-05,0.027581
 "359","SYST-MOR-0007058","hybrid?","none","none","hybrid?","none","none","none",0,2,"hybrid",1e-05,1e-05,0.523912,0.009722,1e-05,0.020758,0.445567,1e-05,0.466325
 "360","SYST-MOR-0007059","none","pure?","none","none","none","none","none",1,0,"pure",1e-05,1e-05,1e-05,0.962734,1e-05,1e-05,0.037206,1e-05,0.037216
-"361","SYST-MOR-0007060","none","pure?","none","hybrid?","none","none","none",1,1,"uncertainHybrid?",1e-05,1e-05,1e-05,0.930848,1e-05,1e-05,0.069092,1e-05,0.069102
+"361","SYST-MOR-0007060","none","pure?","none","hybrid?","none","none","none",1,1,"uncertain hybrid",1e-05,1e-05,1e-05,0.930848,1e-05,1e-05,0.069092,1e-05,0.069102
 "362","SYST-MOR-0007061","pure?","none","none","none","none","none","none",1,0,"pure",1e-05,1e-05,0.99993,1e-05,1e-05,1e-05,1e-05,1e-05,2e-05
 "363","SYST-MOR-0007062","pure?","none","none","none","none","none","none",1,0,"pure",1e-05,1e-05,0.99993,1e-05,1e-05,1e-05,1e-05,1e-05,2e-05
 "364","SYST-MOR-0007063","pure?","none","none","none","none","none","none",1,0,"pure",1e-05,1e-05,0.99993,1e-05,1e-05,1e-05,1e-05,1e-05,2e-05
@@ -373,7 +373,7 @@
 "372","SYST-MOR-0007071","none","none","none","pure?","none","none","none",1,0,"pure",1e-05,1e-05,1e-05,0.011292,1e-05,1e-05,0.988648,1e-05,0.988658
 "373","SYST-MOR-0007072","none","none","none","pure?","none","none","none",1,0,"pure",1e-05,1e-05,1e-05,1.1e-05,1e-05,0.039068,0.960871,1e-05,0.999939
 "374","SYST-MOR-0007073","none","none","none","pure?","none","none","none",1,0,"pure",1e-05,1e-05,1e-05,1e-05,1.2e-05,1.9e-05,0.999919,1e-05,0.999938
-"375","SYST-MOR-0007074","none","hybrid?","none","pure?","none","none","none",1,1,"uncertainHybrid?",1e-05,1e-05,1e-05,0.032213,1e-05,0.047571,0.920166,1e-05,0.967737
+"375","SYST-MOR-0007074","none","hybrid?","none","pure?","none","none","none",1,1,"uncertain hybrid",1e-05,1e-05,1e-05,0.032213,1e-05,0.047571,0.920166,1e-05,0.967737
 "376","SYST-MOR-0007075","pure?","none","none","none","none","none","none",1,0,"pure",1e-05,1e-05,0.976454,1e-05,1e-05,1e-05,0.023486,1e-05,0.023496
 "377","SYST-MOR-0007076","none","hybrid?","none","hybrid?","none","none","none",0,2,"hybrid",1e-05,1e-05,1e-05,0.080181,1e-05,0.052968,0.866802,1e-05,0.91977
 "378","SYST-MOR-0007077","hybrid?","none","none","hybrid?","none","none","none",0,2,"hybrid",1e-05,1e-05,0.492479,0.007272,1e-05,1e-05,0.5002,1e-05,0.50021
@@ -425,7 +425,7 @@
 "424","SYST-MOR-0007123","none","hybrid?","none","hybrid?","none","none","none",0,2,"hybrid",1e-05,1e-05,1e-05,0.05728,1e-05,0.153334,0.789336,1e-05,0.94267
 "425","SYST-MOR-0007124","none","hybrid?","none","hybrid?","none","none","none",0,2,"hybrid",1e-05,1e-05,0.007261,0.217152,1e-05,0.092134,0.683414,1e-05,0.775548
 "426","SYST-MOR-0007125","pure?","none","none","none","none","none","none",1,0,"pure",1e-05,1e-05,0.99993,1e-05,1e-05,1e-05,1e-05,1e-05,2e-05
-"427","SYST-MOR-0007126","none","hybrid?","none","pure?","none","none","none",1,1,"uncertainHybrid?",1e-05,1e-05,1e-05,0.036655,1e-05,0.102871,0.860424,1e-05,0.963295
+"427","SYST-MOR-0007126","none","hybrid?","none","pure?","none","none","none",1,1,"uncertain hybrid",1e-05,1e-05,1e-05,0.036655,1e-05,0.102871,0.860424,1e-05,0.963295
 "428","SYST-MOR-0007127","none","hybrid?","none","hybrid?","none","none","none",0,2,"hybrid",1e-05,1e-05,0.006299,0.104005,1e-05,0.092481,0.797175,1e-05,0.889656
 "429","SYST-MOR-0007128","pure?","none","none","none","none","none","none",1,0,"pure",1e-05,1e-05,0.99993,1e-05,1e-05,1e-05,1e-05,1e-05,2e-05
 "430","SYST-MOR-0007129","none","pure?","none","none","none","none","none",1,0,"pure",1e-05,1e-05,1e-05,0.99993,1e-05,1e-05,1e-05,1e-05,2e-05
@@ -436,7 +436,7 @@
 "435","SYST-MOR-0007134","none","pure?","none","none","none","none","none",1,0,"pure",1e-05,2e-05,1e-05,0.99992,1e-05,1e-05,1e-05,1e-05,2e-05
 "436","SYST-MOR-0007135","pure?","none","none","none","none","none","none",1,0,"pure",1e-05,1e-05,0.99993,1e-05,1e-05,1e-05,1e-05,1e-05,2e-05
 "437","SYST-MOR-0007136","none","none","none","none","none","none","pure?",1,0,"pure",0.99993,1e-05,1e-05,1e-05,1e-05,1e-05,1e-05,1e-05,2e-05
-"438","SYST-MOR-0007137","none","hybrid?","none","pure?","none","none","none",1,1,"uncertainHybrid?",1e-05,1e-05,1e-05,0.024268,1.5e-05,0.954513,0.021164,1e-05,0.975677
+"438","SYST-MOR-0007137","none","hybrid?","none","pure?","none","none","none",1,1,"uncertain hybrid",1e-05,1e-05,1e-05,0.024268,1.5e-05,0.954513,0.021164,1e-05,0.975677
 "439","SYST-MOR-0007138","none","pure?","none","none","none","none","none",1,0,"pure",1e-05,1e-05,1e-05,0.99993,1e-05,1e-05,1e-05,1e-05,2e-05
 "440","SYST-MOR-0007139","none","none","none","none","none","none","pure?",1,0,"pure",0.999924,1e-05,1e-05,1e-05,1.6e-05,1e-05,1e-05,1e-05,2e-05
 "441","SYST-MOR-0007140","pure?","none","none","none","none","none","none",1,0,"pure",1e-05,1e-05,0.99993,1e-05,1e-05,1e-05,1e-05,1e-05,2e-05
@@ -536,7 +536,7 @@
 "535","SYST-MOR-0007234","none","none","none","none","none","pure?","none",1,0,"pure",1e-05,0.99993,1e-05,1e-05,1e-05,1e-05,1e-05,1e-05,2e-05
 "536","SYST-MOR-0007235","none","none","none","none","none","pure?","none",1,0,"pure",1e-05,0.99993,1e-05,1e-05,1e-05,1e-05,1e-05,1e-05,2e-05
 "537","SYST-MOR-0007236","pure?","none","none","none","none","none","none",1,0,"pure",1e-05,1e-05,0.99993,1e-05,1e-05,1e-05,1e-05,1e-05,2e-05
-"538","SYST-MOR-0007237","hybrid?","none","none","none","none","none","none",0,1,"uncertainPure",0.017525,1e-05,0.966156,1e-05,0.01627,1e-05,1e-05,1e-05,2e-05
+"538","SYST-MOR-0007237","hybrid?","none","none","none","none","none","none",0,1,"uncertain pure",0.017525,1e-05,0.966156,1e-05,0.01627,1e-05,1e-05,1e-05,2e-05
 "539","SYST-MOR-0007238","none","none","none","none","pure?","none","none",1,0,"pure",1e-05,1e-05,1e-05,1e-05,1e-05,1e-05,1e-05,0.99993,2e-05
 "540","SYST-MOR-0007239","none","none","none","none","pure?","none","none",1,0,"pure",1e-05,1e-05,1e-05,1e-05,1.3e-05,1e-05,1e-05,0.999927,2e-05
 "541","SYST-MOR-0007240","none","none","none","none","pure?","none","none",1,0,"pure",1e-05,1e-05,1e-05,1e-05,1e-05,1e-05,1e-05,0.99993,2e-05
@@ -628,7 +628,7 @@
 "627","SYST-MOR-0007438","none","hybrid?","none","hybrid?","none","none","none",0,2,"hybrid",1e-05,1.6e-05,1e-05,0.058648,1.3e-05,0.034107,0.907187,1e-05,0.941294
 "628","SYST-MOR-0007439","none","hybrid?","none","hybrid?","none","none","none",0,2,"hybrid",1e-05,1e-05,1e-05,0.517108,1e-05,1e-05,0.482832,1e-05,0.482842
 "629","SYST-MOR-0007440","none","hybrid?","none","hybrid?","none","none","none",0,2,"hybrid",1e-05,1e-05,1e-05,0.053401,0.005402,0.051867,0.889291,1e-05,0.941158
-"630","SYST-MOR-0007441","none","none","none","hybrid?","none","none","none",0,1,"uncertainPure",1e-05,1e-05,1e-05,0.059377,1e-05,0.081056,0.859517,1e-05,0.940573
+"630","SYST-MOR-0007441","none","none","none","hybrid?","none","none","none",0,1,"uncertain pure",1e-05,1e-05,1e-05,0.059377,1e-05,0.081056,0.859517,1e-05,0.940573
 "631","SYST-MOR-0007442","none","hybrid?","none","hybrid?","none","none","none",0,2,"hybrid",1e-05,1e-05,1e-05,0.337443,1e-05,0.016924,0.645583,1e-05,0.662507
 "632","SYST-MOR-0007443","none","hybrid?","none","hybrid?","none","none","none",0,2,"hybrid",1e-05,1e-05,1e-05,0.314219,1e-05,1e-05,0.685721,1e-05,0.685731
 "633","SYST-MOR-0007444","none","hybrid?","none","hybrid?","none","none","none",0,2,"hybrid",1e-05,1e-05,1e-05,0.074499,1e-05,0.034559,0.890892,1e-05,0.925451
@@ -674,22 +674,22 @@
 "673","SYST-MOR-0007484","none","none","none","pure?","none","none","none",1,0,"pure",1e-05,1e-05,1e-05,1e-05,1e-05,0.435478,0.564462,1e-05,0.99994
 "674","SYST-MOR-0007485","none","none","none","pure?","none","none","none",1,0,"pure",1e-05,1e-05,1e-05,1e-05,1e-05,0.43883,0.56111,1e-05,0.99994
 "675","SYST-MOR-0007486","none","none","none","pure?","none","none","none",1,0,"pure",1e-05,1e-05,1e-05,1e-05,0.006349,1e-05,0.993591,1e-05,0.993601
-"676","SYST-MOR-0007487","none","none","hybrid?","pure?","none","none","none",1,1,"uncertainHybrid?",0.000819,1e-05,1e-05,1e-05,0.023722,1e-05,0.97541,1e-05,0.97542
+"676","SYST-MOR-0007487","none","none","hybrid?","pure?","none","none","none",1,1,"uncertain hybrid",0.000819,1e-05,1e-05,1e-05,0.023722,1e-05,0.97541,1e-05,0.97542
 "677","SYST-MOR-0007488","none","none","none","pure?","none","none","none",1,0,"pure",1e-05,0.002894,1e-05,1e-05,0.018647,0.016212,0.962207,1e-05,0.978419
-"678","SYST-MOR-0007489","none","none","hybrid?","pure?","none","none","none",1,1,"uncertainHybrid?",1e-05,1e-05,1e-05,1e-05,0.03013,1e-05,0.96981,1e-05,0.96982
+"678","SYST-MOR-0007489","none","none","hybrid?","pure?","none","none","none",1,1,"uncertain hybrid",1e-05,1e-05,1e-05,1e-05,0.03013,1e-05,0.96981,1e-05,0.96982
 "679","SYST-MOR-0007490","none","none","none","pure?","none","none","none",1,0,"pure",1e-05,0.003371,0.000105,0.007567,0.015536,0.012395,0.961006,1e-05,0.973401
 "680","SYST-MOR-0007491","none","none","none","pure?","none","none","none",1,0,"pure",1e-05,1e-05,1e-05,1e-05,1e-05,1e-05,0.99993,1e-05,0.99994
 "681","SYST-MOR-0007492","none","none","none","pure?","none","none","none",1,0,"pure",1e-05,1.2e-05,0.000628,0.008839,0.022906,1.8e-05,0.967577,1e-05,0.967595
 "682","SYST-MOR-0007493","none","none","none","pure?","none","none","none",1,0,"pure",1e-05,0.007085,1e-05,1e-05,1e-05,1e-05,0.992855,1e-05,0.992865
-"683","SYST-MOR-0007494","none","none","hybrid?","pure?","none","none","none",1,1,"uncertainHybrid?",1e-05,1e-05,1e-05,1e-05,0.023626,1e-05,0.976314,1e-05,0.976324
+"683","SYST-MOR-0007494","none","none","hybrid?","pure?","none","none","none",1,1,"uncertain hybrid",1e-05,1e-05,1e-05,1e-05,0.023626,1e-05,0.976314,1e-05,0.976324
 "684","SYST-MOR-0007495","none","none","none","pure?","none","none","none",1,0,"pure",1e-05,1e-05,1e-05,1e-05,1e-05,1e-05,0.99993,1e-05,0.99994
-"685","SYST-MOR-0007496","none","none","none","hybrid?","none","none","none",0,1,"uncertainPure",1e-05,0.006652,1e-05,1.1e-05,0.03433,1e-05,0.950867,0.00811,0.950877
+"685","SYST-MOR-0007496","none","none","none","hybrid?","none","none","none",0,1,"uncertain pure",1e-05,0.006652,1e-05,1.1e-05,0.03433,1e-05,0.950867,0.00811,0.950877
 "686","SYST-MOR-0007497","none","none","hybrid?","hybrid?","none","none","none",0,2,"hybrid",0.013776,1e-05,0.001189,1e-05,0.029942,1e-05,0.955053,1e-05,0.955063
 "687","SYST-MOR-0007498","none","none","hybrid?","hybrid?","none","none","none",0,2,"hybrid",0.001542,0.007066,1e-05,1e-05,0.117024,1e-05,0.874328,1e-05,0.874338
 "688","SYST-MOR-0007499","none","none","hybrid?","hybrid?","none","none","hybrid?",0,3,"hybrid",0.014626,0.020628,1e-05,0.001762,0.057987,1e-05,0.904967,1e-05,0.904977
 "689","SYST-MOR-0007500","none","none","hybrid?","hybrid?","none","none","none",0,2,"hybrid",1e-05,1e-05,0.011684,1e-05,0.098188,1e-05,0.890078,1e-05,0.890088
 "690","SYST-MOR-0007501","none","none","hybrid?","hybrid?","none","none","none",0,2,"hybrid",1e-05,0.003958,1e-05,1e-05,0.129523,1e-05,0.866469,1e-05,0.866479
 "691","SYST-MOR-0007502","none","none","hybrid?","hybrid?","none","none","none",0,2,"hybrid",1e-05,1e-05,1.1e-05,0.006222,0.111961,1e-05,0.871994,0.009782,0.872004
-"692","SYST-MOR-0007503","none","none","none","hybrid?","none","none","none",0,1,"uncertainPure",1e-05,0.000992,1e-05,1e-05,0.069371,1e-05,0.929587,1e-05,0.929597
+"692","SYST-MOR-0007503","none","none","none","hybrid?","none","none","none",0,1,"uncertain pure",1e-05,0.000992,1e-05,1e-05,0.069371,1e-05,0.929587,1e-05,0.929597
 "693","SYST-MOR-0007504","none","none","hybrid?","hybrid?","none","none","none",0,2,"hybrid",0.001832,0.017896,1e-05,1e-05,0.099237,1e-05,0.880994,1e-05,0.881004
 "694","SYST-MOR-0007505","none","none","hybrid?","hybrid?","none","none","none",0,2,"hybrid",1e-05,1e-05,1e-05,1e-05,0.043586,1e-05,0.956354,1e-05,0.956364

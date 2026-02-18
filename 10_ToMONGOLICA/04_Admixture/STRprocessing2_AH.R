@@ -19,8 +19,17 @@ library(readxl)
 library(ggplot2)
 library(tidyr)
 
+library(rstudioapi)
+
+# Getting the path of your current open file
+current_path = 
+  rstudioapi::getActiveDocumentContext()$path 
+setwd(dirname(current_path ))
+
+
+
 # read and process data
-meta <- read_xlsx("00_METADATA/meta_pops.xlsx",sheet="Sheet1")
+meta <- read_xlsx("../../00_METADATA/meta_pops.xlsx",sheet="Sheet1")
 simp_meta <- data.frame(
   cbind(
     Seq=meta$Seq,
@@ -31,9 +40,9 @@ simp_meta <- data.frame(
     lat=meta$latitude.orig,
     long=meta$longitude.orig
     ))
-STR_names <- read.delim("10_ToMONGOLICA/04_Admixture/SubsetFullSTR.txt", sep = "\t", header=FALSE)
+STR_names <- read.delim("../../10_ToMONGOLICA/04_Admixture/SubsetFullSTR.txt", sep = "\t", header=FALSE)
 
-All_STR8 <- read.delim("10_ToMONGOLICA/04_Admixture/ALLSTR_LIST_FILTER10000.8.Q",sep = " ", header=FALSE)
+All_STR8 <- read.delim("../../10_ToMONGOLICA/04_Admixture/ALLSTR_LIST_FILTER10000.8.Q",sep = " ", header=FALSE)
 
 All_STR8$Sample <- STR_names$V1
 All_STR8 <- All_STR8 %>%
@@ -45,24 +54,24 @@ All_S8_dat <-
 ###Visualization Code #####
 ##############################
 
-# All_S8_long<-reshape2::melt(All_S8_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
-# All_S8_long$SamVar<-paste(All_S8_long$Sample,All_S8_long$variable,sep="_")
-# ggplot(data=All_S8_long)+
-#   geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack",width=1)+
-#   scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
-#   labs(title = "All Chromosomes; 8 populations")+
-#   facet_grid(.~species,scales = "free", space = "free")+
-#   theme(axis.text.x=element_blank(),
-#         axis.ticks.x=element_blank(),
-#         axis.text.y=element_blank(),
-#         axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
+All_S8_long<-reshape2::melt(All_S8_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+All_S8_long$SamVar<-paste(All_S8_long$Sample,All_S8_long$variable,sep="_")
+ggplot(data=All_S8_long)+
+  geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack",width=1)+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+  labs(title = "All Chromosomes; 8 populations")+
+  facet_grid(.~species,scales = "free", space = "free")+
+  theme(axis.text.x=element_blank(),
+        axis.ticks.x=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
 
 ######################
 ### STR_CI ###########
 ######################
 
-STR_names <- read.delim("10_ToMONGOLICA/04_Admixture/SubsetFullSTR.txt",sep = "\t",header=FALSE)
-All_STR8_se <- read.delim("10_ToMONGOLICA/04_Admixture/ALLSTR_LIST_FILTER10000.8.Q_se",sep = " ", header=FALSE)
+STR_names <- read.delim("../../10_ToMONGOLICA/04_Admixture/SubsetFullSTR.txt",sep = "\t",header=FALSE)
+All_STR8_se <- read.delim("../../10_ToMONGOLICA/04_Admixture/ALLSTR_LIST_FILTER10000.8.Q_se",sep = " ", header=FALSE)
 All_STR8_se$Sample <- STR_names$V1
 All_STR8_se <- All_STR8_se %>%
   dplyr::mutate(across('Sample',str_replace,'.bam',''))
@@ -112,6 +121,14 @@ All_S8_dat_CI_long[All_S8_dat_CI_long[,9]=="V5",16] <- "lob"
 All_S8_dat_CI_long[All_S8_dat_CI_long[,9]=="macComb",16] <- "mac"
 All_S8_dat_CI_long[All_S8_dat_CI_long[,9]=="V8",16] <- "micmon"
 
+s8_maxCI_4wide<-as.data.frame(cbind(All_S8_dat_CI_long$strpop,All_S8_dat_CI_long$Sample.x,All_S8_dat_CI_long$maxCI))
+s8_maxCI_wide<-spread(s8_maxCI_4wide,key = V1,value=as.numeric(V3))
+write.csv(s8_maxCI_wide,"C:/Users/rmohn/Desktop/10_Analysis/02_STRUCTURE/FinalForCollabs/s8_max_CI.csv")
+
+s8_minCI_4wide<-as.data.frame(cbind(All_S8_dat_CI_long$strpop,All_S8_dat_CI_long$Sample.x,All_S8_dat_CI_long$minCI))
+s8_minCI_wide<-spread(s8_minCI_4wide,key = V1,value=as.numeric(V3))
+write.csv(s8_minCI_wide,"C:/Users/rmohn/Desktop/10_Analysis/02_STRUCTURE/FinalForCollabs/s8_min_CI.csv")
+
 ############################################################################
 ### Scoring an individual contribution as likely pure or likely hybrid #####
 ############################################################################
@@ -134,39 +151,40 @@ for(i in 1:length(All_S8_dat_CI_long$minCI)){
 ###Calculating hybridization based on CI intervals
 ##################################################
 
-s8_hyb_4wide<-as.data.frame(cbind(All_S8_dat_CI_long$strpop,All_S8_dat_CI_long$Sample.x,All_S8_dat_CI_long$CIval))
-s8_hyb_wide<-spread(s8_hyb_4wide,key = V1,value=as.numeric(V3))
-
-for(i in c("alb", "biclyr", "lob", "mac", "micmon", "muepri", "sinstemar")) {
-  s8_hyb_wide[[i]] <- as.numeric(s8_hyb_wide[[i]])
-}
-
-s8_hyb_wide$pureCount <- s8_hyb_wide$hybCount <- 0
-s8_hyb_wide$hyb <- NA
-for(i in 1:length(s8_hyb_wide$V2)){
-  s8_hyb_wide$hybCount[i]<-sum(s8_hyb_wide[i,2:8]>.001&s8_hyb_wide[i,2:8]<.999,na.rm=TRUE)
-  s8_hyb_wide$pureCount[i]<-sum(s8_hyb_wide[i,2:8]>.999,na.rm=TRUE)
-  if(s8_hyb_wide$hybCount[i]> 1 &s8_hyb_wide$pureCount[i] < 1){
-    s8_hyb_wide$hyb[i]<-"hybrid"
-  }
-  if(s8_hyb_wide$hybCount[i]<2 & s8_hyb_wide$pureCount[i] < 1){
-    s8_hyb_wide$hyb[i]<-"uncertainPure"
-  }
-  if(s8_hyb_wide$hybCount[i]<1&s8_hyb_wide$pureCount[i]==1){
-    s8_hyb_wide$hyb[i]<-"pure"
-  }
-  if(s8_hyb_wide$pureCount[i]>1){
-    s8_hyb_wide$hyb[i]<-"?"
-  }
-  if(s8_hyb_wide$pureCount[i]>0&s8_hyb_wide$hybCount[i]>0){
-    s8_hyb_wide$hyb[i]<-"uncertainHybrid?"
-  }
-}
+# s8_hyb_4wide<-as.data.frame(cbind(All_S8_dat_CI_long$strpop,All_S8_dat_CI_long$Sample.x,All_S8_dat_CI_long$CIval))
+# s8_hyb_wide<-spread(s8_hyb_4wide,key = V1,value=as.numeric(V3))
+# 
+# for(i in c("alb", "biclyr", "lob", "mac", "micmon", "muepri", "sinstemar")) {
+#   s8_hyb_wide[[i]] <- as.numeric(s8_hyb_wide[[i]])
+# }
+# 
+# s8_hyb_wide$pureCount <- s8_hyb_wide$hybCount <- 0
+# s8_hyb_wide$hyb <- NA
+# for(i in 1:length(s8_hyb_wide$V2)){
+#   s8_hyb_wide$hybCount[i]<-sum(s8_hyb_wide[i,2:8]>.001&s8_hyb_wide[i,2:8]<.999,na.rm=TRUE)
+#   s8_hyb_wide$pureCount[i]<-sum(s8_hyb_wide[i,2:8]>.999,na.rm=TRUE)
+#   if(s8_hyb_wide$hybCount[i]> 1 &s8_hyb_wide$pureCount[i] < 1){
+#     s8_hyb_wide$hyb[i]<-"hybrid"
+#   }
+#   if(s8_hyb_wide$hybCount[i]<2 & s8_hyb_wide$pureCount[i] < 1){
+#     s8_hyb_wide$hyb[i]<-"uncertain pure"
+#   }
+#   if(s8_hyb_wide$hybCount[i]<1&s8_hyb_wide$pureCount[i]==1){
+#     s8_hyb_wide$hyb[i]<-"pure"
+#   }
+#   if(s8_hyb_wide$pureCount[i]>1){
+#     s8_hyb_wide$hyb[i]<-"?"
+#   }
+#   if(s8_hyb_wide$pureCount[i]>0&s8_hyb_wide$hybCount[i]>0){
+#     s8_hyb_wide$hyb[i]<-"uncertain hybrid"
+#   }
+# }
 
 
 ##################################################
 ###Calculating hybridization based combined data
 ##################################################
+
 s8_hyb_4wide<-as.data.frame(cbind(All_S8_dat_CI_long$strpop,All_S8_dat_CI_long$Sample.x,All_S8_dat_CI_long$contribution))
 s8_hyb_wide<-spread(s8_hyb_4wide,key = V1,value=as.numeric(V3))
 
@@ -180,7 +198,7 @@ for(i in 1:length(s8_hyb_wide$V2)){
     s8_hyb_wide$hyb[i]<-"hybrid"
   }
   if(s8_hyb_wide$hybCount[i]<2 & s8_hyb_wide$pureCount[i] < 1){
-    s8_hyb_wide$hyb[i]<-"uncertainPure"
+    s8_hyb_wide$hyb[i]<-"uncertain pure"
   }
   if(s8_hyb_wide$hybCount[i]<1&s8_hyb_wide$pureCount[i]==1){
     s8_hyb_wide$hyb[i]<-"pure"
@@ -189,26 +207,59 @@ for(i in 1:length(s8_hyb_wide$V2)){
     s8_hyb_wide$hyb[i]<-"?"
   }
   if(s8_hyb_wide$pureCount[i]>0&s8_hyb_wide$hybCount[i]>0){
-    s8_hyb_wide$hyb[i]<-"uncertainHybrid?"
+    s8_hyb_wide$hyb[i]<-"uncertain hybrid"
   }
 }
 
 # write results
+All_S8_dat$V1<-round(All_S8_dat$V1,4)
+All_S8_dat$V2<-round(All_S8_dat$V2,4)
+All_S8_dat$V3<-round(All_S8_dat$V3,4)
+All_S8_dat$V4<-round(All_S8_dat$V4,4)
+All_S8_dat$V5<-round(All_S8_dat$V5,4)
+All_S8_dat$V6<-round(All_S8_dat$V6,4)
+All_S8_dat$V7<-round(All_S8_dat$V7,4)
+All_S8_dat$V8<-round(All_S8_dat$V8,4)
+
+
 s8_hyb_wide_v2 <- cbind(s8_hyb_wide, All_S8_dat[c(paste('V', 1:8, sep = ''), 'macComb')])
 names(s8_hyb_wide_v2)[1] <- 'sample'
 names(s8_hyb_wide_v2)[
   match(paste('V', 1:8, sep = ''), 
   names(s8_hyb_wide_v2))
   ] <- c(
-    "sinstemar",
-    "muepri",
-    "alb",
-    "biclyr",
-    "lob",
-    'mac1',
-    'mac2',
-    "micmon"
+    "sinstemar_1",
+    "muepri_1",
+    "alb_1",
+    "biclyr_1",
+    "lob_1",
+    'mac1_1',
+    'mac2_1',
+    "micmon_1"
   )
 
-write.csv(s8_hyb_wide_v2, '10_ToMONGOLICA/04_Admixture/s8_hyb_wide_v2.csv')
+NameConv<-read_excel("C:/Users/rmohn/Desktop/00_Scripts_and_Labels/00_METADATA/NameConv.xlsx")
 
+s8_hyb_wide_v3<-merge(s8_hyb_wide_v2,NameConv, by.x="sample",by.y="Seq")
+
+write.csv(s8_hyb_wide_v3, '../../10_ToMONGOLICA/04_Admixture/s8_hyb_wide_v3.csv')
+
+
+########Determination
+#make column for determination
+#nameslist<-c("","","","","","","","","","",NA,"sinstemar","muepri","Q. alba","biclyr","Q. lobata",NA,NA,"micmon","Q. macrocarpa","")
+nameslist<-c("sinstemar","muepri","Q. alba","biclyr","Q. lobata","micmon","Q. macrocarpa")
+
+
+s8_hyb_wide_v2$determination<-"Q. sp"
+#for hybrids 50x50
+for(i in 1:length(s8_hyb_wide_v2$sample)){
+  if(s8_hyb_wide_v2$hyb[i]=="hybrid"&sum(s8_hyb_wide_v2[i,c(12:16,19:20)]>0.4&s8_hyb_wide_v2[i,c(12:16,19:20)]<=0.6)>=1){
+      s8_hyb_wide_v2$determination[i]<-paste(nameslist[s8_hyb_wide_v2[i,c(12:16,19:20)]>0.2&s8_hyb_wide_v2[i,c(12:16,19:20)]<=0.6],collapse =" x ")
+  }else{
+    s8_hyb_wide_v2$determination[i]<-paste(nameslist[s8_hyb_wide_v2[i,c(12:16,19:20)]>0.6],collapse="")
+  }
+}
+#for 50x25x25 hybrids
+
+#for pure
