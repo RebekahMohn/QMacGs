@@ -1,0 +1,3 @@
+vcftools --gzvcf /hpc/group/manoslab/QMACROCARPA_GENOMES/14_VARIANTS_MONGOLICA/ALL_LIST.gvcf.gz --keep /hpc/group/manoslab/QMACROCARPA_GENOMES/00a_SUBSETS/Subset20Species_5.csv --max-alleles 2 --max-missing 0.50 --remove-indels --plink --out /cwork/ram163/OAK_GENOMES/15_STR/SS20_LIST_5 --temp /scratch
+plink --file /cwork/ram163/OAK_GENOMES/15_STR/SS20_LIST_5 --recode12 --out /cwork/ram163/OAK_GENOMES/15_STR/SS20_LIST_5
+admixture --cv /cwork/ram163/OAK_GENOMES/15_STR/SS20_LIST_5.ped 12 -j10 | tee log_SS20_5_S12.out

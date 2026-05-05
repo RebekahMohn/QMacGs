@@ -1,0 +1,860 @@
+---
+title: "STR_comb"
+author: "Rebekah Mohn"
+date: "2026-05-05"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+
+```{r}
+#install.packages("DescTools")
+#library(DescTools)
+library(dplyr)
+library(tidyverse)
+library(reshape2)
+library(readxl)
+library(knitr)
+
+meta<-read_xlsx("C:/Users/rmohn/Desktop/00_Scripts_and_Labels/00_METADATA/meta_pops.xlsx",sheet="Sheet1",)
+simp_meta<-data.frame(cbind(Seq=meta$Seq,colnum=meta$collectionNumber,species=meta$GenomicVoucherID_USE_THIS,state=meta$State,site=meta$Pop,lat=meta$latitude.orig,long=meta$longitude.orig))
+```
+
+#Subset STR
+```{r}
+getwd()
+STR_names<-distinct(read.delim("03_sampleListPerSubset/Subset20perSpecies_1.csv",header = FALSE))
+STRnames2<-STR_names %>% arrange(V1)
+SS20_1<-read.delim("05_subsetAdmixtureFiles/SS20_LIST5000_1.12.Q",sep = " ", header=FALSE)
+SS20_1$Sample<-STRnames2$V1
+SS20_1<-SS20_1 %>%
+  dplyr::mutate(across('Sample',str_replace,'.bam',''))
+SS20_1_dat<-merge(x=SS20_1,y=simp_meta,by.x="Sample",by.y="Seq",all.x=TRUE)
+SS20_1_long<-melt(SS20_1_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+
+SS20_1_dat$max<-rep(0,length(SS20_1_dat$Sample))
+for(j in 1:length(SS20_1_dat$Sample)){
+  i<-max.col(SS20_1_dat[,2:13])[j]
+  SS20_1_dat$max[j]<-SS20_1_dat[j,(i+1)]
+  
+}
+
+ggplot(data=SS20_1_long)+
+  geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack",width=1)+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+  labs(x="samples",y=NULL)+
+  facet_grid(.~species,scales = "free", space = "free")+
+  theme(axis.text.x=element_blank(),
+      axis.ticks.x=element_blank(),
+      axis.text.y=element_blank(),
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0),strip.text.x = element_text(angle = 90))
+# i=1
+# for(i in 1:12){
+#   tempset<-subset(SS20_1_long,eval(parse(text=paste("V",(i+1),sep="")))>0.99)
+#   tempsp<-Mode(subset(SS20_1_long,parse(text=paste(V,(i+1),sep=""))>0.99))
+#   names(SS20_1_long)[names(SS20_1_long) == parse(paste(V,i,sep=""))] <- tempsp
+# }
+
+library(dplyr)
+library(tidyverse)
+library(reshape2)
+STR_names<-distinct(read.delim("03_sampleListPerSubset/Subset20perSpecies_2.csv",header=FALSE))
+STRnames2<-STR_names %>% arrange(V1)
+SS20_2<-read.delim("05_subsetAdmixtureFiles/SS20_LIST5000_2.12.Q",sep = " ", header=FALSE)
+SS20_2$Sample<-STRnames2$V1
+SS20_2<-SS20_2 %>%
+  dplyr::mutate(across('Sample',str_replace,'.bam',''))
+SS20_2_dat<-merge(x=SS20_2,y=simp_meta,by.x="Sample",by.y="Seq",all.x=TRUE)
+SS20_2_long<-melt(SS20_2_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+
+
+SS20_2_dat$max<-rep(0,length(SS20_2_dat$Sample))
+for(j in 1:length(SS20_2_dat$Sample)){
+  i<-max.col(SS20_2_dat[,2:13])[j]
+  SS20_2_dat$max[j]<-SS20_2_dat[j,(i+1)]
+}
+
+ggplot(data=SS20_2_long)+
+  geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack",width=1)+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+  labs(x="samples",y=NULL)+
+  facet_grid(.~species,scales = "free", space = "free")+
+  theme(axis.text.x=element_blank(),
+      axis.ticks.x=element_blank(),
+      axis.text.y=element_blank(),
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0),strip.text.x = element_text(angle = 90))
+
+
+
+STR_names<-distinct(read.delim("03_sampleListPerSubset/Subset20perSpecies_3.csv",header=FALSE))
+STRnames2<-STR_names %>% arrange(V1)
+SS20_3<-read.delim("05_subsetAdmixtureFiles/SS20_LIST5000_3.12.Q",sep = " ", header=FALSE)
+SS20_3$Sample<-STRnames2$V1
+SS20_3<-SS20_3 %>%
+  dplyr::mutate(across('Sample',str_replace,'.bam',''))
+SS20_3_dat<-merge(x=SS20_3,y=simp_meta,by.x="Sample",by.y="Seq",all.x=TRUE)
+SS20_3_long<-melt(SS20_3_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+
+SS20_3_dat$max<-rep(0,length(SS20_3_dat$Sample))
+for(j in 1:length(SS20_3_dat$Sample)){
+  i<-max.col(SS20_3_dat[,2:13])[j]
+  SS20_3_dat$max[j]<-SS20_3_dat[j,(i+1)]
+}
+
+
+ggplot(data=SS20_3_long)+
+  geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack",width=1)+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+  labs(x="samples",y=NULL)+
+  facet_grid(.~species,scales = "free", space = "free")+
+  theme(axis.text.x=element_blank(),
+      axis.ticks.x=element_blank(),
+      axis.text.y=element_blank(),
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0),strip.text.x = element_text(angle = 90))
+
+
+
+
+STR_names<-distinct(read.delim("03_sampleListPerSubset/Subset20perSpecies_4.csv",header=FALSE))
+STRnames2<-STR_names %>% arrange(V1)
+SS20_4<-read.delim("05_subsetAdmixtureFiles/SS20_LIST5000_4.12.Q",sep = " ", header=FALSE)
+SS20_4$Sample<-STRnames2$V1
+SS20_4<-SS20_4 %>%
+  dplyr::mutate(across('Sample',str_replace,'.bam',''))
+SS20_4_dat<-merge(x=SS20_4,y=simp_meta,by.x="Sample",by.y="Seq",all.x=TRUE)
+SS20_4_long<-melt(SS20_4_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+
+SS20_4_dat$max<-rep(0,length(SS20_4_dat$Sample))
+for(j in 1:length(SS20_4_dat$Sample)){
+  i<-max.col(SS20_4_dat[,2:13])[j]
+  SS20_4_dat$max[j]<-SS20_4_dat[j,(i+1)]
+}
+
+
+ggplot(data=SS20_4_long)+
+  geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack",width=1)+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+  labs(x="samples",y=NULL)+
+  facet_grid(.~species,scales = "free", space = "free")+
+  theme(axis.text.x=element_blank(),
+      axis.ticks.x=element_blank(),
+      axis.text.y=element_blank(),
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0),strip.text.x = element_text(angle = 90))
+
+
+STR_names<-distinct(read.delim("03_sampleListPerSubset/Subset20perSpecies_5.csv",header=FALSE))
+STRnames2<-STR_names %>% arrange(V1)
+SS20_5<-read.delim("05_subsetAdmixtureFiles/SS20_LIST5000_5.12.Q",sep = " ", header=FALSE)
+SS20_5$Sample<-STRnames2$V1
+SS20_5<-SS20_5 %>%
+  dplyr::mutate(across('Sample',str_replace,'.bam',''))
+SS20_5_dat<-merge(x=SS20_5,y=simp_meta,by.x="Sample",by.y="Seq",all.x=TRUE)
+SS20_5_long<-melt(SS20_5_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+
+SS20_5_dat$max<-rep(0,length(SS20_5_dat$Sample))
+for(j in 1:length(SS20_5_dat$Sample)){
+  i<-max.col(SS20_5_dat[,2:13])[j]
+  SS20_5_dat$max[j]<-SS20_5_dat[j,(i+1)]
+}
+
+ggplot(data=SS20_5_long)+
+  geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack",width=1)+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+  labs(x="samples",y=NULL)+
+  facet_grid(.~species,scales = "free", space = "free")+
+  theme(axis.text.x=element_blank(),
+      axis.ticks.x=element_blank(),
+      axis.text.y=element_blank(),
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0),strip.text.x = element_text(angle = 90))
+
+
+STR_names<-distinct(read.delim("03_sampleListPerSubset/Subset20perSpecies_6.csv",header=FALSE))
+STRnames2<-STR_names %>% arrange(V1)
+SS20_6<-read.delim("05_subsetAdmixtureFiles/SS20_LIST5000_6.12.Q",sep = " ", header=FALSE)
+SS20_6$Sample<-STRnames2$V1
+SS20_6<-SS20_6 %>%
+  dplyr::mutate(across('Sample',str_replace,'.bam',''))
+SS20_6_dat<-merge(x=SS20_6,y=simp_meta,by.x="Sample",by.y="Seq",all.x=TRUE)
+SS20_6_long<-melt(SS20_6_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+
+SS20_6_dat$max<-rep(0,length(SS20_6_dat$Sample))
+for(j in 1:length(SS20_6_dat$Sample)){
+  i<-max.col(SS20_6_dat[,2:13])[j]
+  SS20_6_dat$max[j]<-SS20_6_dat[j,(i+1)]
+}
+
+ggplot(data=SS20_6_long)+
+  geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack",width=1)+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+  labs(x="samples",y=NULL)+
+  facet_grid(.~species,scales = "free", space = "free")+
+  theme(axis.text.x=element_blank(),
+      axis.ticks.x=element_blank(),
+      axis.text.y=element_blank(),
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0),strip.text.x = element_text(angle = 90))
+
+
+STR_names<-distinct(read.delim("03_sampleListPerSubset/Subset20perSpecies_7.csv",header=FALSE))
+STRnames2<-STR_names %>% arrange(V1)
+SS20_7<-read.delim("05_subsetAdmixtureFiles/SS20_LIST5000_7.12.Q",sep = " ", header=FALSE)
+SS20_7$Sample<-STRnames2$V1
+SS20_7<-SS20_7 %>%
+  dplyr::mutate(across('Sample',str_replace,'.bam',''))
+SS20_7_dat<-merge(x=SS20_7,y=simp_meta,by.x="Sample",by.y="Seq",all.x=TRUE)
+SS20_7_long<-melt(SS20_7_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+
+SS20_7_dat$max<-rep(0,length(SS20_7_dat$Sample))
+for(j in 1:length(SS20_7_dat$Sample)){
+  i<-max.col(SS20_7_dat[,2:13])[j]
+  SS20_7_dat$max[j]<-SS20_7_dat[j,(i+1)]
+}
+
+ggplot(data=SS20_7_long)+
+  geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack",width=1)+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+  labs(x="samples",y=NULL)+
+  facet_grid(.~species,scales = "free", space = "free")+
+  theme(axis.text.x=element_blank(),
+      axis.ticks.x=element_blank(),
+      axis.text.y=element_blank(),
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0),strip.text.x = element_text(angle = 90))
+
+
+STR_names<-distinct(read.delim("03_sampleListPerSubset/Subset20perSpecies_8.csv",header=FALSE))
+STRnames2<-STR_names %>% arrange(V1)
+SS20_8<-read.delim("05_subsetAdmixtureFiles/SS20_LIST5000_8.12.Q",sep = " ", header=FALSE)
+SS20_8$Sample<-STRnames2$V1
+SS20_8<-SS20_8 %>%
+  dplyr::mutate(across('Sample',str_replace,'.bam',''))
+SS20_8_dat<-merge(x=SS20_8,y=simp_meta,by.x="Sample",by.y="Seq",all.x=TRUE)
+SS20_8_long<-melt(SS20_8_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+
+SS20_8_dat$max<-rep(0,length(SS20_8_dat$Sample))
+for(j in 1:length(SS20_8_dat$Sample)){
+  i<-max.col(SS20_8_dat[,2:13])[j]
+  SS20_8_dat$max[j]<-SS20_8_dat[j,(i+1)]
+}
+
+ggplot(data=SS20_8_long)+
+  geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack",width=1)+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+  labs(x="samples",y=NULL)+
+  facet_grid(.~species,scales = "free", space = "free")+
+  theme(axis.text.x=element_blank(),
+      axis.ticks.x=element_blank(),
+      axis.text.y=element_blank(),
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0),strip.text.x = element_text(angle = 90))
+
+
+
+
+STR_names<-distinct(read.delim("03_sampleListPerSubset/Subset20perSpecies_9.csv",header=FALSE))
+STRnames2<-STR_names %>% arrange(V1)
+SS20_9<-read.delim("05_subsetAdmixtureFiles/SS20_LIST5000_9.12.Q",sep = " ", header=FALSE)
+SS20_9$Sample<-STRnames2$V1
+SS20_9<-SS20_9 %>%
+  dplyr::mutate(across('Sample',str_replace,'.bam',''))
+SS20_9_dat<-merge(x=SS20_9,y=simp_meta,by.x="Sample",by.y="Seq",all.x=TRUE)
+SS20_9_long<-melt(SS20_9_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+
+SS20_9_dat$max<-rep(0,length(SS20_9_dat$Sample))
+for(j in 1:length(SS20_9_dat$Sample)){
+  i<-max.col(SS20_9_dat[,2:13])[j]
+  SS20_9_dat$max[j]<-SS20_9_dat[j,(i+1)]
+}
+
+ggplot(data=SS20_9_long)+
+  geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack",width=1)+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+  labs(x="samples",y=NULL)+
+  facet_grid(.~species,scales = "free", space = "free")+
+  theme(axis.text.x=element_blank(),
+      axis.ticks.x=element_blank(),
+      axis.text.y=element_blank(),
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0),strip.text.x = element_text(angle = 90))
+
+
+STR_names<-distinct(read.delim("03_sampleListPerSubset/Subset20perSpecies_10.csv",header=FALSE))
+STRnames2<-STR_names %>% arrange(V1)
+SS20_10<-read.delim("05_subsetAdmixtureFiles/SS20_LIST5000_10.12.Q",sep = " ", header=FALSE)
+SS20_10$Sample<-STRnames2$V1
+SS20_10<-SS20_10 %>%
+  dplyr::mutate(across('Sample',str_replace,'.bam',''))
+SS20_10_dat<-merge(x=SS20_10,y=simp_meta,by.x="Sample",by.y="Seq",all.x=TRUE)
+SS20_10_long<-melt(SS20_10_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+
+SS20_10_dat$max<-rep(0,length(SS20_10_dat$Sample))
+for(j in 1:length(SS20_10_dat$Sample)){
+  i<-max.col(SS20_10_dat[,2:13])[j]
+  SS20_10_dat$max[j]<-SS20_10_dat[j,(i+1)]
+}
+
+ggplot(data=SS20_10_long)+
+  geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack",width=1)+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+  labs(x="samples",y=NULL)+
+  facet_grid(.~species,scales = "free", space = "free")+
+  theme(axis.text.x=element_blank(),
+      axis.ticks.x=element_blank(),
+      axis.text.y=element_blank(),
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0),strip.text.x = element_text(angle = 90))
+
+
+STR_names<-distinct(read.delim("03_sampleListPerSubset/Subset20perSpecies_11.csv",header=FALSE))
+STRnames2<-STR_names %>% arrange(V1)
+SS20_11<-read.delim("05_subsetAdmixtureFiles/SS20_LIST5000_11.12.Q",sep = " ", header=FALSE)
+SS20_11$Sample<-STRnames2$V1
+SS20_11<-SS20_11 %>%
+  dplyr::mutate(across('Sample',str_replace,'.bam',''))
+SS20_11_dat<-merge(x=SS20_11,y=simp_meta,by.x="Sample",by.y="Seq",all.x=TRUE)
+SS20_11_long<-melt(SS20_11_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+
+SS20_11_dat$max<-rep(0,length(SS20_11_dat$Sample))
+for(j in 1:length(SS20_11_dat$Sample)){
+  i<-max.col(SS20_11_dat[,2:13])[j]
+  SS20_11_dat$max[j]<-SS20_11_dat[j,(i+1)]
+}
+
+ggplot(data=SS20_11_long)+
+  geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack",width=1)+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+  labs(x="samples",y=NULL)+
+  facet_grid(.~species,scales = "free", space = "free")+
+  theme(axis.text.x=element_blank(),
+      axis.ticks.x=element_blank(),
+      axis.text.y=element_blank(),
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0),strip.text.x = element_text(angle = 90))
+
+
+STR_names<-distinct(read.delim("03_sampleListPerSubset/Subset20perSpecies_12.csv",header=FALSE))
+STRnames2<-STR_names %>% arrange(V1)
+SS20_12<-read.delim("05_subsetAdmixtureFiles/SS20_LIST5000_12.12.Q",sep = " ", header=FALSE)
+SS20_12$Sample<-STRnames2$V1
+SS20_12<-SS20_12 %>%
+  dplyr::mutate(across('Sample',str_replace,'.bam',''))
+SS20_12_dat<-merge(x=SS20_12,y=simp_meta,by.x="Sample",by.y="Seq",all.x=TRUE)
+SS20_12_long<-melt(SS20_12_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+
+SS20_12_dat$max<-rep(0,length(SS20_12_dat$Sample))
+for(j in 1:length(SS20_12_dat$Sample)){
+  i<-max.col(SS20_12_dat[,2:13])[j]
+  SS20_12_dat$max[j]<-SS20_12_dat[j,(i+1)]
+}
+
+ggplot(data=SS20_12_long)+
+  geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack",width=1)+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+  labs(x="samples",y=NULL)+
+  facet_grid(.~species,scales = "free", space = "free")+
+  theme(axis.text.x=element_blank(),
+      axis.ticks.x=element_blank(),
+      axis.text.y=element_blank(),
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0),strip.text.x = element_text(angle = 90))
+
+
+STR_names<-distinct(read.delim("03_sampleListPerSubset/Subset20perSpecies_13.csv",header=FALSE))
+STRnames2<-STR_names %>% arrange(V1)
+SS20_13<-read.delim("05_subsetAdmixtureFiles/SS20_LIST5000_13.12.Q",sep = " ", header=FALSE)
+SS20_13$Sample<-STRnames2$V1
+SS20_13<-SS20_13 %>%
+  dplyr::mutate(across('Sample',str_replace,'.bam',''))
+SS20_13_dat<-merge(x=SS20_13,y=simp_meta,by.x="Sample",by.y="Seq",all.x=TRUE)
+SS20_13_long<-melt(SS20_13_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+
+SS20_13_dat$max<-rep(0,length(SS20_13_dat$Sample))
+for(j in 1:length(SS20_13_dat$Sample)){
+  i<-max.col(SS20_13_dat[,2:13])[j]
+  SS20_13_dat$max[j]<-SS20_13_dat[j,(i+1)]
+}
+
+ggplot(data=SS20_13_long)+
+  geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack",width=1)+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+  labs(x="samples",y=NULL)+
+  facet_grid(.~species,scales = "free", space = "free")+
+  theme(axis.text.x=element_blank(),
+      axis.ticks.x=element_blank(),
+      axis.text.y=element_blank(),
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0),strip.text.x = element_text(angle = 90))
+
+library(dplyr)
+library(tidyverse)
+library(reshape2)
+STR_names<-distinct(read.delim("03_sampleListPerSubset/Subset20perSpecies_14.csv",header=FALSE))
+STRnames2<-STR_names %>% arrange(V1)
+SS20_14<-read.delim("05_subsetAdmixtureFiles/SS20_LIST5000_14.12.Q",sep = " ", header=FALSE)
+SS20_14$Sample<-STRnames2$V1
+SS20_14<-SS20_14 %>%
+  dplyr::mutate(across('Sample',str_replace,'.bam',''))
+SS20_14_dat<-merge(x=SS20_14,y=simp_meta,by.x="Sample",by.y="Seq",all.x=TRUE)
+SS20_14_long<-melt(SS20_14_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+
+SS20_14_dat$max<-rep(0,length(SS20_14_dat$Sample))
+for(j in 1:length(SS20_14_dat$Sample)){
+  i<-max.col(SS20_14_dat[,2:13])[j]
+  SS20_14_dat$max[j]<-SS20_14_dat[j,(i+1)]
+}
+
+ggplot(data=SS20_14_long)+
+  geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack",width=1)+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+  labs(x="samples",y=NULL)+
+  facet_grid(.~species,scales = "free", space = "free")+
+  theme(axis.text.x=element_blank(),
+      axis.ticks.x=element_blank(),
+      axis.text.y=element_blank(),
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0),strip.text.x = element_text(angle = 90))
+
+library(dplyr)
+library(tidyverse)
+library(reshape2)
+STR_names<-distinct(read.delim("03_sampleListPerSubset/Subset20perSpecies_15.csv",header=FALSE))
+STRnames2<-STR_names %>% arrange(V1)
+SS20_15<-read.delim("05_subsetAdmixtureFiles/SS20_LIST5000_15.12.Q",sep = " ", header=FALSE)
+SS20_15$Sample<-STRnames2$V1
+SS20_15<-SS20_15 %>%
+  dplyr::mutate(across('Sample',str_replace,'.bam',''))
+SS20_15_dat<-merge(x=SS20_15,y=simp_meta,by.x="Sample",by.y="Seq",all.x=TRUE)
+SS20_15_long<-melt(SS20_15_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+
+SS20_15_dat$max<-rep(0,length(SS20_15_dat$Sample))
+for(j in 1:length(SS20_15_dat$Sample)){
+  i<-max.col(SS20_15_dat[,2:13])[j]
+  SS20_15_dat$max[j]<-SS20_15_dat[j,(i+1)]
+}
+
+ggplot(data=SS20_15_long)+
+  geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack",width=1)+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+  labs(x="samples",y=NULL)+
+  facet_grid(.~species,scales = "free", space = "free")+
+  theme(axis.text.x=element_blank(),
+      axis.ticks.x=element_blank(),
+      axis.text.y=element_blank(),
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0),strip.text.x = element_text(angle = 90))
+
+
+
+STR_names<-distinct(read.delim("03_sampleListPerSubset/Subset20perSpecies_16.csv",header=FALSE))
+STRnames2<-STR_names %>% arrange(V1)
+SS20_16<-read.delim("05_subsetAdmixtureFiles/SS20_LIST5000_16.12.Q",sep = " ", header=FALSE)
+SS20_16$Sample<-STRnames2$V1
+SS20_16<-SS20_16 %>%
+  dplyr::mutate(across('Sample',str_replace,'.bam',''))
+SS20_16_dat<-merge(x=SS20_16,y=simp_meta,by.x="Sample",by.y="Seq",all.x=TRUE)
+SS20_16_long<-melt(SS20_16_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+
+SS20_16_dat$max<-rep(0,length(SS20_16_dat$Sample))
+for(j in 1:length(SS20_16_dat$Sample)){
+  i<-max.col(SS20_16_dat[,2:13])[j]
+  SS20_16_dat$max[j]<-SS20_16_dat[j,(i+1)]
+}
+
+ggplot(data=SS20_16_long)+
+  geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack",width=1)+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+  labs(x="samples",y=NULL)+
+  facet_grid(.~species,scales = "free", space = "free")+
+  theme(axis.text.x=element_blank(),
+      axis.ticks.x=element_blank(),
+      axis.text.y=element_blank(),
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0),strip.text.x = element_text(angle = 90))
+
+
+STR_names<-distinct(read.delim("03_sampleListPerSubset/Subset20perSpecies_17.csv",header=FALSE))
+STRnames2<-STR_names %>% arrange(V1)
+SS20_17<-read.delim("05_subsetAdmixtureFiles/SS20_LIST5000_17.12.Q",sep = " ", header=FALSE)
+SS20_17$Sample<-STRnames2$V1
+SS20_17<-SS20_17 %>%
+  dplyr::mutate(across('Sample',str_replace,'.bam',''))
+SS20_17_dat<-merge(x=SS20_17,y=simp_meta,by.x="Sample",by.y="Seq",all.x=TRUE)
+SS20_17_long<-melt(SS20_17_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+
+SS20_17_dat$max<-rep(0,length(SS20_17_dat$Sample))
+for(j in 1:length(SS20_17_dat$Sample)){
+  i<-max.col(SS20_17_dat[,2:13])[j]
+  SS20_17_dat$max[j]<-SS20_17_dat[j,(i+1)]
+}
+
+ggplot(data=SS20_17_long)+
+  geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack",width=1)+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+  labs(x="samples",y=NULL)+
+  facet_grid(.~species,scales = "free", space = "free")+
+  theme(axis.text.x=element_blank(),
+      axis.ticks.x=element_blank(),
+      axis.text.y=element_blank(),
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0),strip.text.x = element_text(angle = 90))
+
+
+STR_names<-distinct(read.delim("03_sampleListPerSubset/Subset20perSpecies_18.csv",header=FALSE))
+STRnames2<-STR_names %>% arrange(V1)
+SS20_18<-read.delim("05_subsetAdmixtureFiles/SS20_LIST5000_18.12.Q",sep = " ", header=FALSE)
+SS20_18$Sample<-STRnames2$V1
+SS20_18<-SS20_18 %>%
+  dplyr::mutate(across('Sample',str_replace,'.bam',''))
+SS20_18_dat<-merge(x=SS20_18,y=simp_meta,by.x="Sample",by.y="Seq",all.x=TRUE)
+SS20_18_long<-melt(SS20_18_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+
+SS20_18_dat$max<-rep(0,length(SS20_18_dat$Sample))
+for(j in 1:length(SS20_18_dat$Sample)){
+  i<-max.col(SS20_18_dat[,2:13])[j]
+  SS20_18_dat$max[j]<-SS20_18_dat[j,(i+1)]
+}
+
+ggplot(data=SS20_18_long)+
+  geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack",width=1)+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+  labs(x="samples",y=NULL)+
+  facet_grid(.~species,scales = "free", space = "free")+
+  theme(axis.text.x=element_blank(),
+      axis.ticks.x=element_blank(),
+      axis.text.y=element_blank(),
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0),strip.text.x = element_text(angle = 90))
+
+
+STR_names<-distinct(read.delim("03_sampleListPerSubset/Subset20perSpecies_19.csv",header=FALSE))
+STRnames2<-STR_names %>% arrange(V1)
+SS20_19<-read.delim("05_subsetAdmixtureFiles/SS20_LIST5000_19.12.Q",sep = " ", header=FALSE)
+SS20_19$Sample<-STRnames2$V1
+SS20_19<-SS20_19 %>%
+  dplyr::mutate(across('Sample',str_replace,'.bam',''))
+SS20_19_dat<-merge(x=SS20_19,y=simp_meta,by.x="Sample",by.y="Seq",all.x=TRUE)
+SS20_19_long<-melt(SS20_19_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+
+SS20_19_dat$max<-rep(0,length(SS20_19_dat$Sample))
+for(j in 1:length(SS20_19_dat$Sample)){
+  i<-max.col(SS20_19_dat[,2:13])[j]
+  SS20_19_dat$max[j]<-SS20_19_dat[j,(i+1)]
+}
+
+ggplot(data=SS20_19_long)+
+  geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack",width=1)+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+  labs(x="samples",y=NULL)+
+  facet_grid(.~species,scales = "free", space = "free")+
+  theme(axis.text.x=element_blank(),
+      axis.ticks.x=element_blank(),
+      axis.text.y=element_blank(),
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0),strip.text.x = element_text(angle = 90))
+
+
+STR_names<-distinct(read.delim("03_sampleListPerSubset/Subset20perSpecies_20.csv",header=FALSE))
+STRnames2<-STR_names %>% arrange(V1)
+SS20_20<-read.delim("05_subsetAdmixtureFiles/SS20_LIST5000_20.12.Q",sep = " ", header=FALSE)
+SS20_20$Sample<-STRnames2$V1
+SS20_20<-SS20_20 %>%
+  dplyr::mutate(across('Sample',str_replace,'.bam',''))
+SS20_20_dat<-merge(x=SS20_20,y=simp_meta,by.x="Sample",by.y="Seq",all.x=TRUE)
+SS20_20_long<-melt(SS20_20_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+
+SS20_20_dat$max<-rep(0,length(SS20_20_dat$Sample))
+for(j in 1:length(SS20_20_dat$Sample)){
+  i<-max.col(SS20_20_dat[,2:13])[j]
+  SS20_20_dat$max[j]<-SS20_20_dat[j,(i+1)]
+}
+
+ggplot(data=SS20_20_long)+
+  geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack",width=1)+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+  labs(x="samples",y=NULL)+
+  facet_grid(.~species,scales = "free", space = "free")+
+  theme(axis.text.x=element_blank(),
+      axis.ticks.x=element_blank(),
+      axis.text.y=element_blank(),
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0),strip.text.x = element_text(angle = 90))
+
+
+STR_names<-distinct(read.delim("03_sampleListPerSubset/Subset20perSpecies_21.csv",header=FALSE))
+STRnames2<-STR_names %>% arrange(V1)
+SS20_21<-read.delim("05_subsetAdmixtureFiles/SS20_LIST5000_21.12.Q",sep = " ", header=FALSE)
+SS20_21$Sample<-STRnames2$V1
+SS20_21<-SS20_21 %>%
+  dplyr::mutate(across('Sample',str_replace,'.bam',''))
+SS20_21_dat<-merge(x=SS20_21,y=simp_meta,by.x="Sample",by.y="Seq",all.x=TRUE)
+SS20_21_long<-melt(SS20_21_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+
+SS20_21_dat$max<-rep(0,length(SS20_21_dat$Sample))
+for(j in 1:length(SS20_21_dat$Sample)){
+  i<-max.col(SS20_21_dat[,2:13])[j]
+  SS20_21_dat$max[j]<-SS20_21_dat[j,(i+1)]
+}
+
+ggplot(data=SS20_21_long)+
+  geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack",width=1)+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+  labs(x="samples",y=NULL)+
+  facet_grid(.~species,scales = "free", space = "free")+
+  theme(axis.text.x=element_blank(),
+      axis.ticks.x=element_blank(),
+      axis.text.y=element_blank(),
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0),strip.text.x = element_text(angle = 90))
+
+
+STR_names<-distinct(read.delim("03_sampleListPerSubset/Subset20perSpecies_22.csv",header=FALSE))
+STRnames2<-STR_names %>% arrange(V1)
+SS20_22<-read.delim("05_subsetAdmixtureFiles/SS20_LIST5000_22.12.Q",sep = " ", header=FALSE)
+SS20_22$Sample<-STRnames2$V1
+SS20_22<-SS20_22 %>%
+  dplyr::mutate(across('Sample',str_replace,'.bam',''))
+SS20_22_dat<-merge(x=SS20_22,y=simp_meta,by.x="Sample",by.y="Seq",all.x=TRUE)
+SS20_22_long<-melt(SS20_22_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+
+SS20_22_dat$max<-rep(0,length(SS20_22_dat$Sample))
+for(j in 1:length(SS20_22_dat$Sample)){
+  i<-max.col(SS20_22_dat[,2:13])[j]
+  SS20_22_dat$max[j]<-SS20_22_dat[j,(i+1)]
+}
+
+ggplot(data=SS20_22_long)+
+  geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack",width=1)+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+  labs(x="samples",y=NULL)+
+  facet_grid(.~species,scales = "free", space = "free")+
+  theme(axis.text.x=element_blank(),
+      axis.ticks.x=element_blank(),
+      axis.text.y=element_blank(),
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0),strip.text.x = element_text(angle = 90))
+
+
+STR_names<-distinct(read.delim("03_sampleListPerSubset/Subset20perSpecies_23.csv",header=FALSE))
+STRnames2<-STR_names %>% arrange(V1)
+SS20_23<-read.delim("05_subsetAdmixtureFiles/SS20_LIST5000_23.12.Q",sep = " ", header=FALSE)
+SS20_23$Sample<-STRnames2$V1
+SS20_23<-SS20_23 %>%
+  dplyr::mutate(across('Sample',str_replace,'.bam',''))
+SS20_23_dat<-merge(x=SS20_23,y=simp_meta,by.x="Sample",by.y="Seq",all.x=TRUE)
+SS20_23_long<-melt(SS20_23_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+
+SS20_23_dat$max<-rep(0,length(SS20_23_dat$Sample))
+for(j in 1:length(SS20_23_dat$Sample)){
+  i<-max.col(SS20_23_dat[,2:13])[j]
+  SS20_23_dat$max[j]<-SS20_23_dat[j,(i+1)]
+}
+
+ggplot(data=SS20_23_long)+
+  geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack",width=1)+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+  labs(x="samples",y=NULL)+
+  facet_grid(.~species,scales = "free", space = "free")+
+  theme(axis.text.x=element_blank(),
+      axis.ticks.x=element_blank(),
+      axis.text.y=element_blank(),
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0),strip.text.x = element_text(angle = 90))
+
+```
+
+
+
+```{r}
+library(dplyr)
+library(readxl)
+library(stringr)
+newnames<-read_excel("07_pop_comp_across_runs.xlsx",sheet="Sheet4")
+#All_S12_sp<-read.csv("../02_STRUCTURE/Admixture_S12_Species_RM.csv")
+masterSTR<-data.frame(alb1=numeric(),alb2=numeric(),bic1=numeric(),bic2=numeric(),lob1=numeric(),lob2=numeric(),lyr1=numeric(),lyr2=numeric(),mac1=numeric(),mac2=numeric(),mar=numeric(),mic=numeric(),mon=numeric(),mue1=numeric(),sin=numeric(),ste=numeric(),alb_mic=numeric(),mic_mon=numeric(),mic_alb=numeric(),mue_pri=numeric(),pri_mue=numeric(),ste_mar5=numeric(),sin_mar5=numeric(),ste_mar=numeric(),ste_sin=numeric())
+
+meta<-read.csv("C:/Users/rmohn/Desktop/00_Scripts_and_Labels/00_METADATA/oldMeta/metadata_sequenced_taxonomyfixed_outgroup.csv")
+simp_meta<-data.frame(cbind(Seq=meta$Seq,colnum=meta$collectionNumber,species=meta$GenomicVoucherID_USE_THIS,state=meta$state.provIndIowanace,site=meta$site,lat=meta$latitude.orig,long=meta$longitude.orig))
+
+for(i in 1:23){
+  
+  STR_names<-distinct(read.delim(paste("03_sampleListPerSubset/Subset20perSpecies_",i,".csv",sep=""),header = FALSE))
+  STRnames2<-STR_names %>% arrange(V1)
+  SS20<-read.delim(paste("05_subsetAdmixtureFiles/SS20_LIST5000_",i,".12.Q",sep=""),sep = " ", header=FALSE)
+  SS20$Sample<-STRnames2$V1
+  SS20$Run<-i
+  SS20<-SS20 %>%
+    dplyr::mutate(across('Sample',str_replace,'.bam',''))
+  newnamesvec = setNames(as.character(names(newnames)[3:14]),as.character(newnames[i,3:14]))
+  SS20_a<-SS20 %>% rename(newnamesvec)
+  masterSTR<-bind_rows(masterSTR,SS20_a)
+  ###Merge keeping all the columns and adding NAs for those that don't match
+}
+
+
+masterSTR_dat<-merge(masterSTR,simp_meta,by.x="Sample",by.y="Seq")
+write.csv(masterSTR_dat,file="07_Output/mergeSTRres.csv",quote=FALSE)
+library(tidyr)
+library(ggplot2)
+library(data.table)
+setnafill(masterSTR,cols=c("alb1",  "alb2", "bic1", "bic2", "lob1", "lob2", "lyr1", "lyr2", "mac1",
+"mac2", "mar",  "mic",  "mon",  "sin",  "ste",  "alb_mic","mic_mon", "mic_alb","mue_pri","pri_mue","ste_mar5", "sin_mar5", "ste_mar","ste_sin","pri","pri2","mue2","mue1", "alb5", "bic_lyr"),fill = 0)
+
+colorsstr<-c(alb1="#27219B",alb5="#6A56E4",alb2="#161956",bic1="#127DB2",bic2="#6CC4F0",bic_lyr="#04D297",lob1="#30663C",lob2="#9EE692",lyr1="#91B8C1",lyr2="#758F7C",mac1="#C85C76",mac2="#6E1414",mar="#F2ED09",mic="#4165EB",mon="#6D1CF0",mue1="#C131E3",mue2="#6B1D75",pri="#F23679",pri2="#F89EBE",mue_pri="#D49DF9",pri_mue="#CF275F",sin="#B30909",ste="#FAC416",ste_mar="#E18E15",ste_mar5="#D5983F",sin_mar5="#AF4009",ste_sin="#ED6511",mic_mon="#96899B",alb_mic="#9EB9FC")
+
+masterSTR_dat_long<-reshape2::melt(masterSTR_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long","Run"))
+pdf("07_Output/STR_subset_Supp.pdf",height=9,width=6.5)
+ggplot(masterSTR_dat_long)+
+  geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack",width=1)+
+  scale_fill_manual(values=colorsstr)+
+  labs(x="samples",y=NULL)+
+  facet_grid(Run~species,scales = "free", space = "free")+
+  theme(axis.text.x=element_blank(),
+      axis.ticks.x=element_blank(),
+      axis.text.y=element_blank(),
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0),panel.spacing.x=unit(.2, "lines"),panel.spacing.y=unit(0, "lines"),legend.title = element_text( size=8), legend.text=element_text(size=8),legend.position = "bottom",strip.text.x=element_text(angle=90))
+dev.off()
+
+#rowsum(masterSTR)
+masterSTR$alb<-masterSTR$alb1+masterSTR$alb2
+masterSTR$mac<-masterSTR$mac1+masterSTR$mac2
+masterSTR$bic<-masterSTR$bic1+masterSTR$bic2
+masterSTR$lyr<-masterSTR$lyr1+masterSTR$lyr2
+masterSTR$lob<-masterSTR$lob1+masterSTR$lob2
+masterSTR$mue<-masterSTR$mue1+masterSTR$mue2
+masterSTR$pri3<-masterSTR$pri+masterSTR$pri2
+
+#masterSTR$muepri<-masterSTR$mue_pri+masterSTR$mue+masterSTR$pri+masterSTR$pri_mue
+#masterSTR$biclyr<-masterSTR$bic+masterSTR$lyr+masterSTR$bic_lyr
+masterSTR$stemar<-masterSTR$ste+masterSTR$mar+masterSTR$ste_mar+masterSTR$ste_mar5
+
+submasterSTR<-subset(masterSTR,alb>.1|bic>.1|lob>.1|lyr>.1|mac>.1|mic>.1|mon>.1|mue>.1|pri>.1|stemar>.1|sin>.1)
+submasterSTR_med<-aggregate(x=list(alb=submasterSTR$alb,bic=submasterSTR$bic,lob=submasterSTR$lob,lyr=submasterSTR$lyr,mac=submasterSTR$mac,mic=submasterSTR$mic,mon=submasterSTR$mon,mue=submasterSTR$mue,pri=submasterSTR$pri,sin=submasterSTR$sin,ste=submasterSTR$ste,stemar=submasterSTR$stemar,mar=submasterSTR$mar),by=list(submasterSTR$Sample),FUN=function(x) c(mid = quantile(x,probs=c(0.5),type=3,na.rm=TRUE)))
+
+
+submasterSTR_max<-aggregate(x=list(alb=submasterSTR$alb,bic=submasterSTR$bic,lob=submasterSTR$lob,lyr=submasterSTR$lyr,mac=submasterSTR$mac,mic=submasterSTR$mic,mon=submasterSTR$mon,mue=submasterSTR$mue,pri=submasterSTR$pri,sin=submasterSTR$sin,mar=submasterSTR$mar,ste=submasterSTR$ste,stemar=submasterSTR$stemar),by=list(submasterSTR$Sample),FUN=max)
+
+submasterSTR2<-merge(submasterSTR_med,submasterSTR_max,by="Group.1")
+subSTR3<-merge(submasterSTR2,simp_meta,by.x="Group.1",by.y="Seq")
+
+subSTR3$sp<-rep("sp",length(subSTR3$Group.1))
+subSTR3$hyb<-rep("sp",length(subSTR3$Group.1))
+
+
+
+
+####TEST 2######
+for(i in 1:length(subSTR3$Group.1)){
+  if(subSTR3$alb.x[i]>.99&(subSTR3$bic.y[i]<0.01&subSTR3$lob.y[i]<0.01&subSTR3$lyr.y[i]<0.01&subSTR3$mac.y[i]<0.01&subSTR3$mac.y[i]<0.01&subSTR3$mar.y[i]<0.01&subSTR3$mic.y[i]<0.01&subSTR3$mon.y[i]<0.01&subSTR3$mue.y[i]<0.01&subSTR3$pri.y[i]<0.01&subSTR3$sin.y[i]<0.01&subSTR3$ste.y[i]<0.01&subSTR3$stemar.y[i]<0.01)){
+    subSTR3$sp[i] <- "alb"
+    subSTR3$hyb[i] <- "pure"
+  }else{
+    if(subSTR3$bic.x[i]>.99&(subSTR3$alb.y[i]<0.01&subSTR3$lob.y[i]<0.01&subSTR3$lyr.y[i]<0.01&subSTR3$mac.y[i]<0.01&subSTR3$mac.y[i]<0.01&subSTR3$mar.y[i]<0.01&subSTR3$mic.y[i]<0.01&subSTR3$mon.y[i]<0.01&subSTR3$mue.y[i]<0.01&subSTR3$pri.y[i]<0.01&subSTR3$sin.y[i]<0.01&subSTR3$ste.y[i]<0.01&subSTR3$stemar.y[i]<0.01)){
+      subSTR3$sp[i] <- "bic"
+      subSTR3$hyb[i] <- "pure"
+    }else{
+      if(subSTR3$lob.x[i]>.99&subSTR3$alb.y[i]<0.01&subSTR3$bic.y[i]<0.01&subSTR3$lyr.y[i]<0.01&subSTR3$mac.y[i]<0.01&subSTR3$mac.y[i]<0.01&subSTR3$mar.y[i]<0.01&subSTR3$mic.y[i]<0.01&subSTR3$mon.y[i]<0.01&subSTR3$mue.y[i]<0.01&subSTR3$pri.y[i]<0.01&subSTR3$sin.y[i]<0.01&subSTR3$ste.y[i]<0.01&subSTR3$stemar.y[i]<0.01){
+        subSTR3$sp[i] <- "lob"
+        subSTR3$hyb[i] <- "pure"
+      }else{
+        if(subSTR3$lyr.x[i]>.99&(subSTR3$alb.y[i]<0.01&subSTR3$bic.y[i]<0.01&subSTR3$lob.y[i]<0.01&subSTR3$mac.y[i]<0.01&subSTR3$mar.y[i]<0.01&subSTR3$mic.y[i]<0.01&subSTR3$mon.y[i]<0.01&subSTR3$mue.y[i]<0.01&subSTR3$pri.y[i]<0.01&subSTR3$sin.y[i]<0.01&subSTR3$ste.y[i]<0.01&subSTR3$stemar.y[i]<0.01)){
+          subSTR3$sp[i] <- "lyr"
+          subSTR3$hyb[i] <- "pure"
+        }else{
+          if(subSTR3$mac.x[i]>.99&(subSTR3$alb.y[i]<0.01&subSTR3$bic.y[i]<0.01&subSTR3$lob.y[i]<0.01&subSTR3$lyr.y[i]<0.01&subSTR3$mar.y[i]<0.01&subSTR3$mic.y[i]<0.01&subSTR3$mon.y[i]<0.01&subSTR3$mue.y[i]<0.01&subSTR3$pri.y[i]<0.01&subSTR3$sin.y[i]<0.01&subSTR3$ste.y[i]<0.01&subSTR3$stemar.y[i]<0.01)){
+            subSTR3$sp[i] <- "mac"
+            subSTR3$hyb[i] <- "pure"
+          }else{
+            if(subSTR3$mic.x[i]>.99&(subSTR3$alb.y[i]<0.01&subSTR3$bic.y[i]<0.01&subSTR3$lob.y[i]<0.01&subSTR3$lyr.y[i]<0.01&subSTR3$mac.y[i]<0.01&subSTR3$mac.y[i]<0.01&subSTR3$mar.y[i]<0.01&subSTR3$mon.y[i]<0.01&subSTR3$mue.y[i]<0.01&subSTR3$pri.y[i]<0.01&subSTR3$sin.y[i]<0.01&subSTR3$ste.y[i]<0.01&subSTR3$stemar.y[i]<0.01)){
+              subSTR3$sp[i] <- "mic"
+              subSTR3$hyb[i] <- "pure"
+            }else{
+              if(subSTR3$mon.x[i]>.99&(subSTR3$alb.y[i]<0.01&subSTR3$bic.y[i]<0.01&subSTR3$lob.y[i]<0.01&subSTR3$lyr.y[i]<0.01&subSTR3$mac.y[i]<0.01&subSTR3$mac.y[i]<0.01&subSTR3$mar.y[i]<0.01&subSTR3$mic.y[i]<0.01&subSTR3$mue.y[i]<0.01&subSTR3$pri.y[i]<0.01&subSTR3$sin.y[i]<0.01&subSTR3$ste.y[i]<0.01&subSTR3$stemar.y[i]<0.01)){
+                subSTR3$sp[i] <- "mon"
+                subSTR3$hyb[i] <- "pure"
+              }else{
+                if(subSTR3$mue.x[i]>.99&(subSTR3$alb.y[i]<0.01&subSTR3$bic.y[i]<0.01&subSTR3$lob.y[i]<0.01&subSTR3$lyr.y[i]<0.01&subSTR3$mac.y[i]<0.01&subSTR3$mac.y[i]<0.01&subSTR3$mar.y[i]<0.01&subSTR3$mic.y[i]<0.01&subSTR3$mon.y[i]<0.01&subSTR3$pri.y[i]<0.01&subSTR3$sin.y[i]<0.01&subSTR3$ste.y[i]<0.01&subSTR3$stemar.y[i]<0.01)){
+                  subSTR3$sp[i] <- "mue"
+                  subSTR3$hyb[i] <- "pure"
+                }else{
+                  if(subSTR3$pri.x[i]>.99&(subSTR3$alb.y[i]<0.01&subSTR3$bic.y[i]<0.01&subSTR3$lob.y[i]<0.01&subSTR3$lyr.y[i]<0.01&subSTR3$mac.y[i]<0.01&subSTR3$mac.y[i]<0.01&subSTR3$mar.y[i]<0.01&subSTR3$mic.y[i]<0.01&subSTR3$mon.y[i]<0.01&subSTR3$mue.y[i]<0.01&subSTR3$sin.y[i]<0.01&subSTR3$ste.y[i]<0.01&subSTR3$stemar.y[i]<0.01)){
+                    subSTR3$sp[i] <- "pri"
+                    subSTR3$hyb[i] <- "pure"
+                  }else{
+                    if(subSTR3$sin.x[i]>.99&(subSTR3$alb.y[i]<0.01&subSTR3$bic.y[i]<0.01&subSTR3$lob.y[i]<0.01&subSTR3$lyr.y[i]<0.01&subSTR3$mac.y[i]<0.01&subSTR3$mac.y[i]<0.01&subSTR3$mar.y[i]<0.01&subSTR3$mic.y[i]<0.01&subSTR3$mon.y[i]<0.01&subSTR3$mue.y[i]<0.01&subSTR3$pri.y[i]<0.01&subSTR3$ste.y[i]<0.01&subSTR3$stemar.y[i]<0.01)){
+                      subSTR3$sp[i] <- "sin"
+                      subSTR3$hyb[i] <- "pure"
+                    }else{
+                      if(subSTR3$stemar.x[i]>.99&(subSTR3$alb.y[i]<0.01&subSTR3$bic.y[i]<0.01&subSTR3$lob.y[i]<0.01&subSTR3$lyr.y[i]<0.01&subSTR3$mac.y[i]<0.01&subSTR3$mac.y[i]<0.01&subSTR3$mic.y[i]<0.01&subSTR3$mon.y[i]<0.01&subSTR3$mue.y[i]<0.01&subSTR3$pri.y[i]<0.01&subSTR3$sin.y[i]<0.01&subSTR3$mar.y[i]<0.01)){
+                        subSTR3$sp[i] <- "ste"
+                        subSTR3$hyb[i] <- "pure"
+                      }else{
+                        if(subSTR3$stemar.x[i]>.99&(subSTR3$alb.y[i]<0.01&subSTR3$bic.y[i]<0.01&subSTR3$lob.y[i]<0.01&subSTR3$lyr.y[i]<0.01&subSTR3$mac.y[i]<0.01&subSTR3$mac.y[i]<0.01&subSTR3$ste.y[i]<0.01&subSTR3$mic.y[i]<0.01&subSTR3$mon.y[i]<0.01&subSTR3$mue.y[i]<0.01&subSTR3$pri.y[i]<0.01&subSTR3$sin.y[i]<0.01)){
+                          subSTR3$sp[i] <- "mar"
+                          subSTR3$hyb[i] <- "pure"
+                        }else{
+                          subSTR3$sp[i] <- "hyb"
+                          subSTR3$hyb[i] <- "hyb"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+
+puresubSTR3<-subset(subSTR3,hyb=="pure")
+
+write.csv(puresubSTR3,file="07_Output/pureIndvSubSTR.csv")
+write.csv(subSTR3,file="07_Output/subSTRComb.csv")
+
+
+write.table(x=paste(subset(puresubSTR3,sp=="mac")[,1],".bam",sep=""),"07_Output/Mac99.tsv",quote = FALSE,row.names = FALSE,col.names = FALSE)
+
+
+```
+
+#Visualization for Manuscript
+```{r}
+library(reshape2)
+library(ggplot2)
+subSTRComb<-read.csv("07_Output/subSTRComb.csv")
+subSTRCombmed<-subSTRComb[,-c(13,15:28)]
+subSTRCombmed$tot<-rowSums(subSTRCombmed[,3:13])
+subSTRCombmed_long<-melt(subSTRCombmed,id.vars =  c("X","Group.1", "colnum","species","state","site","lat","long","sp","hyb","tot"))
+subSTRCombmed_long$species2<-paste("Q. ",sapply(strsplit(x=subSTRCombmed_long$species,split=c(" ")),"[",2),sep="")
+
+##ManuscriptFigure
+ggplot(data=subset(subSTRCombmed_long,tot>0.99))+
+  geom_bar(mapping=aes(x=paste(species2,Group.1),y=value,fill=variable),stat="identity",position="stack",width=1)+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255","yellow","pink"))+
+  labs(x="samples",y=NULL,fill="population")+
+  facet_grid(.~species2,scales = "free", space = "free")+
+  theme(axis.text.x=element_blank(),
+      axis.ticks.x=element_blank(),
+      axis.text.y=element_blank(),
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0),strip.text.x = element_text(angle = 90,face = "italic"))
+
+
+subSTRCombmax<-subSTRComb[,-c(3:15)]
+subSTRCombmax_long<-melt(subSTRCombmax,id.vars =  c("X","Group.1", "colnum","species","state","site","lat","long","sp","hyb"))
+
+ggplot(data=subSTRCombmax_long)+
+  geom_bar(mapping=aes(x=paste(species,Group.1),y=value,fill=variable),stat="identity",position="stack",width=1)+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255","yellow","pink"))+
+  labs(x="samples",y=NULL)+
+  facet_grid(.~species,scales = "free", space = "free")+
+  theme(axis.text.x=element_blank(),
+      axis.ticks.x=element_blank(),
+      axis.text.y=element_blank(),
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0),strip.text.x = element_text(angle = 90))
+
+
+##Macrocarpa only
+# ggplot(data=subset(subSTRCombmed_long,tot>0.99&species=="Quercus macrocarpa Michx."))+
+#   geom_bar(mapping=aes(x=paste(species,Group.1),y=value,fill=variable),stat="identity",position="stack",width=1)+
+#   scale_fill_manual(values=c("#661100","#332288","#000000","#117733","#999999","#DDCC77","#88CCEE","#CC6677","#AA4499","#999933","yellow","#44AA99","#882255"))+
+#   labs(x="samples",y=NULL)+
+#   facet_grid(.~species,scales = "free", space = "free")+
+#   theme(axis.text.x=element_blank(),
+#       axis.ticks.x=element_blank(),
+#       axis.text.y=element_blank(),
+#       axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
+# 
+# SSmac99str<-subset(subSTRCombmed,tot>0.99&species=="Quercus macrocarpa Michx.")
+# 
+
+```
+
