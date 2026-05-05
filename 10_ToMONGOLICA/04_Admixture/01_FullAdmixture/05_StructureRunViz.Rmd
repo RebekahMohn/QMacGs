@@ -1,0 +1,2316 @@
+---
+title: "QGenomes"
+author: "Rebekah Mohn"
+date: "2023-11-17"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r}
+library(readxl)
+library(ggplot2)
+library(reshape2)
+library(tidyr)
+library(dplyr)
+library(stringr)
+library(scatterpie)
+
+cbbPalette <- c("#888888","#88CCEE","#CC6677","#117733","#661100","#000000","#332288","#44AA99","#AA4499","#999933","#DDCC77","#882255")
+cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73",
+                "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+```
+
+```{r}
+
+```
+
+
+```{r}
+full_het<-read.delim("../01_SummaryStats/HET_FULL.het")
+meta<-read.csv("../../00_Scripts_and_Labels/00_METADATA/metadata_sequenced_taxonomyfixed_outgroup.csv")
+full_het$O.HET<-full_het$N_SITES - full_het$O.HOM.
+full_het$P.HET<-full_het$O.HET / full_het$N_SITES
+full_het$Seq<-full_het$INDV
+full_het<-full_het %>%
+  dplyr::mutate(across('Seq',str_replace,'.bam',''))
+full_het_dat<-merge(x=full_het,y=meta,by.x="Seq",by.y="Seq",all.x=TRUE)
+
+ggplot(data=full_het_dat)+
+  geom_histogram(mapping=aes(x=O.HET, fill = GenomicVoucherID_USE_THIS))+
+  facet_grid(GenomicVoucherID_USE_THIS~., scale="free_y")+
+  scale_fill_manual(values=c("#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#888888","#44AA99","#AA4499","#999933","#000000","#882255", "yellow","lightgray"))+
+  theme(strip.text.y=element_text(angle=0))+
+  theme_light()
+
+
+ggplot(data=full_het_dat)+
+  geom_point(mapping=aes(x=O.HOM./N_SITES, y=N_SITES, color = GenomicVoucherID_USE_THIS))+
+  scale_color_manual(values=c("#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#888888","#44AA99","#AA4499","#999933","#000000","#882255", "yellow","lightgray"))+
+  theme_light()+
+  ylim(130000000,148000000)+
+  xlim(130000000,143000000)+
+  facet_grid(GenomicVoucherID_USE_THIS~.)
+
+ggplot(data=full_het_dat)+
+  geom_point(mapping=aes(x=O.HOM./N_SITES, y=N_SITES, color = GenomicVoucherID_USE_THIS))+
+  scale_color_manual(values=c("#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#888888","#44AA99","#AA4499","#999933","#000000","#882255", "yellow","lightgray"))+
+  theme_light()#+
+  facet_grid(GenomicVoucherID_USE_THIS~.)
+
+ggplot(data=full_het_dat)+
+  geom_point(mapping=aes(x=P.HET, y=N_SITES, color = GenomicVoucherID_USE_THIS))+
+  scale_color_manual(values=c("#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#888888","#44AA99","#AA4499","#999933","#000000","#882255", "yellow","lightgray"))+
+  ylim(130000000,148000000)+
+  xlim(.01,.025)+
+  theme_light()
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+###Full Structure
+
+```{r}
+library(dplyr)
+library(stringr)
+library(reshape2)
+meta<-read.csv("../../00_Scripts_and_Labels/00_METADATA/metadata_sequenced_taxonomyfixed_outgroup.csv")
+
+simp_meta<-data.frame(cbind(Seq=meta$Seq,colnum=meta$collectionNumber,species=meta$GenomicVoucherID_USE_THIS,state=meta$state.provIndIowanace,site=meta$site,lat=meta$latitude.orig,long=meta$longitude.orig))
+
+STR_names<-read.delim("../SubsetFullSTR.txt",sep = "\t",header=FALSE)
+# All_STR3<-read.delim("All_LIST_FILTER10000.3.Q",sep = " ", header=FALSE)
+# All_STR3$Sample<-full_het$INDV
+# All_STR3<-All_STR3 %>%
+#   dplyr::mutate(across('Sample',str_replace,'.bam',''))
+# All_S3_dat<-merge(x=All_STR3,y=simp_meta,by.x="Sample",by.y="Seq",all.x=TRUE)
+# #All_STR3_sp<-merge(x=All_STR2,y=samp,by.x="Sample",by.y="Seq")
+# All_S3_long<-melt(All_S3_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+# 
+All_STR6<-read.delim("ALLSTR_LIST_FILTER10000.6.Q",sep = " ", header=FALSE)
+All_STR6$Sample<-STR_names$V1
+All_STR6<-All_STR6 %>%
+  dplyr::mutate(across('Sample',str_replace,'.bam',''))
+All_S6_dat<-merge(x=All_STR6,y=simp_meta,by.x="Sample",by.y="Seq",all.x=TRUE)
+#All_STR3_sp<-merge(x=All_STR2,y=samp,by.x="Sample",by.y="Seq")
+All_S6_long<-melt(All_S6_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+
+library(dplyr)
+All_STR8<-read.delim("ALLSTR_LIST_FILTER10000.8.Q",sep = " ", header=FALSE)
+All_STR8$Sample<-STR_names$V1
+All_STR8<-All_STR8 %>%
+  dplyr::mutate(across('Sample',str_replace,'.bam',''))
+All_S8_dat<-merge(x=All_STR8,y=simp_meta,by.x="Sample",by.y="Seq",all.x=TRUE)
+#All_STR3_sp<-merge(x=All_STR2,y=samp,by.x="Sample",by.y="Seq")
+All_S8_long<-melt(All_S8_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+
+
+
+All_STR10<-read.delim("ALLSTR_LIST_FILTER10000.10.Q",sep = " ", header=FALSE)
+All_STR10$Sample<-STR_names$V1
+All_STR10<-All_STR10 %>%
+  dplyr::mutate(across('Sample',str_replace,'.bam',''))
+All_S10_dat<-merge(x=All_STR10,y=simp_meta,by.x="Sample",by.y="Seq",all.x=TRUE)
+#All_STR3_sp<-merge(x=All_STR2,y=samp,by.x="Sample",by.y="Seq")
+All_S10_long<-melt(All_S10_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+write.csv(All_S10_long, "C:/Users/rmohn/Desktop/10_Analysis/02_STRUCTURE/S10_long.csv",row.names = FALSE)
+
+
+All_STR12<-read.delim("ALLSTR_LIST_FILTER10000.12.Q",sep = " ", header=FALSE)
+All_STR12$Sample<-STR_names$V1
+All_STR12<-All_STR12 %>%
+  dplyr::mutate(across('Sample',str_replace,'.bam',''))
+All_S12_dat<-merge(x=All_STR12,y=simp_meta,by.x="Sample",by.y="Seq",all.x=TRUE)
+#All_STR3_sp<-merge(x=All_STR2,y=samp,by.x="Sample",by.y="Seq")
+All_S12_long<-melt(All_S12_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+write.csv(All_S12_long, "C:/Users/rmohn/Desktop/10_Analysis/02_STRUCTURE/S12_long.csv",row.names = FALSE)
+
+# All_STR15<-read.delim("All_LIST_FILTER10000.15.Q",sep = " ", header=FALSE)
+# All_STR15$Sample<-full_het$INDV
+# All_STR15<-All_STR15 %>%
+#   dplyr::mutate(across('Sample',str_replace,'.bam',''))
+# All_S15_dat<-merge(x=All_STR15,y=simp_meta,by.x="Sample",by.y="Seq",all.x=TRUE)
+# #All_STR3_sp<-merge(x=All_STR2,y=samp,by.x="Sample",by.y="Seq")
+# All_S15_long<-melt(All_S15_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+
+All_STR16<-read.delim("ALLSTR_LIST_FILTER10000.16.Q",sep = " ", header=FALSE)
+All_STR16$Sample<-STR_names$V1
+All_STR16<-All_STR16 %>%
+  dplyr::mutate(across('Sample',str_replace,'.bam',''))
+All_S16_dat<-merge(x=All_STR15,y=simp_meta,by.x="Sample",by.y="Seq",all.x=TRUE)
+
+All_S16_long<-melt(All_S16_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+
+
+All_STR17<-read.delim("ALLSTR_LIST_FILTER10000.17.Q",sep = " ", header=FALSE)
+All_STR17$Sample<-STR_names$V1
+All_STR17<-All_STR17 %>%
+  dplyr::mutate(across('Sample',str_replace,'.bam',''))
+All_S17_dat<-merge(x=All_STR17,y=simp_meta,by.x="Sample",by.y="Seq",all.x=TRUE)
+#All_STR3_sp<-merge(x=All_STR2,y=samp,by.x="Sample",by.y="Seq")
+All_S17_long<-melt(All_S17_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+
+
+
+# ggplot(data=All_S3_long)+
+#   geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack")+
+#   scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+#   labs(title = "All Chromosomes; 3 populations")+
+#   facet_grid(species~.)+
+#   theme(axis.text.x=element_blank(), 
+#       axis.ticks.x=element_blank(), 
+#       axis.text.y=element_blank(), 
+#       axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
+# 
+# 
+ggplot(data=All_S6_long)+
+  geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack")+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+  labs(title = "All Chromosomes; 3 populations")+
+  facet_grid(species~.)+
+  theme(axis.text.x=element_blank(),
+      axis.ticks.x=element_blank(),
+      axis.text.y=element_blank(),
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
+
+ggplot(data=All_S8_long)+
+  geom_bar(mapping=aes(x=paste(species,state,Sample),y=value,fill=variable),stat="identity",position="stack")+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+  labs(title = "All Chromosomes; 8 populations")+
+  facet_grid(species~.)+
+  theme(axis.text.x=element_blank(), 
+      axis.ticks.x=element_blank(), 
+      axis.text.y=element_blank(), 
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
+
+ggplot(data=All_S7_long)+
+  geom_bar(mapping=aes(x=paste(species,state,Sample),y=value,fill=variable),stat="identity",position="stack")+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+  labs(title = "All Chromosomes; 8 populations")+
+  facet_grid(species~.)+
+  theme(axis.text.x=element_blank(), 
+      axis.ticks.x=element_blank(), 
+      axis.text.y=element_blank(), 
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
+
+
+ggplot(data=subset(All_S8_long,Sample=="SYST-MOR-0006777"))+
+  geom_bar(mapping=aes(x=paste(species,state,Sample),y=value,fill=variable),stat="identity",position="stack")+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+  labs(x="MO_BOT_045_All")+
+  facet_grid(species~.)+
+  theme(axis.text.x=element_blank(), 
+      axis.ticks.x=element_blank(), 
+      axis.text.y=element_blank(), 
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
+
+ggplot(data=subset(All_S12_long,Sample=="SYST-MOR-0006949"|Sample=="SYST-MOR-0006948"))+
+  geom_bar(mapping=aes(x=paste(species,state,Sample),y=value,fill=variable),stat="identity",position="stack")+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+  labs(x=NULL, y="genetic composition (%)")+
+  theme_light()+
+  theme(axis.text.x=element_blank(), 
+      axis.ticks.x=element_blank(), 
+      axis.text.y=element_blank(), 
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
+
+
+ggplot(data=subset(All_S12_long))+
+  geom_bar(mapping=aes(x=paste(species,state,Sample),y=value,fill=variable),stat="identity",position="stack")+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+  labs(x=NULL, y="genetic composition (%)")+
+  theme_light()+
+  theme(axis.text.x=element_blank(), 
+      axis.ticks.x=element_blank(), 
+      axis.text.y=element_blank(), 
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
+
+
+# ggplot(data=All_S10_long)+
+#   geom_bar(mapping=aes(x=paste(species,state,Sample),y=value,fill=variable),stat="identity",position="stack")+
+#   scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+#   labs(title = "All Chromosomes; 3 populations")+
+#   facet_grid(species~.)+
+#   theme(axis.text.x=element_blank(), 
+#       axis.ticks.x=element_blank(), 
+#       axis.text.y=element_blank(), 
+#       axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
+
+ggplot(data=All_S12_long)+
+  geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack")+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+  labs(title = "All Chromosomes; 12 populations")+
+  facet_grid(species~.)+
+  theme(axis.text.x=element_blank(), 
+      axis.ticks.x=element_blank(), 
+      axis.text.y=element_blank(), 
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
+
+ggplot(data=All_S16_long)+
+  geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack")+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255","lightgreen","lightpink","orange"))+
+  labs(title = "All Chromosomes; 16 populations")+
+  facet_grid(species~.)+
+  theme(axis.text.x=element_blank(),
+      axis.ticks.x=element_blank(),
+      axis.text.y=element_blank(),
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
+
+ggplot(data=All_S17_long)+
+  geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack")+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","green","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255","lightgreen","lightpink","orange","darkgreen","lightyellow","yellow"))+
+  labs(title = "All Chromosomes; 17 populations")+
+  facet_grid(species~.)+
+  theme(axis.text.x=element_blank(), 
+      axis.ticks.x=element_blank(), 
+      axis.text.y=element_blank(), 
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
+
+
+
+ggplot(data = states)+
+  geom_polygon(data = counties, aes(x = long, y = lat, group = group),fill = 'gray90', color = "white", lwd = 0.1)+
+  geom_polygon(aes(x = long, y = lat, group = group),
+                      fill = NA, color = "black")+
+  scale_fill_manual('Species cluster', values = cbbPalette)+
+  coord_map('albers', lat0=40, lat1=38)+
+  geom_scatterpie(aes(x = longitude.orig, y = latitude.orig,group=Sample), data = c12_S12_mue_coord, cols = c("V2","V12","remainder"), alpha = 1)
+
+
+```
+
+```{r}
+ggplot(data=All_STR12_long)+
+  geom_bar(mapping=aes(x=paste(Sp_Pop,Sample),y=value,fill=variable),stat="identity",position="stack")+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+  labs(title = "All Chromosomes; 2 populations")+
+  facet_grid(St~.)+
+  theme(axis.text.x=element_blank(), 
+      axis.ticks.x=element_blank(), 
+      axis.text.y=element_blank(), 
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
+
+```
+
+
+```{r}
+Species_S12<-as.data.frame(cbind(All_S12_dat$Sample,All_S12_dat$colnum,All_S12_dat$species))
+Species_S12$alba<-All_S12_dat$V9
+Species_S12$bicolor_lyrata<-All_S12_dat$V5
+Species_S12$lobata<-All_S12_dat$V11
+Species_S12$macrocarpa<-All_S12_dat$V1+All_S12_dat$V7+All_S12_dat$V10
+Species_S12$michauxii<-All_S12_dat$V4
+Species_S12$montana<-All_S12_dat$V2
+Species_S12$muehlenbergii_prinoides<-All_S12_dat$V12+All_S12_dat$V6
+Species_S12$sinuata<-All_S12_dat$V3
+Species_S12$stellata_margaretiae<-All_S12_dat$V8
+write.csv(x=Species_S12,file="Admixture_S12_Species.csv",col.names = TRUE,row.names=FALSE)
+```
+
+
+
+```{r}
+
+All_S12_dat2=All_S12_dat
+All_S12_dat2$strpop<-rep("hybrid",694)
+#All_S12_dat2$sp_cor<-rep(FALSE,720)
+All_S12_dat2$hybrid<-rep("hybrid60",694)
+for(i in 1:694){
+  if(All_S12_dat2[i,9]>.99){
+    All_S12_dat2[i,20]<-"Qste_Qmar"
+    All_S12_dat2[i,21]<-"species"
+  }else{
+    if(All_S12_dat2[i,10]>.99){
+      All_S12_dat2[i,20]<-"Qalb"
+      All_S12_dat2[i,21]<-"species"
+    }else{
+      if(All_S12_dat2[i,6]>.99){
+        All_S12_dat2[i,20]<-"Qlyr_Qbic"
+        All_S12_dat2[i,21]<-"species"
+      }else{
+        if(All_S12_dat2[i,5]>.99){
+          All_S12_dat2[i,20]<-"Qmic"
+          All_S12_dat2[i,21]<-"species"
+        }else{
+            if(All_S12_dat2[i,3]>.99){
+              All_S12_dat2[i,20]<-"Qmon"
+              All_S12_dat2[i,21]<-"species"
+            }else{
+              if(All_S12_dat2[i,7]+All_S12_dat2[i,13]>.99){
+                All_S12_dat2[i,20]<-"Qmue"
+                All_S12_dat2[i,21]<-"species"
+              }else{
+                if(All_S12_dat2[i,4]>.99){
+                  All_S12_dat2[i,20]<-"Qsin"
+                  All_S12_dat2[i,21]<-"species"
+               }else{
+                 if(All_S12_dat2[i,12]>.99){
+                    All_S12_dat2[i,20]<-"Qlob"
+                    All_S12_dat2[i,21]<-"species"
+                 }else{
+                   if(All_S12_dat2[i,8]+All_S12_dat2[i,11]+All_S12_dat2[i,2]>0.99){
+                     All_S12_dat2[i,20]<-"Qmac"
+                     All_S12_dat2[i,21]<-"species"
+                   }else{
+                     if(All_S12_dat2[i,8]+All_S12_dat2[i,11]+All_S12_dat2[i,2]>0.60|All_S12_dat2[i,12]>.60|All_S12_dat2[i,4]>.60|All_S12_dat2[i,7]+All_S12_dat2[i,13]>.60|All_S12_dat2[i,3]>.60|All_S12_dat2[i,5]>.60|All_S12_dat2[i,6]>.60|All_S12_dat2[i,10]>.60|All_S12_dat2[i,9]>.60){
+                       All_S12_dat2[i,21]<-"hybrid99"
+                       
+                     }
+                   }
+
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+write.csv(All_S12_dat2, "C:/Users/rmohn/Desktop/10_Analysis/02_STRUCTURE/S12_hyb99.csv",row.names = FALSE)
+
+# All_STR12_dat2$maxstrpop<-rep("v0",693)
+# All_STR12_dat2[,21]<-colnames(All_STR12_dat2)[1+apply(All_STR12_dat2[,2:13],1,which.max)]
+# All_STR12_dat2$maxstrsp<-rep("sp",693)
+# for(i in 1:693){
+#     if(All_STR7_sp2[i,21]=="V3"){
+#       All_STR7_sp2[i,22]<-"Qalb"
+#     }else{
+#       if(All_STR7_sp2[i,21]=="V6"){
+#         All_STR7_sp2[i,22]<-"Qlyr_Qbic"
+#         if(All_STR7_sp2[i,14]=="Qlyr"|All_STR7_sp2[i,14]=="Qbic"){
+#          All_STR7_sp2[i,22]<-All_STR7_sp2[i,14]
+#         }
+#       }else{
+#        if(All_STR7_sp2[i,21]=="V1"){
+#         All_STR7_sp2[i,22]<-"Qmic_Qmon"
+#         if(All_STR7_sp2[i,14]=="Qmic"|All_STR7_sp2[i,14]=="Qmon"){
+#           All_STR7_sp2[i,22]<-All_STR7_sp2[i,14]
+#           }
+#         }else{
+#             if(All_STR7_sp2[i,21]=="V4"){
+#               All_STR7_sp2[i,22]<-"Qste_Qmar_Qsin"
+#               if(All_STR7_sp2[i,14]=="Qste"|All_STR7_sp2[i,14]=="Qmar"|All_STR7_sp2[i,14]=="Qsin"){
+#                 All_STR7_sp2[i,22]<-All_STR7_sp2[i,14]
+#               }
+#             }else{
+#               if(All_STR7_sp2[i,21]=="V7"){
+#                 All_STR7_sp2[i,22]<-"Qmue_Qpri"
+#                 if(All_STR7_sp2[i,14]=="Qmue"|All_STR7_sp2[i,14]=="Qpri"){
+#                   All_STR7_sp2[i,22]<-All_STR7_sp2[i,14]
+#                 }
+#               }else{
+#                 if(All_STR7_sp2[i,21]=="V2"|All_STR7_sp2[i,21]=="V5"){
+#                   All_STR7_sp2[i,22]<-"Qmac"
+#                 }
+#               }
+#         }
+#       }
+#     }
+#   }
+# }
+
+ggplot(data = states)+
+  geom_polygon(data = counties, aes(x = long, y = lat, group = group),fill = 'white', color = "white", lwd = 0.1)+
+  geom_polygon(aes(x = long, y = lat, group = group),
+                      fill = NA, color = "gray85")+
+ # scale_fill_manual('Species cluster', values = cbbPalette)+
+  coord_map('albers', lat0=40, lat1=38)+
+  geom_jitter(data = subset(All_S12_dat2,!is.na(lat)),mapping=aes(x = as.numeric(long), y = as.numeric(lat), color=hybrid), height=.5, width=.5,alpha = .7,size=1)+
+  #scale_color_binned(type="viridis",direction=-1)+
+  scale_color_manual(values=c("darkblue","orange"))#+
+  #scale_color_binned(wacolors$sound_sunset, reverse=TRUE)
+  #scale_size_continuous(range=c(.7,1))#+
+  #scale_shape_manual( values = c(16,1))
+
+
+
+```
+
+
+```{r}
+#install.packages("wacolors")
+library(wacolors)
+All_het<-read.delim("../chr1-12.het",sep = c("\t","/"))
+#c12_miss<-read.delim("../chr6_reps.lmiss")
+#c12_snpden<-read.delim("../chr6_reps.snpden")
+All_het$O.HET.<-(All_het$N_SITES-All_het$O.HOM.)
+All_het$P.HET.<-(All_het$N_SITES-All_het$O.HOM.)/All_het$N_SITES
+All_het$P.HOM.<-(All_het$O.HOM.)/All_het$N_SITES
+samp<-read.csv("../../Sample_SpxPop2.csv")
+All_het_sp<-merge(All_het,All_STR12_sp2,by.x = "INDV", by.y="Sample")
+ggplot(data = All_het_sp)+
+  geom_point(mapping=aes(x=P.HET.,y=P.HET.,color=Sp))+
+  scale_color_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+  labs(x="Heterozygosity/SNP in All Chromosomes",y="Heterozygosity/SNP in Chromosomes 12")+
+  theme_light()
+
+
+
+ggplot(data = All_het_sp)+
+  geom_histogram(mapping=aes(x=P.HET.,fill=strpop),binwidth = .001)+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255","#444444","orange","lightblue"))+
+  facet_grid(strpop~., scales="free_y")+
+  labs(x="Heterozygosity/SNP in All Chromosomes")+
+  theme_light()+
+  theme(strip.text.y = element_text(angle = 0))
+
+All_het_coord<-merge(All_het_sp,coord_samp,by.x="INDV",by.y="Seq")
+ggplot(data = states)+
+  geom_polygon(data = counties, aes(x = long, y = lat, group = group),fill = 'white', color = "white", lwd = 0.1)+
+  geom_polygon(aes(x = long, y = lat, group = group),
+                      fill = NA, color = "gray85")+
+  scale_fill_manual('Species cluster', values = cbbPalette)+
+  coord_map('albers', lat0=40, lat1=38)+
+  geom_jitter(aes(x = longitude.orig, y = latitude.orig,color=P.HET.),width=.5,height=.5, data = All_het_coord, alpha = 1,size=1)+
+  #scale_color_binned(type="viridis",direction=-1)+
+  scale_color_binned(high="darkblue",low="yellow")#+
+  #scale_color_binned(wacolors$sound_sunset, reverse=TRUE)
+  #scale_shape_manual( values = c(16,1))
+  
+
+All_het_coord<-merge(All_het_sp,coord_samp,by.x="INDV",by.y="Seq")
+ggplot(data = states)+
+  geom_polygon(data = counties, aes(x = long, y = lat, group = group),fill = 'white', color = "white", lwd = 0.1)+
+  geom_polygon(aes(x = long, y = lat, group = group),
+                      fill = NA, color = "gray85")+
+  scale_fill_manual('Species cluster', values = cbbPalette)+
+  coord_map('albers', lat0=40, lat1=38)+
+  geom_jitter(aes(x = longitude.orig, y = latitude.orig,shape=hybrid,color=hybrid),width=.5,height=.5, data = All_het_coord, alpha = .6,size=1.5)+
+  #scale_color_binned(type="viridis",direction=-1)+
+  scale_color_manual(values=c("darkblue","orange"))+
+  #scale_color_binned(wacolors$sound_sunset, reverse=TRUE)
+  scale_size_continuous(range=c(.7,1))#+
+  #scale_shape_manual( values = c(16,1))
+```
+
+```{r} 
+All_snpden<-read.delim("../chr1-12_reps_SNPd.snpden")
+
+
+ggplot(data = All_snpden)+
+  geom_point(mapping=aes(x=BIN_START, y=SNP_COUNT),size=.2,alpha=0.1)+
+  facet_grid(CHROM~.)+
+  labs(title="All Chromosomes",x="location", y="count")+
+  theme_light()
+
+Qmac_snpden<-read.delim("../chr1-12_Qmac_wpi2.snpden")
+
+
+ggplot(data = Qmac_snpden)+
+  geom_point(mapping=aes(x=BIN_START, y=SNP_COUNT),size=.2,alpha=0.1)+
+  facet_grid(CHROM~.)+
+  labs(title="All Chromosomes",x="location", y="count")+
+  theme_light()
+```
+
+
+```{r}
+All_STR7_sp2=All_STR7_sp
+All_STR7_sp2$strpop<-rep("hybrid",693)
+All_STR7_sp2$sp_cor<-rep(FALSE,693)
+All_STR7_sp2$hybrid<-rep(FALSE,693)
+for(i in 1:693){
+    if(All_STR7_sp2[i,4]>.90){
+      All_STR7_sp2[i,13]<-"Qalb"
+      if(All_STR7_sp2[i,9]=="Qalb"){
+       All_STR7_sp2[i,14]<-TRUE
+      }
+    }else{
+      if(All_STR7_sp2[i,7]>.90){
+        All_STR7_sp2[i,13]<-"Qlyr_Qbic"
+        if(All_STR7_sp2[i,9]=="Qlyr"|All_STR7_sp2[i,9]=="Qbic"){
+         All_STR7_sp2[i,14]<-TRUE
+         All_STR7_sp2[i,13]<-All_STR7_sp2[i,9]
+        }
+      }else{
+       if(All_STR7_sp2[i,2]>.90){
+        All_STR7_sp2[i,13]<-"Qmic_Qmon"
+        if(All_STR7_sp2[i,9]=="Qmic"|All_STR7_sp2[i,9]=="Qmon"){
+          All_STR7_sp2[i,14]<-TRUE
+          All_STR7_sp2[i,13]<-All_STR7_sp2[i,9]
+          }
+        }else{
+            if(All_STR7_sp2[i,5]>.85){
+              All_STR7_sp2[i,13]<-"Qste_Qmar_Qsin"
+              if(All_STR7_sp2[i,9]=="Qste"|All_STR7_sp2[i,9]=="Qmar"|All_STR7_sp2[i,9]=="Qsin"){
+                All_STR7_sp2[i,14]<-TRUE
+                All_STR7_sp2[i,13]<-All_STR7_sp2[i,9]
+              }
+            }else{
+              if(All_STR7_sp2[i,8]>.90){
+                All_STR7_sp2[i,13]<-"Qmue_Qpri"
+                if(All_STR7_sp2[i,9]=="Qmue"|All_STR7_sp2[i,9]=="Qpri"){
+                  All_STR7_sp2[i,14]<-TRUE
+                  All_STR7_sp2[i,13]<-All_STR7_sp2[i,9]
+                }
+              }else{
+                if(All_STR7_sp2[i,3]+All_STR7_sp2[i,6]>0.90){
+                  All_STR7_sp2[i,13]<-"Qmac"
+                  if(All_STR7_sp2[i,9]=="Qmac"){
+                    All_STR7_sp2[i,14]<-TRUE
+                  }
+                }else{
+            #      if(All_STR7_sp2[i,14]=="hybrid"){
+                   if(max(All_STR7_sp2[i,2:8])>.80){
+                     All_STR7_sp2[i,13]<-"F3_hybrid"
+                     All_STR7_sp2[i,15]<-"TRUE"
+                   }else{
+                     if(max(All_STR7_sp2[i,2:8])>.60){
+                       All_STR7_sp2[i,13]<-"F2_hybrid"
+                       All_STR7_sp2[i,15]<-"TRUE"
+                     }else{
+                       All_STR7_sp2[i,13]<-"F1_hybrid"
+                       All_STR7_sp2[i,15]<-"TRUE"
+                   #   }
+                  #  }
+               #   }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+All_STR7_sp2$maxstrpop<-rep("v0",693)
+All_STR7_sp2[,16]<-colnames(All_STR7_sp2)[1+apply(All_STR7_sp2[,2:8],1,which.max)]
+All_STR7_sp2$maxstrsp<-rep("sp",693)
+for(i in 1:693){
+    if(All_STR7_sp2[i,16]=="V3"){
+      All_STR7_sp2[i,17]<-"Qalb"
+    }else{
+      if(All_STR7_sp2[i,16]=="V6"){
+        All_STR7_sp2[i,17]<-"Qlyr_Qbic"
+        if(All_STR7_sp2[i,9]=="Qlyr"|All_STR7_sp2[i,9]=="Qbic"){
+         All_STR7_sp2[i,17]<-All_STR7_sp2[i,9]
+        }
+      }else{
+       if(All_STR7_sp2[i,16]=="V1"){
+        All_STR7_sp2[i,17]<-"Qmic_Qmon"
+        if(All_STR7_sp2[i,9]=="Qmic"|All_STR7_sp2[i,9]=="Qmon"){
+          All_STR7_sp2[i,17]<-All_STR7_sp2[i,9]
+          }
+        }else{
+            if(All_STR7_sp2[i,16]=="V4"){
+              All_STR7_sp2[i,17]<-"Qste_Qmar_Qsin"
+              if(All_STR7_sp2[i,9]=="Qste"|All_STR7_sp2[i,9]=="Qmar"|All_STR7_sp2[i,9]=="Qsin"){
+                All_STR7_sp2[i,17]<-All_STR7_sp2[i,9]
+              }
+            }else{
+              if(All_STR7_sp2[i,16]=="V7"){
+                All_STR7_sp2[i,17]<-"Qmue_Qpri"
+                if(All_STR7_sp2[i,9]=="Qmue"|All_STR7_sp2[i,9]=="Qpri"){
+                  All_STR7_sp2[i,17]<-All_STR7_sp2[i,9]
+                }
+              }else{
+                if(All_STR7_sp2[i,16]=="V2"|All_STR7_sp2[i,16]=="V5"){
+                  All_STR7_sp2[i,17]<-"Qmac"
+                }
+              }
+        }
+      }
+    }
+  }
+}
+
+write.csv(All_STR7_sp2,"../../STR7_sp_pops.csv")
+```
+
+###Qmac
+```{r}
+
+###Qmac Structure
+
+Qmac_Sam<-read.delim("../toLobata10/Samp_sp_Qmac2",header = FALSE)
+#coord_samp<-read.delim("../../00_Scripts_and_Labels/00_LABELS/coord_samp.csv",header=FALSE)
+#Qmac_Samp<-merge(Qmac_Sam,coord_samp,by.x = "V1",by.y = "Seq",all.y=FALSE, all.x=TRUE)
+
+Qmac_STR2<-read.delim("../toLobata10/chr1-12_Qmac.2.Q",sep = " ", header=FALSE)
+Qmac_STR2[,(length(Qmac_STR2[1,])+1)]=Qmac_Sam
+
+Qmac_STR2_sp<-merge(x=Qmac_STR2,y=meta,by.x="V1.1",by.y="Seq",all.x=TRUE,all.y=FALSE)
+Qmac_STR2_long<-melt(Qmac_STR2_sp,id.vars =  c("V1.1","GenomicVoucherID_USE_THIS","Pop","latitude.orig","longitude.orig"))
+
+# Qmac_STR3<-read.delim("../chr1-12_Qmac.3.Q",sep = " ", header=FALSE)
+# Qmac_STR3[,(length(Qmac_STR3[1,])+1):(length(Qmac_STR3[1,])+3)]=Qmac_Samp
+# Qmac_STR3_sp<-merge(x=Qmac_STR3,y=samp,by.x="V1.1",by.y="Seq")
+# Qmac_STR3_long<-melt(Qmac_STR3_sp,id.vars =  c("V1.1","Sp","Sp_Pop","Pop","St","latitude.orig","longitude.orig"))
+# 
+# Qmac_STR4<-read.delim("../chr1-12_Qmac.4.Q",sep = " ", header=FALSE)
+# Qmac_STR4[,(length(Qmac_STR4[1,])+1):(length(Qmac_STR4[1,])+3)]=Qmac_Samp
+# Qmac_STR4_sp<-merge(x=Qmac_STR4,y=samp,by.x="V1.1",by.y="Seq")
+# Qmac_STR4_long<-melt(Qmac_STR4_sp,id.vars =  c("V1.1","Sp","Sp_Pop","Pop","St","latitude.orig","longitude.orig"))
+# 
+# Qmac_STR5<-read.delim("../chr1-12_Qmac.5.Q",sep = " ", header=FALSE)
+# Qmac_STR5[,(length(Qmac_STR5[1,])+1):(length(Qmac_STR5[1,])+3)]=Qmac_Samp
+# Qmac_STR5_sp<-merge(x=Qmac_STR5,y=samp,by.x="V1.1",by.y="Seq")
+# Qmac_STR5_long<-melt(Qmac_STR5_sp,id.vars =  c("V1.1","Sp","Sp_Pop","Pop","St","latitude.orig","longitude.orig"))
+# 
+# Qmac_STR6<-read.delim("../chr1-12_Qmac.6.Q",sep = " ", header=FALSE)
+# Qmac_STR6[,(length(Qmac_STR6[1,])+1):(length(Qmac_STR6[1,])+3)]=Qmac_Samp
+# Qmac_STR6_sp<-merge(x=Qmac_STR6,y=samp,by.x="V1.1",by.y="Seq")
+# Qmac_STR6_long<-melt(Qmac_STR6_sp,id.vars =  c("V1.1","Sp","Sp_Pop","Pop","St","latitude.orig","longitude.orig"))
+# 
+# Qmac_STR7<-read.delim("../chr1-12_Qmac.7.Q",sep = " ", header=FALSE)
+# Qmac_STR7[,(length(Qmac_STR7[1,])+1):(length(Qmac_STR7[1,])+3)]=Qmac_Samp
+# Qmac_STR7_sp<-merge(x=Qmac_STR7,y=samp,by.x="V1.1",by.y="Seq")
+# Qmac_STR7_long<-melt(Qmac_STR7_sp,id.vars =  c("V1.1","Sp","Sp_Pop","Pop","St","latitude.orig","longitude.orig"))
+# 
+# Qmac_STR8<-read.delim("../chr1-12_Qmac.8.Q",sep = " ", header=FALSE)
+# Qmac_STR8[,(length(Qmac_STR8[1,])+1):(length(Qmac_STR8[1,])+3)]=Qmac_Samp
+# Qmac_STR8_sp<-merge(x=Qmac_STR8,y=samp,by.x="V1.1",by.y="Seq")
+# Qmac_STR8_long<-melt(Qmac_STR8_sp,id.vars =  c("V1.1","Sp","Sp_Pop","Pop","St","latitude.orig","longitude.orig"))
+# 
+# Qmac_STR9<-read.delim("../chr1-12_Qmac.9.Q",sep = " ", header=FALSE)
+# Qmac_STR9[,(length(Qmac_STR9[1,])+1):(length(Qmac_STR9[1,])+3)]=Qmac_Samp
+# Qmac_STR9_sp<-merge(x=Qmac_STR9,y=samp,by.x="V1.1",by.y="Seq")
+# Qmac_STR9_long<-melt(Qmac_STR9_sp,id.vars =  c("V1.1","Sp","Sp_Pop","Pop","St","latitude.orig","longitude.orig"))
+# 
+# # Qmac_STR10<-read.delim("../chr1-12_Qmac.10.Q",sep = " ", header=FALSE)
+# # Qmac_STR10$V1<-c12_het$INDV
+# # Qmac_STR10_sp<-merge(x=Qmac_STR10,y=samp,by.x="V1",by.y="Seq")
+# # Qmac_STR10_long<-melt(Qmac_STR10_sp,id.vars =  c("V1","Sp","Sp_Pop","Pop","St"))
+# # 
+# Qmac_STR11<-read.delim("../chr1-12_Qmac.11.Q",sep = " ", header=FALSE)
+# Qmac_STR11[,(length(Qmac_STR11[1,])+1):(length(Qmac_STR11[1,])+3)]=Qmac_Samp
+# Qmac_STR11_sp<-merge(x=Qmac_STR11,y=samp,by.x="V1.1",by.y="Seq")
+# Qmac_STR11_long<-melt(Qmac_STR11_sp,id.vars =  c("V1","Sp","Sp_Pop","Pop","St"))
+# # 
+# Qmac_STR12<-read.delim("../chr1-12_Qmac.12.Q",sep = " ", header=FALSE)
+# Qmac_STR12$V1<-c12_het$INDV
+# Qmac_STR12_sp<-merge(x=Qmac_STR12,y=samp,by.x="V1",by.y="Seq")
+# Qmac_STR12_long<-melt(Qmac_STR12_sp,id.vars =  c("V1","Sp","Sp_Pop","Pop","St"))
+# 
+# Qmac_STR13<-read.delim("../chr1-12_Qmac.10.Q",sep = " ", header=FALSE)
+# Qmac_STR13$V1<-c12_het$INDV
+# Qmac_STR13_sp<-merge(x=Qmac_STR13,y=samp,by.x="V1",by.y="Seq")
+# Qmac_STR13_long<-melt(Qmac_STR13_sp,id.vars =  c("V1","Sp","Sp_Pop","Pop","St"))
+# 
+# Qmac_STR14<-read.delim("../chr1-12_Qmac.14.Q",sep = " ", header=FALSE)
+# Qmac_STR14$V1<-c12_het$INDV
+# Qmac_STR14_sp<-merge(x=Qmac_STR14,y=samp,by.x="V1",by.y="Seq")
+# Qmac_STR14_long<-melt(Qmac_STR14_sp,id.vars =  c("V1","Sp","Sp_Pop","Pop","St"))
+# 
+# Qmac_STR15<-read.delim("../chr1-12_Qmac.15.Q",sep = " ", header=FALSE)
+# Qmac_STR15$V1<-c12_het$INDV
+# Qmac_STR15_sp<-merge(x=Qmac_STR15,y=samp,by.x="V1",by.y="Seq")
+# Qmac_STR15_long<-melt(Qmac_STR15_sp,id.vars =  c("V1","Sp","Sp_Pop","Pop","St"))
+
+
+Qmac_STR2_long$STR<-rep("STR2",length(Qmac_STR2_long[,1]))
+# Qmac_STR3_long$STR<-rep("STR3",length(Qmac_STR3_long[,1]))
+# Qmac_STR4_long$STR<-rep("STR4",length(Qmac_STR4_long[,1]))
+# Qmac_STR5_long$STR<-rep("STR5",length(Qmac_STR5_long[,1]))
+# Qmac_STR6_long$STR<-rep("STR6",length(Qmac_STR6_long[,1]))
+# Qmac_STR7_long$STR<-rep("STR7",length(Qmac_STR7_long[,1]))
+# Qmac_STR8_long$STR<-rep("STR8",length(Qmac_STR8_long[,1]))
+# Qmac_STR9_long$STR<-rep("STR9",length(Qmac_STR9_long[,1]))
+
+# Qmac_STRall_long<-rbind(Qmac_STR2_long,Qmac_STR3_long,Qmac_STR4_long,Qmac_STR5_long,Qmac_STR6_long,Qmac_STR7_long,Qmac_STR8_long,Qmac_STR9_long)
+# 
+# ggplot(data=Qmac_STRall_long)+
+#   geom_bar(mapping=aes(x=paste(Pop,V1.1),y=value,fill=variable),stat="identity",position="stack")+
+#   scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+#   labs(title = "Q. macrocarpa samples, All chromosomes")+
+#   facet_grid(STR~.)+
+#   theme(axis.text.x=element_blank(), 
+#       axis.ticks.x=element_blank(), 
+#       axis.text.y=element_blank(), 
+#       axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
+
+
+
+
+cbbPalette2.5=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255")
+
+ggplot(data = states)+
+  geom_polygon(data = counties, aes(x = long, y = lat, group = group),fill = 'white', color = "gray90", lwd = 0.1)+
+  geom_polygon(aes(x = long, y = lat, group = group),
+                      fill = NA, color = "black")+
+  scale_fill_manual('Species cluster', values = cbbPalette2.5)+
+  coord_map(xlim = c(-105,-68))+
+  geom_scatterpie(aes(x = longitude.orig, y = latitude.orig,group=Pop), data = Qmac_STR2_sp, cols = c("V1","V2"), alpha = 1)
+
+# ggplot(data = states)+
+#   geom_polygon(data = counties, aes(x = long, y = lat, group = group),color = 'gray90', fill = "white", lwd = 0.1)+
+#   geom_polygon(aes(x = long, y = lat, group = group),
+#                       fill = NA, color = "black")+
+#   scale_fill_manual('Species cluster', values = cbbPalette2.5)+
+#   coord_map('albers', lat0=40, lat1=38)+
+#   geom_scatterpie(aes(x = longitude.orig, y = latitude.orig,group=Pop), data = Qmac_STR3_sp, cols = c("V1","V2","V3"), alpha = 1)
+# 
+# ggplot(data = states)+
+#   geom_polygon(data = counties, aes(x = long, y = lat, group = group),color = 'gray90', fill = "white", lwd = 0.1)+
+#   geom_polygon(aes(x = long, y = lat, group = group),
+#                       fill = NA, color = "black")+
+#   scale_fill_manual('Species cluster', values = cbbPalette2.5)+
+#   coord_map('albers', lat0=40, lat1=38)+
+#   geom_scatterpie(aes(x = longitude.orig, y = latitude.orig,group=Pop), data = Qmac_STR4_sp, cols = c("V1","V2","V3","V4"), alpha = 1)
+# 
+# ggplot(data = states)+
+#   geom_polygon(data = counties, aes(x = long, y = lat, group = group),color = 'gray90', fill = "white", lwd = 0.1)+
+#   geom_polygon(aes(x = long, y = lat, group = group),
+#                       fill = NA, color = "black")+
+#   scale_fill_manual('Species cluster', values = cbbPalette2.5)+
+#   coord_map('albers', lat0=40, lat1=38)+
+#   geom_scatterpie(aes(x = longitude.orig, y = latitude.orig,group=Pop), data = Qmac_STR5_sp, cols = c("V1","V2","V3","V4","V5"), alpha = 1)
+# 
+# ggplot(data = states)+
+#   geom_polygon(data = counties, aes(x = long, y = lat, group = group),color = 'gray90', fill = "white", lwd = 0.1)+
+#   geom_polygon(aes(x = long, y = lat, group = group),
+#                       fill = NA, color = "black")+
+#   scale_fill_manual('Species cluster', values = cbbPalette2.5)+
+#   coord_map('albers', lat0=40, lat1=38)+
+#   geom_scatterpie(aes(x = longitude.orig, y = latitude.orig,group=Pop), data = Qmac_STR6_sp, cols = c("V1","V2","V3","V4","V5","V6"), alpha = 1)
+# 
+# ggplot(data = states)+
+#   geom_polygon(data = counties, aes(x = long, y = lat, group = group),color = 'gray90', fill = "white", lwd = 0.1)+
+#   geom_polygon(aes(x = long, y = lat, group = group),
+#                       fill = NA, color = "black")+
+#   scale_fill_manual('Species cluster', values = cbbPalette2.5)+
+#   coord_map('albers', lat0=40, lat1=38)+
+#   geom_scatterpie(aes(x = longitude.orig, y = latitude.orig,group=Pop), data = Qmac_STR7_sp, cols = c("V1","V2","V3","V4","V5","V6","V7"), alpha = 1)
+# 
+# ggplot(data = states)+
+#   geom_polygon(data = counties, aes(x = long, y = lat, group = group),color = 'gray90', fill = "white", lwd = 0.1)+
+#   geom_polygon(aes(x = long, y = lat, group = group),
+#                       fill = NA, color = "black")+
+#   scale_fill_manual('Species cluster', values = cbbPalette2.5)+
+#   coord_map('albers', lat0=40, lat1=38)+
+#   geom_scatterpie(aes(x = longitude.orig, y = latitude.orig,group=Pop), data = Qmac_STR8_sp, cols = c("V1","V2","V3","V4","V5","V6","V7","V8"), alpha = 1)
+# 
+# ggplot(data = states)+
+#   geom_polygon(data = counties, aes(x = long, y = lat, group = group),color = 'gray90', fill = "white", lwd = 0.1)+
+#   geom_polygon(aes(x = long, y = lat, group = group),
+#                       fill = NA, color = "black")+
+#   scale_fill_manual('Species cluster', values = cbbPalette2.5)+
+#   coord_map('albers', lat0=40, lat1=38)+
+#   geom_scatterpie(aes(x = longitude.orig, y = latitude.orig,group=Pop), data = Qmac_STR9_sp, cols = c("V1","V2","V3","V4","V5","V6","V7","V8","V9"), alpha = 1)
+# 
+# 
+# ggplot(data = states)+
+#   geom_polygon(data = counties, aes(x = long, y = lat, group = group),color = 'gray90', fill = "white", lwd = 0.1)+
+#   geom_polygon(aes(x = long, y = lat, group = group),
+#                       fill = NA, color = "black")+
+#   scale_fill_manual('Species cluster', values = cbbPalette2.5)+
+#   coord_map('albers', lat0=40, lat1=38)+
+#   geom_scatterpie(aes(x = longitude.orig, y = latitude.orig,group=Pop), data = Qmac_STR11_sp, cols = c("V1","V2","V3","V4","V5","V6","V7","V8","V9","V10","V11"), alpha = 1)
+
+
+
+
+
+
+```
+```{r}
+Qmac_STR2_sp2<-Qmac_STR2_sp
+Qmac_STR2_sp2$mainpop<-rep("mix",325)
+Qmac_STR2_sp2$mixamount<-rep(0,325)
+for(i in 1:325){
+  Qmac_STR2_sp2[i,10]<-"mix"
+  Qmac_STR2_sp2[i,11]<-max(Qmac_STR2_sp2[i,2:3])
+  if(Qmac_STR2_sp2[i,2]>.99){
+    Qmac_STR2_sp2[i,10]<-"North"
+  }else{
+    if(Qmac_STR2_sp2[i,3]>.99){
+      Qmac_STR2_sp2[i,10]<-"South"
+    }
+  }
+}
+All_het<-read.delim("../chr1-12.het",sep = c("\t","/"))
+All_het$O.HET.<-(All_het$N_SITES-All_het$O.HOM.)
+All_het$P.HET.<-(All_het$N_SITES-All_het$O.HOM.)/All_het$N_SITES
+All_het$P.HOM.<-(All_het$O.HOM.)/All_het$N_SITES
+Qmac_STR2_sp2<-merge(x=Qmac_STR2_sp2,y=All_het,by.x="V1.1",by.y="INDV",all.x=TRUE, all.y=FALSE)
+write.table(x=Qmac_STR2_sp2,"Qmac_STR2_pops99.tsv",sep="\t",quote = FALSE)
+getwd()
+
+ggplot()+
+  geom_point(mapping = aes(x=Qmac_STR2_sp2$mixamount,y=Qmac_STR2_sp2$P.HET.,color=Qmac_STR2_sp2$mainpop))
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+All_het<-read.delim("../chr1-12.het",sep = c("\t","/"))
+#c12_miss<-read.delim("../chr6_reps.lmiss")
+#c12_snpden<-read.delim("../chr6_reps.snpden")
+All_het$O.HET.<-(All_het$N_SITES-All_het$O.HOM.)
+All_het$P.HET.<-(All_het$N_SITES-All_het$O.HOM.)/All_het$N_SITES
+All_het$P.HOM.<-(All_het$O.HOM.)/All_het$N_SITES
+#samp<-read.csv("../../Sample_SpxPop2.csv")
+Qmac_het_sp<-merge(All_het,Qmac_STR4_sp,by.x = "INDV", by.y="V1.1",all.x = FALSE,all.y=TRUE)
+Qmac_het_sp[,19]<-colnames(Qmac_het_sp)[8+apply(Qmac_het_sp[,9:12],1,which.max)]
+Qmac_het_sp$maxstr<-rep(0,325)
+for(i in 1:325){
+  Qmac_het_sp[i,20]<-max(Qmac_het_sp[i,9:12])
+  
+}
+
+ggplot()+
+  geom_point(mapping=aes(y=Qmac_het_sp$P.HET.,x=Qmac_het_sp$maxstr,color=Qmac_het_sp$V19),alpha=0.6,size=2.5)+
+  scale_color_manual('Species cluster', values = cbbPalette2.5)+
+  labs(y="Heterozygosity/SNP",x="maximum structure value")+
+  theme_light()
+
+ggplot()+
+  geom_point(mapping=aes(y=Qmac_het_sp$P.HET.,x=Qmac_het_sp$maxstr,color=Qmac_het_sp$V19),alpha=0.6,size=2.5)+
+  scale_color_manual('Species cluster', values = cbbPalette2.5)+
+  labs(y="Heterozygosity/SNP",x="maximum structure value")+
+  theme_light()+
+  geom_smooth(method="lm",mapping=aes(y=Qmac_het_sp$P.HET.,x=Qmac_het_sp$maxstr,color=Qmac_het_sp$V19))
+```
+
+
+
+```{r}
+library(adegenet)
+library(ggplot2)
+library(readxl)
+
+snp <- fasta2genlight(file="../chr1-12_thin10000.min650.fasta")
+#Qmac_STR2_sp3<-Qmac_STR2_sp2[Qmac_STR2_sp2[,1]!="SYST-MOR-0007471",]
+#Qmac_STR2_sp3<-Qmac_STR2_sp3[Qmac_STR2_sp3[,1]!="SYST-MOR-0007056",]
+meta<-read.csv("../../Sample_SpxPop2.csv")
+#meta_mac<-meta[meta$Seq %in% Qmac_STR2_sp3[,1],]
+samples_detailed<-read.csv("../../00_Scripts_and_Labels/00_DATA/metadata_specimensSequenced_Duke_taxonomyfixed.csv")
+taxa_update<-cbind(Seq=samples_detailed$Seq,Taxa=samples_detailed$species_epithet)
+samp_mac<-taxa_update[taxa_update[,2]=="macrocarpa",]
+meta_mac<-meta[meta$Seq %in% samp_mac[,1],]
+snp_mac<-snp[indNames(snp) %in% samp_mac[,1]]
+snp_mac$pop = as.factor(meta_mac[match(snp_mac$ind.names, meta_mac$Seq),]$Pop)
+#meta data -> species, population
+#glPlot(snp_mac)
+mac_pca <- glPca(snp_mac, nf=10)
+barplot(mac_pca$eig/sum(mac_pca$eig))
+mac_pca.dataset = as.data.frame(mac_pca$scores)
+mac_pca.dataset$isolates = rownames(mac_pca.dataset)
+#pca.dataset$pop = as.factor(meta_mac[match(snp_mac$ind.names, meta_mac$ALTERNATE.PROJECTCODE),]$Site)
+#pca.dataset$spp = as.factor(meta_mac[match(snp_mac$ind.names, meta_mac$ALTERNATE.PROJECTCODE),]$LABEL_taxonOnly)
+mac_pca.dataset$state = as.factor(meta_mac[match(snp_mac$ind.names, meta_mac$Seq),]$St)
+#pca.dataset$region = as.factor(meta_mac[match(snp_mac$ind.names, meta_mac$ALTERNATE.PROJECTCODE),]$...7)
+mac_pca.dataset$lat = as.numeric(coord_samp[match(snp_mac$ind.names, coord_samp$Seq),]$latitude.orig)
+mac_pca.dataset$long = as.numeric(coord_samp[match(snp_mac$ind.names, coord_samp$Seq),]$longitude.orig)
+mac_pca.dataset$P.HET = as.numeric(All_het[match(snp_mac$ind.names, All_het$INDV),]$P.HET.)
+
+ggplot(mac_pca.dataset, aes(long, lat,color=PC1)) +
+  geom_jitter(size=2)+
+  theme_light()+
+  scale_color_binned(high="darkblue",low="yellow")+
+  xlim(-110,-65)
+
+ggplot(mac_pca.dataset, aes(PC1, PC2,color=lat)) +
+  scale_color_binned(high="darkblue",low="yellow")+
+  geom_point(size=2)+
+  theme_light()
+
+
+ggplot(mac_pca.dataset, aes(y=P.HET, x=PC1,color=lat)) +
+  scale_color_binned(high="darkblue",low="yellow")+
+  geom_point(size=2)+
+  theme_light()
+
+ggplot(pca.dataset, aes(PC1)) +
+  geom_histogram(binwidth = .25)+
+  theme_light()
+
+mac_pca.dataset$strpop<-rep("unknown",338)
+for(i in 1:338){
+  if (mac_pca.dataset[i,1]>-.5) {
+    mac_pca.dataset[i,16]<-"North"
+  }else{
+    mac_pca.dataset[i,16]<-"South"
+  }
+}
+
+ggplot(mac_pca.dataset, aes(long, lat,color=strpop)) +
+  scale_color_manual(values=c("darkblue","#DDBB33"))+
+    geom_jitter(width=.15,height=.15,size=1)+
+  theme_light()
+
+
+ggplot(data = states)+
+  geom_polygon(data = counties, aes(x = long, y = lat, group = group),color = 'gray90', fill = "white", lwd = 0.1)+
+  geom_polygon(aes(x = long, y = lat, group = group),
+                      fill = NA, color = "black")+
+  scale_color_continuous(high="darkblue",low="#DDBB33")+
+  coord_map('albers', lat0=40, lat1=38)+
+  geom_jitter(mac_pca.dataset, mapping=aes(long, lat,color=PC1,shape=strpop),size=1.5)
+mac_pca$eig/sum(mac_pca$eig)
+
+```
+
+```{r}
+library(adegenet)
+library(ggplot2)
+library(readxl)
+cbbPalette2.5=c("#332288","#44AA99","#AA4499","#DDCC77","#000000","#88CCEE","#882255","#117733","#999933","#661100","#CC6677","#888888")
+snp <- fasta2genlight(file="../chr1-12_thin10000.min650.fasta")
+meta<-read.csv("../../00_Scripts_and_Labels/00_DATA/metadata_specimensSequenced_Duke_taxonomyfixed.csv")
+pca <- glPca(snp, nf=10)
+barplot(pca$eig/sum(pca$eig))
+pca.dataset = as.data.frame(pca$scores)
+pca.dataset$isolates = rownames(pca.dataset)
+#pca.dataset$pop = as.factor(meta[match(snp$ind.names, meta$ALTERNATE.PROJECTCODE),]$Site)
+pca.dataset$sppep = as.factor(meta[match(snp$ind.names, meta$Seq),]$species_epithet)
+pca.dataset$state = as.factor(meta[match(snp$ind.names, meta$Seq),]$St)
+#pca.dataset$region = as.factor(meta[match(snp$ind.names, meta$ALTERNATE.PROJECTCODE),]$...7)
+pca.dataset$lat = as.numeric(coord_samp[match(snp$ind.names, coord_samp$Seq),]$latitude.orig)
+pca.dataset$long = as.numeric(coord_samp[match(snp$ind.names, coord_samp$Seq),]$longitude.orig)
+pca.dataset$P.HET = as.numeric(All_het[match(snp$ind.names, All_het$INDV),]$P.HET.)
+
+ggplot(pca.dataset, aes(PC1, PC2,color=sppep)) +
+  geom_point(size=1,alpha=.75)+
+  theme_light()+
+  scale_color_manual(values=cbbPalette2.5)
+
+ggplot(pca.dataset, aes(PC3, PC4,color=sppep)) +
+  geom_point(size=1,alpha=.75)+
+  theme_light()+
+  scale_color_manual(values=cbbPalette2.5)
+
+ggplot(pca.dataset, aes(PC5, PC4,color=sppep)) +
+  geom_point(size=1,alpha=.75)+
+  theme_light()+
+  scale_color_manual(values=cbbPalette2.5)
+
+ggplot(pca.dataset, aes(PC5, PC6,color=sppep)) +
+  geom_point(size=1,alpha=.75)+
+  theme_light()+
+  scale_color_manual(values=cbbPalette2.5)
+
+ggplot(pca.dataset, aes(PC1, PC2,color=sppep)) +
+  geom_point(size=2,alpha=1)+
+  theme_light()+
+  scale_color_manual(values=cbbPalette2.5)+
+  xlim(10,20)+
+  ylim(0,10)
+
+ggplot(pca.dataset, aes(PC1, PC2,color=sppep)) +
+  geom_point(size=2,alpha=1)+
+  theme_light()+
+  scale_color_manual(values=c("#332288","#44AA99","#AA4499","#DDCC77","#000000","#88CCEE","#882255","#114433","#DDBB33","#661100","#CC6677","#888888"))+
+  xlim(-15,-5)+
+  ylim(-26,-19)
+
+ggplot(pca.dataset, aes(PC1, PC2,color=sppep)) +
+  geom_point(size=2,alpha=1)+
+  theme_light()+
+  scale_color_manual(values=cbbPalette2.5)+
+  xlim(-16,-9)+
+  ylim(-11.5,-6)
+write.csv(pca.dataset,file="../../10_Analysis/04_PCA/Full_PCA.csv")
+write.csv(pca$eig,file="../../10_Analysis/04_PCA/Full_PCA_eig.csv")
+```
+amount of variance explained
+
+0.1454985220 0.0671273055 0.0417861181 0.0265736088 0.0153482827 0.0070012428
+
+
+Species to be used for parental species analysis
+```{r}
+STR7_parents=All_STR7_sp
+STR7_parents$strpop<-rep("hybrid",693)
+STR7_parents$pure<-rep(FALSE,693)
+samples_detailed<-read.csv("../../00_Scripts_and_Labels/00_DATA/metadata_specimensSequenced_Duke_taxonomyfixed.csv")
+taxa_update<-cbind(Seq=samples_detailed$Seq,Taxa=samples_detailed$species_epithet)
+STR7_parents<-merge(STR7_parents,taxa_update, by.x="Sample",by.y="Seq")
+for(i in 1:693){
+    if(STR7_parents[i,4]>.99){
+      STR7_parents[i,13]<-"alba"
+      STR7_parents[i,14]<-TRUE
+    }else{
+      if(STR7_parents[i,7]>.99){
+        STR7_parents[i,13]<-"Qlyr_Qbic"
+        STR7_parents[i,14]<-TRUE
+        if(STR7_parents[i,15]=="lyrata"|STR7_parents[i,15]=="bicolor"){
+         STR7_parents[i,13]<-STR7_parents[i,15]
+        }
+      }else{
+       if(STR7_parents[i,2]>.99){
+        STR7_parents[i,13]<-"Qmic_Qmon"
+        STR7_parents[i,14]<-TRUE
+        if(STR7_parents[i,15]=="michauxii"|STR7_parents[i,15]=="montana"){
+
+          STR7_parents[i,13]<-STR7_parents[i,15]
+          }
+        }else{
+            if(STR7_parents[i,5]>.99){
+              STR7_parents[i,13]<-"Qste_Qmar_Qsin"
+              STR7_parents[i,14]<-TRUE
+              if(STR7_parents[i,15]=="stellata"|STR7_parents[i,15]=="margaretiae"|STR7_parents[i,15]=="sinuata"){
+                STR7_parents[i,13]<-STR7_parents[i,15]
+              }
+            }else{
+              if(STR7_parents[i,8]>.99){
+                STR7_parents[i,13]<-"Qmue_Qpri"
+                STR7_parents[i,14]<-TRUE
+                if(STR7_parents[i,15]=="muehlenbergii"|STR7_parents[i,15]=="prinoides"){
+                  STR7_parents[i,13]<-STR7_parents[i,15]
+                }
+              }else{
+                if(STR7_parents[i,3]+STR7_parents[i,6]>0.99){
+                  STR7_parents[i,13]<-"macrocarpa"
+                  STR7_parents[i,14]<-TRUE
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+
+write.csv(STR7_parents,"../../STR7_99Parents.csv")
+```
+
+```{r}
+STR7_parents90=All_STR7_sp
+STR7_parents90$strpop<-rep("hybrid",693)
+STR7_parents90$pure<-rep(FALSE,693)
+samples_detailed<-read.csv("../../00_Scripts_and_Labels/00_DATA/metadata_specimensSequenced_Duke_taxonomyfixed.csv")
+taxa_update<-cbind(Seq=samples_detailed$Seq,Taxa=samples_detailed$species_epithet,ColNum=samples_detailed$collectionNumber)
+STR7_parents90<-merge(STR7_parents90,taxa_update, by.x="Sample",by.y="Seq")
+for(i in 1:693){
+    if(STR7_parents90[i,4]>.90){
+      STR7_parents90[i,13]<-"alba"
+      STR7_parents90[i,14]<-TRUE
+    }else{
+      if(STR7_parents90[i,7]>.90){
+        STR7_parents90[i,13]<-"Qlyr_Qbic"
+        STR7_parents90[i,14]<-TRUE
+        if(STR7_parents90[i,15]=="lyrata"|STR7_parents90[i,15]=="bicolor"){
+         STR7_parents90[i,13]<-STR7_parents90[i,15]
+        }
+      }else{
+       if(STR7_parents90[i,2]>.90){
+        STR7_parents90[i,13]<-"Qmic_Qmon"
+        STR7_parents90[i,14]<-TRUE
+        if(STR7_parents90[i,15]=="michauxii"|STR7_parents90[i,15]=="montana"){
+
+          STR7_parents90[i,13]<-STR7_parents90[i,15]
+          }
+        }else{
+            if(STR7_parents90[i,5]>.90){
+              STR7_parents90[i,13]<-"Qste_Qmar_Qsin"
+              STR7_parents90[i,14]<-TRUE
+              if(STR7_parents90[i,15]=="stellata"|STR7_parents90[i,15]=="margaretiae"|STR7_parents90[i,15]=="sinuata"){
+                STR7_parents90[i,13]<-STR7_parents90[i,15]
+              }
+            }else{
+              if(STR7_parents90[i,8]>.90){
+                STR7_parents90[i,13]<-"Qmue_Qpri"
+                STR7_parents90[i,14]<-TRUE
+                if(STR7_parents90[i,15]=="muehlenbergii"|STR7_parents90[i,15]=="prinoides"){
+                  STR7_parents90[i,13]<-STR7_parents90[i,15]
+                }
+              }else{
+                if(STR7_parents90[i,3]+STR7_parents90[i,6]>0.90){
+                  STR7_parents90[i,13]<-"macrocarpa"
+                  STR7_parents90[i,14]<-TRUE
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+
+write.csv(STR7_parents90,"../../STR7_90Parents.csv")
+```
+
+
+```{r}
+library(ggplot2)
+Qmac_SD_fst<-read.delim("../macSDvmacN99Fst.windowed.weir.fst")
+Qmac_SD_fst_nR<-read.delim("../macSDvmacN99Fst_noReps.windowed.weir.fst")
+Qmacvmacxbic99_fst<-read.delim("../macvmacxbic99Fst.windowed.weir.fst")
+Qmacvbic99_fst<-read.delim("../macbicwFst.windowed.weir.fst")
+Qmacvmacxbic99_fst_filtered<-Qmacvmacxbic99_fst[Qmacvmacxbic99_fst$N_VARIANTS>10&Qmacvmacxbic99_fst$N_VARIANTS<500,]
+Qmacvmacxbic99_fst_filtered2<-Qmacvmacxbic99_fst[Qmacvmacxbic99_fst$N_VARIANTS>10&Qmacvmacxbic99_fst$N_VARIANTS<130,]
+Qmacvmacxbic99_fst_filtered3<-Qmacvmacxbic99_fst[Qmacvmacxbic99_fst$N_VARIANTS>140&Qmacvmacxbic99_fst$N_VARIANTS<600,]
+
+ggplot(data=Qmac_SD_fst)+
+  geom_point(mapping=aes(x=BIN_START,y=MEAN_FST),alpha=0.2,size=0.1)+
+  facet_grid(CHROM~.)+
+  theme_light()
+ggplot(data=Qmac_SD_fst_nR)+
+  geom_point(mapping=aes(x=BIN_START,y=MEAN_FST),alpha=0.2,size=0.1)+
+  facet_grid(CHROM~.)+
+  theme_light()
+
+ggplot(data=Qmacvmacxbic99_fst_filtered)+
+  geom_point(mapping=aes(x=BIN_START,y=MEAN_FST),alpha=0.2,size=0.1)+
+  facet_grid(CHROM~.)+
+  theme_light()
+
+ggplot(data=Qmacvmacxbic99_fst_filtered2)+
+  geom_point(mapping=aes(x=BIN_START,y=MEAN_FST),alpha=0.2,size=0.1)+
+  facet_grid(CHROM~.)+
+  theme_light()
+
+ggplot(data=Qmacvmacxbic99_fst_filtered3)+
+  geom_point(mapping=aes(x=BIN_START,y=MEAN_FST),alpha=0.2,size=0.1)+
+  facet_grid(CHROM~.)+
+  theme_light()
+
+ggplot(data=Qmacvmacxbic99_fst_filtered2)+
+  geom_point(mapping=aes(x=BIN_START,y=WEIGHTED_FST),alpha=0.2,size=0.1)+
+  facet_grid(CHROM~.)+
+  theme_light()
+
+ggplot(data=Qmacvmacxbic99_fst_filtered3)+
+  geom_point(mapping=aes(x=BIN_START,y=WEIGHTED_FST),alpha=0.2,size=0.1)+
+  facet_grid(CHROM~.)+
+  theme_light()
+
+
+ggplot(data=Qmacvbic99_fst)+
+  geom_point(mapping=aes(x=BIN_START,y=MEAN_FST),alpha=0.2,size=0.1)+
+  facet_grid(CHROM~.)+
+  theme_light()
+
+ggplot()+
+  geom_point(mapping=aes(x=Qmacvmacxbic99_fst$BIN_START,y=Qmacvmacxbic99_fst$MEAN_FST),alpha=0.5,size=0.1,color="lightblue")+
+  geom_point(mapping=aes(x=Qmacvbic99_fst$BIN_START,y=Qmacvbic99_fst$MEAN_FST),alpha=0.2,size=0.1,color="pink")+
+  theme_light()
+
+
+ggplot()+
+  geom_point(mapping=aes(x=Qmacvmacxbic99_fst$N_VARIANTS,y=Qmacvmacxbic99_fst$MEAN_FST),alpha=0.1,size=.1)
+ggplot()+
+  geom_point(mapping=aes(x=Qmacvmacxbic99_fst$N_VARIANTS,y=Qmacvmacxbic99_fst$WEIGHTED_FST),alpha=0.1,size=.1)
+ggplot()+
+  geom_histogram(mapping=aes(x=Qmacvmacxbic99_fst$N_VARIANTS),binwidth = 5)
+ggplot()+
+  geom_histogram(mapping=aes(x=Qmacvmacxbic99_fst$MEAN_FST))
+
+ggplot()+
+  geom_point(mapping=aes(x=Qmacvbic99_fst$MEAN_FST,y=Qmacvmacxbic99_fst$MEAN_FST),alpha=0.2,size=0.1)
+```
+
+```{r}
+ggplot()+
+  geom_histogram(mapping=aes(x=Qmacvbic99_fst$N_VARIANTS),binwidth = 5)
+ggplot()+
+  geom_histogram(mapping=aes(x=Qmac_SD_fst$N_VARIANTS),binwidth = 5)
+ggplot()+
+  geom_histogram(mapping=aes(x=Qmac_SD_fst$MEAN_FST),binwidth = .01)
+ggplot()+
+  geom_histogram(mapping=aes(x=Qmac_SD_fst_nR$N_VARIANTS),binwidth = 5)+
+  facet_grid(Qmac_SD_fst_nR$CHROM~.)
+ggplot(data=Qmac_SD_fst_nR)+
+  geom_point(mapping=aes(x=BIN_START,y=N_VARIANTS),alpha=0.2,size=0.1)+
+  facet_grid(CHROM~.)+
+  theme_light()
+```
+
+
+```{r}
+for(i in 1:3){
+  write.csv(i,paste("Test",i,".csv"))
+}
+getwd()
+```
+```{r}
+IN_NvIN_S_fst<-read.delim("../INmacNvmacSFst_noReps.windowed.weir.fst")
+ggplot(data=IN_NvIN_S_fst)+
+  geom_point(mapping=aes(x=BIN_START,y=MEAN_FST),alpha=0.2,size=0.1)+
+  facet_grid(CHROM~.)+
+  theme_light()
+```
+
+##PCA with outgroup
+```{r}
+library(adegenet)
+library(ggplot2)
+library(readxl)
+cbbPalette2.5=c("orange","#332288","#44AA99","#AA4499","#DDCC77","#000000","#88CCEE","#882255","#114433","#999933","#661100","#CC6677","#888888","red","blue","pink")
+snp <- fasta2genlight(file="../chr1_thin.fa")
+meta<-read.csv("../../00_Scripts_and_Labels/00_METADATA/metadata_specimensSequenced_Duke_taxonomyfixed.csv")
+pca <- glPca(snp, nf=10)
+qbarplot(pca$eig/sum(pca$eig))
+pca.dataset = as.data.frame(pca$scores)
+pca.dataset$isolates = rownames(pca.dataset)
+#pca.dataset$pop = as.factor(meta[match(snp$ind.names, meta$ALTERNATE.PROJECTCODE),]$Site)
+pca.dataset$sppep = as.factor(meta[match(snp$ind.names, meta$Seq),]$species_epithet)
+pca.dataset$state = as.factor(meta[match(snp$ind.names, meta$Seq),]$St)
+#pca.dataset$region = as.factor(meta[match(snp$ind.names, meta$ALTERNATE.PROJECTCODE),]$...7)
+pca.dataset$lat = as.numeric(coord_samp[match(snp$ind.names, coord_samp$Seq),]$latitude.orig)
+pca.dataset$long = as.numeric(coord_samp[match(snp$ind.names, coord_samp$Seq),]$longitude.orig)
+pca.dataset$P.HET = as.numeric(All_het[match(snp$ind.names, All_het$INDV),]$P.HET.)
+
+ggplot(pca.dataset, aes(PC1, PC2,color=sppep)) +
+  geom_point(size=1,alpha=.75)+
+  theme_light()+
+  scale_color_manual(values=cbbPalette2.5)
+
+ggplot(pca.dataset, aes(PC1, PC2)) +
+  geom_point(size=1,alpha=.75)+
+  theme_light()
+
+ggplot(pca.dataset, aes(PC3, PC4,color=sppep)) +
+  geom_point(size=1,alpha=.75)+
+  theme_light()+
+  scale_color_manual(values=cbbPalette2.5)
+
+ggplot(pca.dataset, aes(PC5, PC4,color=sppep)) +
+  geom_point(size=1,alpha=.75)+
+  theme_light()+
+  scale_color_manual(values=cbbPalette2.5)
+
+ggplot(pca.dataset, aes(PC5, PC6,color=sppep)) +
+  geom_point(size=1,alpha=.75)+
+  theme_light()+
+  scale_color_manual(values=cbbPalette2.5)
+
+ggplot(pca.dataset, aes(PC1, PC2,color=sppep)) +
+  geom_point(size=2,alpha=1)+
+  theme_light()+
+  scale_color_manual(values=cbbPalette2.5)+
+  xlim(10,20)+
+  ylim(0,10)
+
+ggplot(pca.dataset, aes(PC1, PC2,color=sppep)) +
+  geom_point(size=2,alpha=1)+
+  theme_light()+
+  scale_color_manual(values=c("orange","#332288","#44AA99","#AA4499","#DDCC77","#000000","#88CCEE","#882255","#114433","#BBCC66","#661100","#CC6677","#888888"))+
+  xlim(-15,-5)+
+  ylim(-26,-19)
+
+ggplot(pca.dataset, aes(PC1, PC2,color=sppep)) +
+  geom_point(size=2,alpha=1)+
+  theme_light()+
+  scale_color_manual(values=cbbPalette2.5)+
+  xlim(-16,-9)+
+  ylim(-11.5,-6)
+write.csv(pca.dataset,file="../../10_Analysis/04_PCA/C1_outgroup_PCA.csv")
+write.csv(pca$eig,file="../../10_Analysis/04_PCA/Full_PCA_eig.csv")
+C1_outgroup_PCA <- read.csv("C:/Users/rmohn/Desktop/10_Analysis/04_PCA/C1_outgroup_PCA.csv", na.strings="#N/A")
+
+
+ggplot(C1_outgroup_PCA, aes(PC1, PC2,color=Species)) +
+  geom_point(size=1,alpha=.75)+
+  theme_light()+
+  scale_color_manual(values=cbbPalette2.5)
+
+ggplot(C1_outgroup_PCA, aes(PC3, PC4,color=Species)) +
+  geom_point(size=1,alpha=.75)+
+  theme_light()+
+  scale_color_manual(values=cbbPalette2.5)
+
+ggplot(C1_outgroup_PCA, aes(PC5, PC6,color=Species)) +
+  geom_point(size=1,alpha=.75)+
+  theme_light()+
+  scale_color_manual(values=cbbPalette2.5)
+```
+
+```{r}
+Chr1_OutS10<-read.delim("../chr1_filter1.10.Q",sep = " ", header=FALSE)
+C1_outgroup_PCA_sampling <- read.csv("C:/Users/rmohn/Desktop/10_Analysis/02_STRUCTURE/C1_outgroup_PCA_sampling.csv", header=FALSE)
+
+Chr1_OutS10$Sample<-C1_outgroup_PCA_sampling$V1
+Chr1_OutS10$Sp<-C1_outgroup_PCA_sampling$V2
+Chr1_OutGSTR10_long<-melt(Chr1_OutS10,id.vars =  c("Sample","Sp"))
+ggplot(data=Chr1_OutGSTR10_long)+
+  geom_bar(mapping=aes(x=paste(Sp,Sample),y=value,fill=variable),stat="identity",position="stack")+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+  
+  facet_grid(Sp~.) +
+  theme(axis.text.x=element_blank(),
+      axis.ticks.x=element_blank(),
+      axis.text.y=element_blank(),
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))+
+  theme_light()
+
+
+```
+
+
+##Hybridization Border or Glaciation
+#identifying hybrids
+```{r}
+Chr1_OutS10<-read.delim("../chr1_filter1.10.Q",sep = " ", header=FALSE)
+C1_outgroup_PCA_sampling <- read.csv("C:/Users/rmohn/Desktop/10_Analysis/02_STRUCTURE/C1_outgroup_PCA_sampling.csv", header=FALSE)
+
+Chr1_OutS10$Sample<-C1_outgroup_PCA_sampling$V1
+Chr1_OutS10$Sp<-C1_outgroup_PCA_sampling$V2
+
+
+Chr1_OutS10$strpop<-rep("species",727)
+#Chr1_OutS10$sp_cor<-rep(FALSE,693)
+#Chr1_OutS10$hybrid<-rep("species",693)
+for(i in 1:727){
+  if(Chr1_OutS10[i,12]=="Quercus sinuata Walt." | Chr1_OutS10[i,12]=="rubra"){
+  }else{
+    if(Chr1_OutS10[i,1]+Chr1_OutS10[i,10]+Chr1_OutS10[i,7]>.90){
+    }else{
+      if(max(Chr1_OutS10[i,1:10])<.90){
+       Chr1_OutS10[i,13]<-"hybrid"
+      }
+    }
+  }
+}
+
+```
+
+```{r}
+
+
+
+samps_bord_dist<-read.csv("../Samps_border_dist.csv")
+samps_bord_dist_less<-cbind(Seq=samps_bord_dist[,3],samps_bord_dist[,48:56])
+Chr1_OutS10_bord<-merge(Chr1_OutS10,y=samps_bord_dist_less,by.x="Sample",by.y="Seq")
+Chr1_OutS10_bord$minborddist<-rep(0,693)
+for(i in 1:693){
+  Chr1_OutS10_bord[i,23]<-min(Chr1_OutS10_bord[i,14:22])
+}
+
+samps_glac<-read.csv("../../00_Scripts_and_Labels/00_METADATA/Samples_TimeSinceGlaciation.csv")
+samps_glac_less<-cbind(Seq=samps_glac[,3],samps_glac[,57])
+Chr1_OutS10_bord_glac<-merge(Chr1_OutS10_bord,y=samps_glac_less,by.x="Sample",by.y="Seq")
+# write.csv(c12_str_het_bord,"c12_str_het_bord.csv")
+# 
+# 
+# c12_str_het_bord_par<-read.csv("c12_str_het_bord_2.csv")
+# 
+
+ggplot()+
+  geom_histogram(mapping=aes(x=Chr1_OutS10_bord[Chr1_OutS10_bord[,13]!="hybrid",23]),fill="#332288",binwidth = .1)+
+  geom_histogram(mapping=aes(x=Chr1_OutS10_bord[Chr1_OutS10_bord[,13]=="hybrid",23]),fill="#DDCC77",binwidth = .1)+
+  theme_light()+
+  labs(x="distance to species boundary",subtitle = "blue are non-hybrids, yellow are hybrids")
+
+ggplot()+
+  geom_histogram(mapping=aes(x=as.numeric(Chr1_OutS10_bord_glac[Chr1_OutS10_bord_glac[,13]!="hybrid",24])),fill="#332288",binwidth = 1000)+
+  geom_histogram(mapping=aes(x=as.numeric(Chr1_OutS10_bord_glac[Chr1_OutS10_bord_glac[,13]=="hybrid",24])),fill="#DDCC77",binwidth = 1000)+
+  theme_light()+
+  labs(x="last glaciated",title = "all samples time since glaciated")
+
+                                                                                                                                                                                           
+
+
+
+# mean(c12_str_het_bord_par[c12_str_het_bord_par[,19]=="hybrid",49])
+# mean(c12_str_het_bord_par[c12_str_het_bord_par[,19]!="hybrid",49])
+# median(c12_str_het_bord_par[c12_str_het_bord_par[,19]=="hybrid",49])
+# median(c12_str_het_bord_par[c12_str_het_bord_par[,19]!="hybrid",49])
+# 
+# bootstr=c()
+# for(i in 1:100){
+#   bootstr[i]=mean(sample(x=c12_str_het_bord_par$minbordpare,size=29,replace=FALSE))
+#   }
+# 
+# ggplot()+
+#   geom_histogram(mapping=aes(x=bootstr),binwidth = .05)+
+#   geom_vline(xintercept=0.27,color="darkred")+
+#   theme_light()+
+#   labs(x="Sampling without replacement distance to species border (line is the mean for hybrids)" )
+
+
+dat_alb_bic_mac_mue<-Chr1_OutS10_bord_glac[Chr1_OutS10_bord_glac[,12]=="Quercus macrocarpa Michx."|Chr1_OutS10_bord_glac[,12]=="Quercus muehlenbergii Engelm."|Chr1_OutS10_bord_glac[,12]=="Quercus alba L."|Chr1_OutS10_bord_glac[,12]=="Quercus bicolor Willd."|Chr1_OutS10_bord_glac[,12]=="Quercus prinoides Willd.",]
+
+ggplot(data=dat_alb_bic_mac_mue)+
+  geom_histogram(mapping = aes(x=as.numeric(V2.y),fill=strpop),position="dodge",binwidth = 40000)+
+  theme_light()+
+  labs(x="last glaciated",title = "alba, macrocarpa, bicolor, muehlenbergii samples time since glaciated")
+
+dat_alb_bic_mac<-Chr1_OutS10_bord_glac[Chr1_OutS10_bord_glac[,12]=="Quercus macrocarpa Michx."|Chr1_OutS10_bord_glac[,12]=="Quercus alba L."|Chr1_OutS10_bord_glac[,12]=="Quercus bicolor Willd.",]
+
+ggplot(data=dat_alb_bic_mac)+
+  geom_histogram(mapping = aes(x=as.numeric(V2.y),fill=strpop),position="dodge",binwidth = 40000)+
+  theme_light()+
+  labs(x="last glaciated",title = "alba, macrocarpa, bicolor samples time since glaciated")
+
+```
+
+```{r}
+dat_bic_mac<-Chr1_OutS10_bord_glac[(Chr1_OutS10_bord_glac[,12]=="Quercus macrocarpa Michx."|Chr1_OutS10_bord_glac[,12]=="Quercus bicolor Willd.")&(Chr1_OutS10_bord_glac[,3]<0.05&Chr1_OutS10_bord_glac[,4]<0.05&Chr1_OutS10_bord_glac[,5]<0.05&Chr1_OutS10_bord_glac[,7]<0.05&Chr1_OutS10_bord_glac[,6]<0.05&Chr1_OutS10_bord_glac[,10]<0.05),]
+Pop_file<-read.csv("../../00_Scripts_and_Labels/00_METADATA/Seq_Pop_Coord.csv")
+dat_bic_mac_pop<-merge(dat_bic_mac,Pop_file,by.x="Sample",by.y="Seq")
+dat_bic_mac_pop$nSamps<-rep(1,361)
+dat_bic_mac_pop$hybrids<-rep(0,361)
+dat_bic_mac_pop$mac<-rep(0,361)
+dat_bic_mac_pop$bic<-rep(0,361)
+for(i in 1:361){
+  if(dat_bic_mac_pop[i,13] == "hybrid"){
+  dat_bic_mac_pop[i,35]<-1
+  }
+  if(dat_bic_mac_pop[i,12] == "Quercus macrocarpa Michx."){
+  dat_bic_mac_pop[i,36]<-1
+  }
+  if(dat_bic_mac_pop[i,12] == "Quercus bicolor Willd."){
+  dat_bic_mac_pop[i,37]<-1
+  }
+}
+pop_stats_sum<-aggregate(x = dat_bic_mac_pop[,34:37],by=list(dat_bic_mac_pop$site),FUN="sum")
+pop_stats_mean<-aggregate(x = dat_bic_mac_pop[,23],by=list(dat_bic_mac_pop$site,dat_bic_mac_pop$V2.y),FUN="mean")
+pop_stats_mean2<-aggregate(x = dat_bic_mac_pop[,32:33],by=list(dat_bic_mac_pop$site),FUN="mean")
+pop_stats<-merge(pop_stats_sum,pop_stats_mean,by="Group.1")
+pop_stats<-merge(pop_stats,pop_stats_mean2,by="Group.1")
+
+pop_stats_mac_bic<-pop_stats[pop_stats[,4]>0&pop_stats[,5]>0,]
+pop_stats_mac_bic$p_hybrid<-pop_stats_mac_bic$hybrids/pop_stats_mac_bic$nSamps
+
+ggplot()+
+  geom_boxplot(mapping=aes(x=pop_stats_mac_bic$Group.2,y=pop_stats_mac_bic$p_hybrid))+
+  geom_jitter(mapping=aes(x=pop_stats_mac_bic$Group.2,y=pop_stats_mac_bic$p_hybrid),height = 0)+
+  labs(x="time since glaciation (100,000 is Null)", y="percent of individuals hybridized", title = "Q. macrocarpa and Q. bicolor populations (10)" )+
+  theme_light()
+
+ggplot()+
+  geom_point(mapping=aes(x=pop_stats_mac_bic$x,y=pop_stats_mac_bic$p_hybrid,color=pop_stats_mac_bic$Group.2),size=2,alpha=.7)+
+  labs(color="time since glaciation (100,000 is Null)", y="percent of individuals hybridized",x="distance to range edge", title = "Q. macrocarpa and Q. bicolor populations (10)" )+
+  theme_light()
+
+```
+
+```{r}
+library(ggplot2)
+dat_alb_mac<-Chr1_OutS10_bord_glac[(Chr1_OutS10_bord_glac[,12]=="Quercus macrocarpa Michx."|Chr1_OutS10_bord_glac[,12]=="Quercus alba L.")&(Chr1_OutS10_bord_glac[,3]<0.05&Chr1_OutS10_bord_glac[,4]<0.05&Chr1_OutS10_bord_glac[,5]<0.05&Chr1_OutS10_bord_glac[,7]<0.05&Chr1_OutS10_bord_glac[,10]<0.05&Chr1_OutS10_bord_glac[,9]<0.05),]
+Pop_file<-read.csv("../../00_Scripts_and_Labels/00_METADATA/Seq_Pop_Coord.csv")
+dat_alb_mac_pop<-merge(dat_alb_mac,Pop_file,by.x="Sample",by.y="Seq")
+dat_alb_mac_pop$nSamps<-rep(1,456)
+dat_alb_mac_pop$hybrids<-rep(0,456)
+dat_alb_mac_pop$mac<-rep(0,456)
+dat_alb_mac_pop$alb<-rep(0,456)
+for(i in 1:456){
+  if(dat_alb_mac_pop[i,13] == "hybrid"){
+  dat_alb_mac_pop[i,35]<-1
+  }
+  if(dat_alb_mac_pop[i,12] == "Quercus macrocarpa Michx."){
+  dat_alb_mac_pop[i,36]<-1
+  }
+  if(dat_alb_mac_pop[i,12] == "Quercus alba L."){
+  dat_alb_mac_pop[i,37]<-1
+  }
+}
+pop_stats_sum<-aggregate(x = dat_alb_mac_pop[,34:37],by=list(dat_alb_mac_pop$site),FUN="sum")
+pop_stats_mean<-aggregate(x = dat_alb_mac_pop[,23],by=list(dat_alb_mac_pop$site,dat_alb_mac_pop$V2.y),FUN="min")
+pop_stats_mean2<-aggregate(x = dat_alb_mac_pop[,32:33],by=list(dat_alb_mac_pop$site),FUN="mean")
+pop_stats<-merge(pop_stats_sum,pop_stats_mean,by="Group.1")
+pop_stats<-merge(pop_stats,pop_stats_mean2,by="Group.1")
+
+pop_stats_mac_alb<-pop_stats[pop_stats[,4]>0&pop_stats[,5]>0,]
+pop_stats_mac_alb$p_hybrid<-pop_stats_mac_alb$hybrids/pop_stats_mac_alb$nSamps
+
+ggplot()+
+  geom_boxplot(mapping=aes(x=pop_stats_mac_alb$Group.2,y=pop_stats_mac_alb$p_hybrid),outlier.size = 0,outlier.colour = "white")+
+  geom_jitter(mapping=aes(x=pop_stats_mac_alb$Group.2,y=pop_stats_mac_alb$p_hybrid),height = 0)+
+  labs(x="time since glaciation (100,000 is Null)", y="percent of individuals hybridized", title = "Q. macrocarpa and Q. alba populations (25)" )+
+  theme_light()
+
+
+ggplot()+
+  geom_jitter(mapping=aes(x=pop_stats_mac_alb$x,y=pop_stats_mac_alb$p_hybrid,color=pop_stats_mac_alb$Group.2),size=2,alpha=.7)+
+  labs(color="time since glaciation (100,000 is Null)", y="percent of individuals hybridized",x="distance to range edge", title = "Q. macrocarpa and Q. alba populations (25)" )+
+  theme_light()
+
+aov(pop_stats_mac_alb$p_hybrid~pop_stats_mac_alb$Group.2+pop_stats_mac_alb$x)
+aov(pop_stats_mac_alb$p_hybrid~pop_stats_mac_alb$x)
+aov(pop_stats_mac_alb$p_hybrid~pop_stats_mac_alb$Group.2)
+
+```
+
+```{r}
+library(ggplot2)
+dat_mue_mac<-Chr1_OutS10_bord_glac[(Chr1_OutS10_bord_glac[,12]=="Quercus macrocarpa Michx."|Chr1_OutS10_bord_glac[,12]=="Quercus muehlenbergii Engelm."|Chr1_OutS10_bord_glac[,12]=="Quercus prinoides Willd.")&(Chr1_OutS10_bord_glac[,3]<0.05&Chr1_OutS10_bord_glac[,4]<0.05&Chr1_OutS10_bord_glac[,7]<0.05&Chr1_OutS10_bord_glac[,6]<0.05&Chr1_OutS10_bord_glac[,10]<0.05&Chr1_OutS10_bord_glac[,9]<0.05),]
+Pop_file<-read.csv("../../00_Scripts_and_Labels/00_METADATA/Seq_Pop_Coord.csv")
+dat_mue_mac_pop<-merge(dat_mue_mac,Pop_file,by.x="Sample",by.y="Seq")
+dat_mue_mac_pop$nSamps<-rep(1,425)
+dat_mue_mac_pop$hybrids<-rep(0,425)
+dat_mue_mac_pop$mac<-rep(0,425)
+dat_mue_mac_pop$mue<-rep(0,425)
+for(i in 1:425){
+  if(dat_mue_mac_pop[i,13] == "hybrid"){
+  dat_mue_mac_pop[i,35]<-1
+  }
+  if(dat_mue_mac_pop[i,12] == "Quercus macrocarpa Michx."){
+  dat_mue_mac_pop[i,36]<-1
+  }
+  if(dat_mue_mac_pop[i,12] == "Quercus muehlenbergii Engelm."|dat_mue_mac_pop[i,12] == "Quercus prinoides Willd."){
+  dat_mue_mac_pop[i,37]<-1
+  }
+}
+pop_stats_sum<-aggregate(x = dat_mue_mac_pop[,34:37],by=list(dat_mue_mac_pop$site),FUN="sum")
+pop_stats_mean<-aggregate(x = dat_mue_mac_pop[,23],by=list(dat_mue_mac_pop$site,dat_mue_mac_pop$V2.y),FUN="min")
+pop_stats_mean2<-aggregate(x = dat_mue_mac_pop[,32:33],by=list(dat_mue_mac_pop$site),FUN="mean")
+pop_stats<-merge(pop_stats_sum,pop_stats_mean,by="Group.1")
+pop_stats<-merge(pop_stats,pop_stats_mean2,by="Group.1")
+
+pop_stats_mac_mue<-pop_stats[pop_stats[,4]>0&pop_stats[,5]>0,]
+pop_stats_mac_mue$p_hybrid<-pop_stats_mac_mue$hybrids/pop_stats_mac_mue$nSamps
+
+ggplot()+
+  geom_boxplot(mapping=aes(x=pop_stats_mac_mue$Group.2,y=pop_stats_mac_mue$p_hybrid),outlier.size = 0,outlier.colour = "white")+
+  geom_jitter(mapping=aes(x=pop_stats_mac_mue$Group.2,y=pop_stats_mac_mue$p_hybrid),height = 0)+
+  labs(x="time since glaciation (100,000 is Null)", y="percent of individuals hybridized", title = "Q. macrocarpa and Q. muehlenbergii populations (16)" )+
+  theme_light()
+
+ggplot()+
+  geom_point(mapping=aes(x=pop_stats_mac_mue$x,y=pop_stats_mac_mue$p_hybrid,color=pop_stats_mac_mue$Group.2),size=2,alpha=.7)+
+  labs(color="time since glaciation (100,000 is Null)", y="percent of individuals hybridized",x="distance to range edge", title = "Q. macrocarpa and Q. muehlenbergii populations (16)" )+
+  theme_light()
+
+aov(pop_stats_mac_mue$p_hybrid~pop_stats_mac_mue$Group.2+pop_stats_mac_mue$x)
+aov(pop_stats_mac_mue$p_hybrid~pop_stats_mac_mue$x)
+aov(pop_stats_mac_mue$p_hybrid~pop_stats_mac_mue$Group.2)
+```
+
+#All species in glaciated regions
+```{r}
+library(ggplot2)
+dat_abmm<-Chr1_OutS10_bord_glac[(Chr1_OutS10_bord_glac[,12]=="Quercus macrocarpa Michx."|Chr1_OutS10_bord_glac[,12]=="Quercus muehlenbergii Engelm."|Chr1_OutS10_bord_glac[,12]=="Quercus alba L."|Chr1_OutS10_bord_glac[,12]=="Quercus bicolor Willd."|Chr1_OutS10_bord_glac[,12]=="Quercus prinoides Willd.")&(Chr1_OutS10_bord_glac[,7]<0.05&Chr1_OutS10_bord_glac[,3]<0.05&Chr1_OutS10_bord_glac[,4]<0.05&Chr1_OutS10_bord_glac[,10]<0.05),]
+Pop_file<-read.csv("../../00_Scripts_and_Labels/00_METADATA/Seq_Pop_Coord.csv")
+dat_abmm_pop<-merge(dat_abmm,Pop_file,by.x="Sample",by.y="Seq")
+dat_abmm_pop$nSamps<-rep(1,600)
+dat_abmm_pop$hybrids<-rep(0,600)
+dat_abmm_pop$mac<-rep(0,600)
+dat_abmm_pop$mue<-rep(0,600)
+dat_abmm_pop$alb<-rep(0,600)
+dat_abmm_pop$bic<-rep(0,600)
+for(i in 1:600){
+  if(dat_abmm_pop[i,13] == "hybrid"){
+  dat_abmm_pop[i,35]<-1
+  }
+  if(dat_abmm_pop[i,12] == "Quercus macrocarpa Michx."){
+  dat_abmm_pop[i,36]<-1
+  }
+  if(dat_abmm_pop[i,12] == "Quercus muehlenbergii Engelm."){
+  dat_abmm_pop[i,37]<-1
+  }
+    if(dat_abmm_pop[i,12] == "Quercus alba L."){
+  dat_abmm_pop[i,38]<-1
+  }
+  if(dat_abmm_pop[i,12] == "Quercus bicolor Willd."){
+  dat_abmm_pop[i,39]<-1
+  }
+}
+pop_stats_sum<-aggregate(x = dat_abmm_pop[,34:39],by=list(dat_abmm_pop$site),FUN="sum")
+pop_stats_mean<-aggregate(x = dat_abmm_pop[,23],by=list(dat_abmm_pop$site,dat_abmm_pop$V2.y),FUN="min")
+pop_stats_mean2<-aggregate(x = dat_abmm_pop[,32:33],by=list(dat_abmm_pop$site),FUN="mean")
+pop_stats<-merge(pop_stats_sum,pop_stats_mean,by="Group.1")
+pop_stats<-merge(pop_stats,pop_stats_mean2,by="Group.1")
+
+pop_stats_abmm<-pop_stats[pop_stats[,4]>0&(pop_stats[,5]>0|pop_stats[,6]>0|pop_stats[,7]>0),]
+pop_stats_abmm$p_hybrid<-pop_stats_abmm$hybrids/pop_stats_abmm$nSamps
+
+ggplot()+
+  geom_boxplot(mapping=aes(x=pop_stats_abmm$Group.2,y=pop_stats_abmm$p_hybrid),outlier.size = 0,outlier.colour = "white")+
+  geom_jitter(mapping=aes(x=pop_stats_abmm$Group.2,y=pop_stats_abmm$p_hybrid),height = 0)+
+  labs(x="time since glaciation (100,000 is Null)", y="percent of individuals hybridized", title = "Q. macrocarpa, Q. bicolor, Q. muehlenbergii, Q.alba populations (34)" )+
+  theme_light()
+
+ggplot()+
+  geom_point(mapping=aes(x=pop_stats_abmm$x,y=pop_stats_abmm$p_hybrid,color=pop_stats_abmm$Group.2),size=2,alpha=.7)+
+  labs(color="time since glaciation (100,000 is Null)", y="percent of individuals hybridized",x="distance to range edge", title = "Q. macrocarpa, Q. bicolor, Q. muehlenbergii, Q.alba populations (34)" )+
+  theme_light()
+
+aov(pop_stats_abmm$p_hybrid~pop_stats_abmm$Group.2+pop_stats_abmm$x)
+aov(pop_stats_abmm$p_hybrid~pop_stats_abmm$x)
+aov(pop_stats_abmm$p_hybrid~pop_stats_abmm$Group.2)
+```
+```{r}
+library(ggplot2)
+dat_alb_bic<-Chr1_OutS10_bord_glac[(Chr1_OutS10_bord_glac[,12]=="Quercus bicolor Willd."|Chr1_OutS10_bord_glac[,12]=="Quercus alba L.")&(Chr1_OutS10_bord_glac[,2]<0.05&Chr1_OutS10_bord_glac[,3]<0.05&Chr1_OutS10_bord_glac[,4]<0.05&Chr1_OutS10_bord_glac[,5]<0.05&Chr1_OutS10_bord_glac[,8]<0.05&Chr1_OutS10_bord_glac[,7]<0.05&Chr1_OutS10_bord_glac[,10]<0.05&Chr1_OutS10_bord_glac[,11]<0.05),]
+Pop_file<-read.csv("../../00_Scripts_and_Labels/00_METADATA/Seq_Pop_Coord.csv")
+dat_alb_bic_pop<-merge(dat_alb_bic,Pop_file,by.x="Sample",by.y="Seq")
+dat_alb_bic_pop$nSamps<-rep(1,145)
+dat_alb_bic_pop$hybrids<-rep(0,145)
+dat_alb_bic_pop$bic<-rep(0,145)
+dat_alb_bic_pop$alb<-rep(0,145)
+for(i in 1:145){
+  if(dat_alb_bic_pop[i,13] == "hybrid"){
+  dat_alb_bic_pop[i,35]<-1
+  }
+  if(dat_alb_bic_pop[i,12] == "Quercus bicolor Willd."){
+  dat_alb_bic_pop[i,36]<-1
+  }
+  if(dat_alb_bic_pop[i,12] == "Quercus alba L."){
+  dat_alb_bic_pop[i,37]<-1
+  }
+}
+pop_stats_sum<-aggregate(x = dat_alb_bic_pop[,34:37],by=list(dat_alb_bic_pop$site),FUN="sum")
+pop_stats_mean<-aggregate(x = dat_alb_bic_pop[,23],by=list(dat_alb_bic_pop$site,dat_alb_bic_pop$V2.y),FUN="min")
+pop_stats_mean2<-aggregate(x = dat_alb_bic_pop[,32:33],by=list(dat_alb_bic_pop$site),FUN="mean")
+pop_stats<-merge(pop_stats_sum,pop_stats_mean,by="Group.1")
+pop_stats<-merge(pop_stats,pop_stats_mean2,by="Group.1")
+
+pop_stats_bic_alb<-pop_stats[pop_stats[,4]>0&pop_stats[,5]>0,]
+pop_stats_bic_alb$p_hybrid<-pop_stats_bic_alb$hybrids/pop_stats_bic_alb$nSamps
+
+ggplot()+
+  geom_boxplot(mapping=aes(x=pop_stats_bic_alb$Group.2,y=pop_stats_bic_alb$p_hybrid),outlier.size = 0,outlier.colour = "white")+
+  geom_jitter(mapping=aes(x=pop_stats_bic_alb$Group.2,y=pop_stats_bic_alb$p_hybrid),height = 0)+
+  labs(x="time since glaciation (100,000 is Null)", y="percent of individuals hybridized", title = "Q. bicolor and Q. alba populations (25)" )+
+  theme_light()
+
+
+ggplot()+
+  geom_jitter(mapping=aes(x=pop_stats_bic_alb$x,y=pop_stats_bic_alb$p_hybrid,color=pop_stats_bic_alb$Group.2),size=2,alpha=.7)+
+  labs(color="time since glaciation (100,000 is Null)", y="percent of individuals hybridized",x="distance to range edge", title = "Q. bicolor and Q. alba populations (25)" )+
+  theme_light()
+
+aov(pop_stats_bic_alb$p_hybrid~pop_stats_bic_alb$Group.2+pop_stats_bic_alb$x)
+aov(pop_stats_bic_alb$p_hybrid~pop_stats_bic_alb$x)
+aov(pop_stats_bic_alb$p_hybrid~pop_stats_bic_alb$Group.2)
+
+```
+```{r}
+meta<-read.csv("../../00_Scripts_and_Labels/00_METADATA/metadata_specimensSequenced_Duke_taxonomyfixed.csv")
+meta$count<-rep(1,693)
+sum_meta<-aggregate(x = meta$count,by=list(meta$GenomicVoucherID_USE_THIS),FUN="sum")
+```
+
+
+
+
+#SUBSET
+```{r}
+simp_meta<-data.frame(cbind(Seq=meta$Seq,colnum=meta$collectionNumber,species=meta$GenomicVoucherID_USE_THIS,state=meta$state.provIndIowanace,site=meta$site,lat=meta$latitude.orig,long=meta$longitude.orig))
+SS10_names<-read.delim("../Subset10Species.txt",sep = "\t",header=FALSE)
+
+# SS10_STR6<-read.delim("SS10_LIST_FILTER10000.6.Q",sep = " ", header=FALSE)
+# SS10_STR6$Sample<-SS10_names$V1
+# SS10_STR6<-SS10_STR6 %>%
+#   dplyr::mutate(across('Sample',str_replace,'.bam',''))
+# SS10_S6_dat<-merge(x=SS10_STR6,y=simp_meta,by.x="Sample",by.y="Seq",SS10.x=TRUE)
+# #SS10_STR3_sp<-merge(x=SS10_STR2,y=samp,by.x="Sample",by.y="Seq")
+# SS10_S6_long<-melt(SS10_S6_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+
+SS10_STR7<-read.delim("SS10/SS10_LIST_FILTER10000.7.Q",sep = " ", header=FALSE)
+SS10_STR7$Sample<-SS10_names$V1
+SS10_STR7<-SS10_STR7 %>%
+  dplyr::mutate(across('Sample',str_replace,'.bam',''))
+SS10_S7_dat<-merge(x=SS10_STR7,y=simp_meta,by.x="Sample",by.y="Seq",SS10.x=TRUE)
+#SS10_STR3_sp<-merge(x=SS10_STR2,y=samp,by.x="Sample",by.y="Seq")
+SS10_S7_long<-melt(SS10_S7_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+# 
+# SS10_STR8<-read.delim("SS10_LIST_FILTER10000.8.Q",sep = " ", header=FALSE)
+# SS10_STR8$Sample<-SS10_names$V1
+# SS10_STR8<-SS10_STR8 %>%
+#   dplyr::mutate(across('Sample',str_replace,'.bam',''))
+# SS10_S8_dat<-merge(x=SS10_STR8,y=simp_meta,by.x="Sample",by.y="Seq",SS10.x=TRUE)
+# #SS10_STR3_sp<-merge(x=SS10_STR2,y=samp,by.x="Sample",by.y="Seq")
+# SS10_S8_long<-melt(SS10_S8_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+# 
+# SS10_STR10<-read.delim("SS10_LIST_FILTER10000.10.Q",sep = " ", header=FALSE)
+# SS10_STR10$Sample<-SS10_names$V1
+# SS10_STR10<-SS10_STR10 %>%
+#   dplyr::mutate(across('Sample',str_replace,'.bam',''))
+# SS10_S10_dat<-merge(x=SS10_STR10,y=simp_meta,by.x="Sample",by.y="Seq",SS10.x=TRUE)
+# #SS10_STR3_sp<-merge(x=SS10_STR2,y=samp,by.x="Sample",by.y="Seq")
+# SS10_S10_long<-melt(SS10_S10_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+# write.csv(SS10_S10_long, "C:/Users/rmohn/Desktop/10_Analysis/02_STRUCTURE/S10_long.csv",row.names = FALSE)
+# 
+
+SS10_STR12<-read.delim("SS10/SS10_LIST_FILTER10000.12.Q",sep = " ", header=FALSE)
+SS10_STR12$Sample<-SS10_names$V1
+SS10_STR12<-SS10_STR12 %>%
+  dplyr::mutate(across('Sample',str_replace,'.bam',''))
+SS10_S12_dat<-merge(x=SS10_STR12,y=simp_meta,by.x="Sample",by.y="Seq",SS10.x=TRUE)
+#SS10_STR3_sp<-merge(x=SS10_STR2,y=samp,by.x="Sample",by.y="Seq")
+SS10_S12_long<-melt(SS10_S12_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+write.csv(SS10_S12_long, "C:/Users/rmohn/Desktop/10_Analysis/02_STRUCTURE/S12_long.csv",row.names = FALSE)
+
+
+# ggplot(data=SS10_S6_long)+
+#   geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack")+
+#   scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+#   labs(title = "SS10 Chromosomes; 6 populations")+
+#   facet_grid(.~species,scales = "free", space = "free")+
+#   theme(axis.text.x=element_blank(), 
+#       axis.ticks.x=element_blank(), 
+#       axis.text.y=element_blank(), 
+#       axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
+
+ggplot(data=SS10_S7_long)+
+  geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack")+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+  labs(title = "SS10 Chromosomes; 7 populations")+
+  facet_grid(.~species,scales = "free", space = "free")+
+  theme(axis.text.x=element_blank(), 
+      axis.ticks.x=element_blank(), 
+      axis.text.y=element_blank(), 
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
+
+# ggplot(data=SS10_S8_long)+
+#   geom_bar(mapping=aes(x=paste(species,state,Sample),y=value,fill=variable),stat="identity",position="stack")+
+#   scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+#   labs(title = "SS10 Chromosomes; 8 populations")+
+#   facet_grid(.~species,scales = "free", space = "free")+
+#   theme(axis.text.x=element_blank(), 
+#       axis.ticks.x=element_blank(), 
+#       axis.text.y=element_blank(), 
+#       axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
+
+# ggplot(data=SS10_S10_long)+
+#   geom_bar(mapping=aes(x=paste(species,state,Sample),y=value,fill=variable),stat="identity",position="stack")+
+#   scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+#   labs(title = "SS10 Chromosomes; 10 populations")+
+#   facet_grid(.~species,scales = "free", space = "free")+
+#   theme(axis.text.x=element_blank(), 
+#       axis.ticks.x=element_blank(), 
+#       axis.text.y=element_blank(), 
+#       axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
+
+ggplot(data=SS10_S12_long)+
+  geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack")+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+  labs(title = "SS10 Chromosomes; 12 populations")+
+  facet_grid(.~species,scales = "free", space = "free")+
+  theme(axis.text.x=element_blank(), 
+      axis.ticks.x=element_blank(), 
+      axis.text.y=element_blank(), 
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
+
+```
+
+```{r}
+simp_meta<-data.frame(cbind(Seq=meta$Seq,colnum=meta$collectionNumber,species=meta$GenomicVoucherID_USE_THIS,state=meta$state.provIndIowanace,site=meta$site,lat=meta$latitude.orig,long=meta$longitude.orig))
+SS20_names<-read.delim("../Subset20Species.txt",sep = "\t",header=FALSE)
+
+SS20_STR5<-read.delim("SS20_LIST_FILTER10000.5.Q",sep = " ", header=FALSE)
+SS20_STR5$Sample<-SS20_names$V1
+SS20_STR5<-SS20_STR5 %>%
+  dplyr::mutate(across('Sample',str_replace,'.bam',''))
+SS20_S5_dat<-merge(x=SS20_STR5,y=simp_meta,by.x="Sample",by.y="Seq",SS20.x=TRUE)
+#SS20_STR3_sp<-merge(x=SS20_STR2,y=samp,by.x="Sample",by.y="Seq")
+SS20_S5_long<-melt(SS20_S5_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+
+SS20_STR6<-read.delim("SS20_LIST_FILTER10000.6.Q",sep = " ", header=FALSE)
+SS20_STR6$Sample<-SS20_names$V1
+SS20_STR6<-SS20_STR6 %>%
+  dplyr::mutate(across('Sample',str_replace,'.bam',''))
+SS20_S6_dat<-merge(x=SS20_STR6,y=simp_meta,by.x="Sample",by.y="Seq",SS20.x=TRUE)
+#SS20_STR3_sp<-merge(x=SS20_STR2,y=samp,by.x="Sample",by.y="Seq")
+SS20_S6_long<-melt(SS20_S6_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+
+SS20_STR7<-read.delim("SS20/SS20_LIST_FILTER10000.7.Q",sep = " ", header=FALSE)
+SS20_STR7$Sample<-SS20_names$V1
+SS20_STR7<-SS20_STR7 %>%
+  dplyr::mutate(across('Sample',str_replace,'.bam',''))
+SS20_S7_dat<-merge(x=SS20_STR7,y=simp_meta,by.x="Sample",by.y="Seq",SS20.x=TRUE)
+#SS20_STR3_sp<-merge(x=SS20_STR2,y=samp,by.x="Sample",by.y="Seq")
+SS20_S7_long<-melt(SS20_S7_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+
+SS20_STR8<-read.delim("SS20_LIST_FILTER10000.8.Q",sep = " ", header=FALSE)
+SS20_STR8$Sample<-SS20_names$V1
+SS20_STR8<-SS20_STR8 %>%
+  dplyr::mutate(across('Sample',str_replace,'.bam',''))
+SS20_S8_dat<-merge(x=SS20_STR8,y=simp_meta,by.x="Sample",by.y="Seq",SS20.x=TRUE)
+#SS20_STR3_sp<-merge(x=SS20_STR2,y=samp,by.x="Sample",by.y="Seq")
+SS20_S8_long<-melt(SS20_S8_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+
+SS20_STR10<-read.delim("SS20/SS20_LIST_FILTER10000.10.Q",sep = " ", header=FALSE)
+SS20_STR10$Sample<-SS20_names$V1
+SS20_STR10<-SS20_STR10 %>%
+  dplyr::mutate(across('Sample',str_replace,'.bam',''))
+SS20_S10_dat<-merge(x=SS20_STR10,y=simp_meta,by.x="Sample",by.y="Seq",SS20.x=TRUE)
+#SS20_STR3_sp<-merge(x=SS20_STR2,y=samp,by.x="Sample",by.y="Seq")
+SS20_S10_long<-melt(SS20_S10_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+write.csv(SS20_S10_long, "C:/Users/rmohn/Desktop/10_Analysis/02_STRUCTURE/S10_long.csv",row.names = FALSE)
+
+
+# SS20_STR12<-read.delim("SS20_LIST_FILTER10000.12.Q",sep = " ", header=FALSE)
+# SS20_STR12$Sample<-SS20_names$V1
+# SS20_STR12<-SS20_STR12 %>%
+#   dplyr::mutate(across('Sample',str_replace,'.bam',''))
+# SS20_S12_dat<-merge(x=SS20_STR12,y=simp_meta,by.x="Sample",by.y="Seq",SS20.x=TRUE)
+# #SS20_STR3_sp<-merge(x=SS20_STR2,y=samp,by.x="Sample",by.y="Seq")
+# SS20_S12_long<-melt(SS20_S12_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+# write.csv(SS20_S12_long, "C:/Users/rmohn/Desktop/10_Analysis/02_STRUCTURE/S12_long.csv",row.names = FALSE)
+# 
+
+ggplot(data=SS20_S5_long)+
+  geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack")+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+  labs(title = "SS20 Chromosomes; 5 populations")+
+  facet_grid(.~species,scales = "free", space = "free")+
+  theme(axis.text.x=element_blank(), 
+      axis.ticks.x=element_blank(), 
+      axis.text.y=element_blank(), 
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
+
+ggplot(data=SS20_S6_long)+
+  geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack")+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+  labs(title = "SS20 Chromosomes; 6 populations")+
+  facet_grid(.~species,scales = "free", space = "free")+
+  theme(axis.text.x=element_blank(), 
+      axis.ticks.x=element_blank(), 
+      axis.text.y=element_blank(), 
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
+
+ggplot(data=SS20_S7_long)+
+  geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack")+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+  labs(title = "SS20 Chromosomes; 7 populations")+
+  facet_grid(.~species,scales = "free", space = "free")+
+  theme(axis.text.x=element_blank(), 
+      axis.ticks.x=element_blank(), 
+      axis.text.y=element_blank(), 
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
+
+ggplot(data=SS20_S8_long)+
+  geom_bar(mapping=aes(x=paste(species,state,Sample),y=value,fill=variable),stat="identity",position="stack")+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+  labs(title = "SS20 Chromosomes; 8 populations")+
+  facet_grid(.~species,scales = "free", space = "free")+
+  theme(axis.text.x=element_blank(),
+      axis.ticks.x=element_blank(),
+      axis.text.y=element_blank(),
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
+
+ggplot(data=SS20_S10_long)+
+  geom_bar(mapping=aes(x=paste(species,state,Sample),y=value,fill=variable),stat="identity",position="stack")+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+  labs(title = "SS20 Chromosomes; 10 populations")+
+  facet_grid(.~species,scales = "free", space = "free")+
+  theme(axis.text.x=element_blank(), 
+      axis.ticks.x=element_blank(), 
+      axis.text.y=element_blank(), 
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
+
+# ggplot(data=SS20_S12_long)+
+#   geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack")+
+#   scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+#   labs(title = "SS20 Chromosomes; 12 populations")+
+#   facet_grid(.~species,scales = "free", space = "free")+
+#   theme(axis.text.x=element_blank(), 
+#       axis.ticks.x=element_blank(), 
+#       axis.text.y=element_blank(), 
+#       axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
+```
+
+
+```{r}
+meta<-read.csv("../../00_Scripts_and_Labels/00_METADATA/metadata_sequenced_taxonomyfixed_outgroup.csv")
+simp_meta<-data.frame(cbind(Seq=meta$Seq,colnum=meta$collectionNumber,species=meta$GenomicVoucherID_USE_THIS,state=meta$state.provIndIowanace,site=meta$site,lat=meta$latitude.orig,long=meta$longitude.orig))
+SS30_names<-read.delim("../Subset30Species.txt",sep = "\t",header=FALSE)
+
+SS30_STR5<-read.delim("SS30_LIST_FILTER10000.5.Q",sep = " ", header=FALSE)
+SS30_STR5$Sample<-SS30_names$V1
+SS30_STR5<-SS30_STR5 %>%
+  dplyr::mutate(across('Sample',str_replace,'.bam',''))
+SS30_S5_dat<-merge(x=SS30_STR5,y=simp_meta,by.x="Sample",by.y="Seq",SS30.x=TRUE)
+#SS30_STR3_sp<-merge(x=SS30_STR2,y=samp,by.x="Sample",by.y="Seq")
+SS30_S5_long<-melt(SS30_S5_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+
+SS30_STR6<-read.delim("SS30_LIST_FILTER10000.6.Q",sep = " ", header=FALSE)
+SS30_STR6$Sample<-SS30_names$V1
+SS30_STR6<-SS30_STR6 %>%
+  dplyr::mutate(across('Sample',str_replace,'.bam',''))
+SS30_S6_dat<-merge(x=SS30_STR6,y=simp_meta,by.x="Sample",by.y="Seq",SS30.x=TRUE)
+#SS30_STR3_sp<-merge(x=SS30_STR2,y=samp,by.x="Sample",by.y="Seq")
+SS30_S6_long<-melt(SS30_S6_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+
+SS30_STR7<-read.delim("SS30_LIST_FILTER10000.7.Q",sep = " ", header=FALSE)
+SS30_STR7$Sample<-SS30_names$V1
+SS30_STR7<-SS30_STR7 %>%
+  dplyr::mutate(across('Sample',str_replace,'.bam',''))
+SS30_S7_dat<-merge(x=SS30_STR7,y=simp_meta,by.x="Sample",by.y="Seq",SS30.x=TRUE)
+#SS30_STR3_sp<-merge(x=SS30_STR2,y=samp,by.x="Sample",by.y="Seq")
+SS30_S7_long<-melt(SS30_S7_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+
+SS30_STR8<-read.delim("SS30/SS30_LIST_FILTER10000.8.Q",sep = " ", header=FALSE)
+SS30_STR8$Sample<-SS30_names$V1
+SS30_STR8<-SS30_STR8 %>%
+  dplyr::mutate(across('Sample',str_replace,'.bam',''))
+SS30_S8_dat<-merge(x=SS30_STR8,y=simp_meta,by.x="Sample",by.y="Seq",SS30.x=TRUE)
+#SS30_STR3_sp<-merge(x=SS30_STR2,y=samp,by.x="Sample",by.y="Seq")
+SS30_S8_long<-melt(SS30_S8_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+
+SS30_STR10<-read.delim("SS30/SS30_LIST_FILTER10000.10.Q",sep = " ", header=FALSE)
+SS30_STR10$Sample<-SS30_names$V1
+SS30_STR10<-SS30_STR10 %>%
+  dplyr::mutate(across('Sample',str_replace,'.bam',''))
+SS30_S10_dat<-merge(x=SS30_STR10,y=simp_meta,by.x="Sample",by.y="Seq",SS30.x=TRUE)
+#SS30_STR3_sp<-merge(x=SS30_STR2,y=samp,by.x="Sample",by.y="Seq")
+SS30_S10_long<-melt(SS30_S10_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+write.csv(SS30_S10_long, "C:/Users/rmohn/Desktop/10_Analysis/02_STRUCTURE/S10_long.csv",row.names = FALSE)
+
+SS30_STR11<-read.delim("SS30_LIST_FILTER10000.11.Q",sep = " ", header=FALSE)
+SS30_STR11$Sample<-SS30_names$V1
+SS30_STR11<-SS30_STR11 %>%
+  dplyr::mutate(across('Sample',str_replace,'.bam',''))
+SS30_S11_dat<-merge(x=SS30_STR11,y=simp_meta,by.x="Sample",by.y="Seq",SS30.x=TRUE)
+#SS30_STR3_sp<-merge(x=SS30_STR2,y=samp,by.x="Sample",by.y="Seq")
+SS30_S11_long<-melt(SS30_S11_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+write.csv(SS30_S11_long, "C:/Users/rmohn/Desktop/10_Analysis/02_STRUCTURE/S11_long.csv",row.names = FALSE)
+
+SS30_STR12<-read.delim("SS30_LIST_FILTER10000.12.Q",sep = " ", header=FALSE)
+SS30_STR12$Sample<-SS30_names$V1
+SS30_STR12<-SS30_STR12 %>%
+  dplyr::mutate(across('Sample',str_replace,'.bam',''))
+SS30_S12_dat<-merge(x=SS30_STR12,y=simp_meta,by.x="Sample",by.y="Seq",SS30.x=TRUE)
+#SS30_STR3_sp<-merge(x=SS30_STR2,y=samp,by.x="Sample",by.y="Seq")
+SS30_S12_long<-melt(SS30_S12_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+write.csv(SS30_S12_long, "C:/Users/rmohn/Desktop/10_Analysis/02_STRUCTURE/S12_long.csv",row.names = FALSE)
+
+
+ggplot(data=SS30_S5_long)+
+  geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack")+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+  labs(title = "SS30 Chromosomes; 5 populations")+
+  facet_grid(.~species,scales = "free", space = "free")+
+  theme(axis.text.x=element_blank(), 
+      axis.ticks.x=element_blank(), 
+      axis.text.y=element_blank(), 
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
+
+ggplot(data=SS30_S6_long)+
+  geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack")+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+  labs(title = "SS30 Chromosomes; 6 populations")+
+  facet_grid(.~species,scales = "free", space = "free")+
+  theme(axis.text.x=element_blank(), 
+      axis.ticks.x=element_blank(), 
+      axis.text.y=element_blank(), 
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
+
+ggplot(data=SS30_S7_long)+
+  geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack")+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+  labs(title = "SS30 Chromosomes; 7 populations")+
+  facet_grid(.~species,scales = "free", space = "free")+
+  theme(axis.text.x=element_blank(), 
+      axis.ticks.x=element_blank(), 
+      axis.text.y=element_blank(), 
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
+
+ggplot(data=SS30_S8_long)+
+  geom_bar(mapping=aes(x=paste(species,state,Sample),y=value,fill=variable),stat="identity",position="stack")+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+  labs(title = "SS30 Chromosomes; 8 populations")+
+  facet_grid(.~species,scales = "free", space = "free")+
+  theme(axis.text.x=element_blank(),
+      axis.ticks.x=element_blank(),
+      axis.text.y=element_blank(),
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
+
+ggplot(data=SS30_S10_long)+
+  geom_bar(mapping=aes(x=paste(species,state,Sample),y=value,fill=variable),stat="identity",position="stack")+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+  labs(title = "SS30 Chromosomes; 10 populations")+
+  facet_grid(.~species,scales = "free", space = "free")+
+  theme(axis.text.x=element_blank(), 
+      axis.ticks.x=element_blank(), 
+      axis.text.y=element_blank(), 
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
+
+ggplot(data=SS30_S11_long)+
+  geom_bar(mapping=aes(x=paste(species,state,Sample),y=value,fill=variable),stat="identity",position="stack")+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+  labs(title = "SS30 Chromosomes; 11 populations")+
+  facet_grid(.~species,scales = "free", space = "free")+
+  theme(axis.text.x=element_blank(), 
+      axis.ticks.x=element_blank(), 
+      axis.text.y=element_blank(), 
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
+
+ggplot(data=SS30_S12_long)+
+  geom_bar(mapping=aes(x=paste(species,state,Sample),y=value,fill=variable),stat="identity",position="stack")+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+  labs(title = "SS30 Chromosomes; 12 populations")+
+  facet_grid(.~species,scales = "free", space = "free")+
+  theme(axis.text.x=element_blank(), 
+      axis.ticks.x=element_blank(), 
+      axis.text.y=element_blank(), 
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
+
+```
+
+
+
+###MUE
+```{r}
+###Qmac Structure
+
+meta<-read.csv("../../00_Scripts_and_Labels/00_METADATA/metadata_sequenced_taxonomyfixed_outgroup.csv")
+
+simp_meta<-data.frame(cbind(Seq=meta$Seq,colnum=meta$collectionNumber,species=meta$GenomicVoucherID_USE_THIS,state=meta$state.provIndIowanace,site=meta$site,lat=meta$latitude.orig,long=meta$longitude.orig))
+
+
+Qmue_Sam<-read.delim("../mue_str.txt",header = FALSE)
+
+Qmue_STR2<-read.delim("Mue60_FILTER10000.2.Q",sep = " ", header=FALSE)
+Qmue_STR2[,(length(Qmue_STR2[1,])+1)]=Qmue_Sam
+Qmue_STR2<-Qmue_STR2 %>%
+  dplyr::mutate(across('V1.1',str_replace,'.bam',''))
+
+Qmue_STR2_sp<-merge(x=Qmue_STR2,y=meta,by.x="V1.1",by.y="Seq",all.x=TRUE,all.y=FALSE)
+Qmue_STR2_long<-melt(Qmue_STR2_sp,id.vars =  c("V1.1","GenomicVoucherID_USE_THIS","Pop","state.provIndIowanace","latitude.orig","longitude.orig"),measure.vars = c("V1","V2"))
+
+Qmue_STR3<-read.delim("Mue60_FILTER10000.3.Q",sep = " ", header=FALSE)
+Qmue_STR3[,(length(Qmue_STR3[1,])+1)]=Qmue_Sam
+Qmue_STR3<-Qmue_STR3 %>%
+  dplyr::mutate(across('V1.1',str_replace,'.bam',''))
+
+Qmue_STR3_sp<-merge(x=Qmue_STR3,y=meta,by.x="V1.1",by.y="Seq",all.x=TRUE,all.y=FALSE)
+Qmue_STR3_long<-melt(Qmue_STR3_sp,id.vars =  c("V1.1","GenomicVoucherID_USE_THIS","Pop","state.provIndIowanace","latitude.orig","longitude.orig"),measure.vars = c("V1","V2","V3"))
+
+# Qmac_STR3<-read.delim("../chr1-12_Qmac.3.Q",sep = " ", header=FALSE)
+# Qmac_STR3[,(length(Qmac_STR3[1,])+1):(length(Qmac_STR3[1,])+3)]=Qmac_Samp
+# Qmac_STR3_sp<-merge(x=Qmac_STR3,y=samp,by.x="V1.1",by.y="Seq")
+# Qmac_STR3_long<-melt(Qmac_STR3_sp,id.vars =  c("V1.1","Sp","Sp_Pop","Pop","St","latitude.orig","longitude.orig"))
+# 
+# Qmac_STR4<-read.delim("../chr1-12_Qmac.4.Q",sep = " ", header=FALSE)
+# Qmac_STR4[,(length(Qmac_STR4[1,])+1):(length(Qmac_STR4[1,])+3)]=Qmac_Samp
+# Qmac_STR4_sp<-merge(x=Qmac_STR4,y=samp,by.x="V1.1",by.y="Seq")
+# Qmac_STR4_long<-melt(Qmac_STR4_sp,id.vars =  c("V1.1","Sp","Sp_Pop","Pop","St","latitude.orig","longitude.orig"))
+# 
+# Qmac_STR5<-read.delim("../chr1-12_Qmac.5.Q",sep = " ", header=FALSE)
+# Qmac_STR5[,(length(Qmac_STR5[1,])+1):(length(Qmac_STR5[1,])+3)]=Qmac_Samp
+# Qmac_STR5_sp<-merge(x=Qmac_STR5,y=samp,by.x="V1.1",by.y="Seq")
+# Qmac_STR5_long<-melt(Qmac_STR5_sp,id.vars =  c("V1.1","Sp","Sp_Pop","Pop","St","latitude.orig","longitude.orig"))
+# 
+# Qmac_STR6<-read.delim("../chr1-12_Qmac.6.Q",sep = " ", header=FALSE)
+# Qmac_STR6[,(length(Qmac_STR6[1,])+1):(length(Qmac_STR6[1,])+3)]=Qmac_Samp
+# Qmac_STR6_sp<-merge(x=Qmac_STR6,y=samp,by.x="V1.1",by.y="Seq")
+# Qmac_STR6_long<-melt(Qmac_STR6_sp,id.vars =  c("V1.1","Sp","Sp_Pop","Pop","St","latitude.orig","longitude.orig"))
+
+
+
+#Qmu_STR2_long$STR<-rep("STR2",length(Qmac_STR2_long[,1]))
+# Qmac_STR3_long$STR<-rep("STR3",length(Qmac_STR3_long[,1]))
+# Qmac_STR4_long$STR<-rep("STR4",length(Qmac_STR4_long[,1]))
+# Qmac_STR5_long$STR<-rep("STR5",length(Qmac_STR5_long[,1]))
+# Qmac_STR6_long$STR<-rep("STR6",length(Qmac_STR6_long[,1]))
+# Qmac_STR7_long$STR<-rep("STR7",length(Qmac_STR7_long[,1]))
+# Qmac_STR8_long$STR<-rep("STR8",length(Qmac_STR8_long[,1]))
+# Qmac_STR9_long$STR<-rep("STR9",length(Qmac_STR9_long[,1]))
+
+# Qmac_STRall_long<-rbind(Qmac_STR2_long,Qmac_STR3_long,Qmac_STR4_long,Qmac_STR5_long,Qmac_STR6_long,Qmac_STR7_long,Qmac_STR8_long,Qmac_STR9_long)
+# 
+# ggplot(data=Qmac_STRall_long)+
+#   geom_bar(mapping=aes(x=paste(Pop,V1.1),y=value,fill=variable),stat="identity",position="stack")+
+#   scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+#   labs(title = "Q. macrocarpa samples, All chromosomes")+
+#   facet_grid(STR~.)+
+#   theme(axis.text.x=element_blank(), 
+#       axis.ticks.x=element_blank(), 
+#       axis.text.y=element_blank(), 
+#       axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
+
+
+
+
+cbbPalette2.5=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255")
+
+ggplot(data = states)+
+  geom_polygon(data = counties, aes(x = long, y = lat, group = group),fill = 'white', color = "gray90", lwd = 0.1)+
+  geom_polygon(aes(x = long, y = lat, group = group),
+                      fill = NA, color = "black")+
+  scale_fill_manual('Species cluster', values = cbbPalette2.5)+
+  coord_map(xlim = c(-105,-68))+
+  geom_scatterpie(aes(x = longitude.orig, y = latitude.orig,group=Pop), data = Qmue_STR2_sp, cols = c("V1","V2"), alpha = 1)+
+  facet_grid(.~GenomicVoucherID_USE_THIS)
+
+ggplot(data = states)+
+  geom_polygon(data = counties, aes(x = long, y = lat, group = group),fill = 'white', color = "gray90", lwd = 0.1)+
+  geom_polygon(aes(x = long, y = lat, group = group),
+                      fill = NA, color = "black")+
+  scale_fill_manual('Species cluster', values = cbbPalette2.5)+
+  coord_map(xlim = c(-105,-92), ylim=c(35,50))+
+  geom_scatterpie(aes(x = longitude.orig, y = latitude.orig,group=Pop), data = Qmue_STR3_sp, cols = c("V1","V2","V3"), alpha = 1)+
+  facet_grid(.~GenomicVoucherID_USE_THIS)
+
+ggplot(data=Qmue_STR2_long)+
+  geom_bar(mapping=aes(x=paste(GenomicVoucherID_USE_THIS,V1.1),y=value,fill=variable),stat="identity",position="stack")+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","green","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255","lightgreen","lightpink","orange","darkgreen","lightyellow","yellow"))+
+  labs(title = "All Chromosomes; 2 populations")+
+  facet_grid(GenomicVoucherID_USE_THIS~state.provIndIowanace,scales = "free", space = "free")+
+  theme(axis.text.x=element_blank(), 
+      axis.ticks.x=element_blank(), 
+      axis.text.y=element_blank(), 
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
+
+ggplot(data=Qmue_STR2_long)+
+  geom_bar(mapping=aes(x=paste(GenomicVoucherID_USE_THIS,V1.1),y=value,fill=variable),stat="identity",position="stack")+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","green","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255","lightgreen","lightpink","orange","darkgreen","lightyellow","yellow"))+
+  labs(title = "All Chromosomes; 2 populations")+
+  facet_grid(GenomicVoucherID_USE_THIS~state.provIndIowanace,scales = "free", space = "free")+
+  theme(axis.text.x=element_blank(), 
+      axis.ticks.x=element_blank(), 
+      axis.text.y=element_blank(), 
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
+
+ggplot(data=Qmue_STR3_long)+
+  geom_bar(mapping=aes(x=paste(GenomicVoucherID_USE_THIS,V1.1),y=value,fill=variable),stat="identity",position="stack")+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","green","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255","lightgreen","lightpink","orange","darkgreen","lightyellow","yellow"))+
+  labs(title = "All Chromosomes; 3 populations")+
+  facet_grid(GenomicVoucherID_USE_THIS~state.provIndIowanace,scales = "free", space = "free")+
+  theme(axis.text.x=element_blank(), 
+      axis.ticks.x=element_blank(), 
+      axis.text.y=element_blank(), 
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
+
+```
+
+
+```{r}
+All_S12_dat2=All_S12_dat
+All_S12_dat2$strpop<-rep("hybrid",694)
+#All_S12_dat2$sp_cor<-rep(FALSE,720)
+All_S12_dat2$hybrid<-rep("hybrid60",694)
+for(i in 1:694){
+  if(All_S12_dat2[i,9]>.90){
+    All_S12_dat2[i,20]<-"Qste_Qmar"
+    All_S12_dat2[i,21]<-"species"
+  }else{
+    if(All_S12_dat2[i,10]>.90){
+      All_S12_dat2[i,20]<-"Qalb"
+      All_S12_dat2[i,21]<-"species"
+    }else{
+      if(All_S12_dat2[i,6]>.90){
+        All_S12_dat2[i,20]<-"Qlyr_Qbic"
+        All_S12_dat2[i,21]<-"species"
+      }else{
+        if(All_S12_dat2[i,5]>.90){
+          All_S12_dat2[i,20]<-"Qmic"
+          All_S12_dat2[i,21]<-"species"
+        }else{
+            if(All_S12_dat2[i,3]>.90){
+              All_S12_dat2[i,20]<-"Qmon"
+              All_S12_dat2[i,21]<-"species"
+            }else{
+              if(All_S12_dat2[i,7]+All_S12_dat2[i,13]>.90){
+                All_S12_dat2[i,20]<-"Qmue"
+                All_S12_dat2[i,21]<-"species"
+              }else{
+                if(All_S12_dat2[i,4]>.90){
+                  All_S12_dat2[i,20]<-"Qsin"
+                  All_S12_dat2[i,21]<-"species"
+               }else{
+                 if(All_S12_dat2[i,12]>.90){
+                    All_S12_dat2[i,20]<-"Qlob"
+                    All_S12_dat2[i,21]<-"species"
+                 }else{
+                   if(All_S12_dat2[i,8]+All_S12_dat2[i,11]+All_S12_dat2[i,2]>0.90){
+                     All_S12_dat2[i,20]<-"Qmac"
+                     All_S12_dat2[i,21]<-"species"
+                   }else{
+                     if(All_S12_dat2[i,8]+All_S12_dat2[i,11]+All_S12_dat2[i,2]>0.60|All_S12_dat2[i,12]>.60|All_S12_dat2[i,4]>.60|All_S12_dat2[i,7]+All_S12_dat2[i,13]>.60|All_S12_dat2[i,3]>.60|All_S12_dat2[i,5]>.60|All_S12_dat2[i,6]>.60|All_S12_dat2[i,10]>.60|All_S12_dat2[i,9]>.60){
+                       All_S12_dat2[i,21]<-"hybrid90"
+                       
+                     }
+                   }
+
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+write.csv(All_S12_dat2, "C:/Users/rmohn/Desktop/10_Analysis/02_STRUCTURE/S12_hyb.csv",row.names = FALSE)
+
+# All_STR12_dat2$maxstrpop<-rep("v0",693)
+# All_STR12_dat2[,21]<-colnames(All_STR12_dat2)[1+apply(All_STR12_dat2[,2:13],1,which.max)]
+# All_STR12_dat2$maxstrsp<-rep("sp",693)
+# for(i in 1:693){
+#     if(All_STR7_sp2[i,21]=="V3"){
+#       All_STR7_sp2[i,22]<-"Qalb"
+#     }else{
+#       if(All_STR7_sp2[i,21]=="V6"){
+#         All_STR7_sp2[i,22]<-"Qlyr_Qbic"
+#         if(All_STR7_sp2[i,14]=="Qlyr"|All_STR7_sp2[i,14]=="Qbic"){
+#          All_STR7_sp2[i,22]<-All_STR7_sp2[i,14]
+#         }
+#       }else{
+#        if(All_STR7_sp2[i,21]=="V1"){
+#         All_STR7_sp2[i,22]<-"Qmic_Qmon"
+#         if(All_STR7_sp2[i,14]=="Qmic"|All_STR7_sp2[i,14]=="Qmon"){
+#           All_STR7_sp2[i,22]<-All_STR7_sp2[i,14]
+#           }
+#         }else{
+#             if(All_STR7_sp2[i,21]=="V4"){
+#               All_STR7_sp2[i,22]<-"Qste_Qmar_Qsin"
+#               if(All_STR7_sp2[i,14]=="Qste"|All_STR7_sp2[i,14]=="Qmar"|All_STR7_sp2[i,14]=="Qsin"){
+#                 All_STR7_sp2[i,22]<-All_STR7_sp2[i,14]
+#               }
+#             }else{
+#               if(All_STR7_sp2[i,21]=="V7"){
+#                 All_STR7_sp2[i,22]<-"Qmue_Qpri"
+#                 if(All_STR7_sp2[i,14]=="Qmue"|All_STR7_sp2[i,14]=="Qpri"){
+#                   All_STR7_sp2[i,22]<-All_STR7_sp2[i,14]
+#                 }
+#               }else{
+#                 if(All_STR7_sp2[i,21]=="V2"|All_STR7_sp2[i,21]=="V5"){
+#                   All_STR7_sp2[i,22]<-"Qmac"
+#                 }
+#               }
+#         }
+#       }
+#     }
+#   }
+# }
+
+ggplot(data = states)+
+  geom_polygon(data = counties, aes(x = long, y = lat, group = group),fill = 'white', color = "white", lwd = 0.1)+
+  geom_polygon(aes(x = long, y = lat, group = group),
+                      fill = NA, color = "gray85")+
+ # scale_fill_manual('Species cluster', values = cbbPalette)+
+  coord_map('albers', lat0=40, lat1=38)+
+  geom_jitter(data = subset(All_S12_dat2,!is.na(lat)),mapping=aes(x = as.numeric(long), y = as.numeric(lat), color=hybrid), height=.5, width=.5,alpha = .7,size=1)+
+  #scale_color_binned(type="viridis",direction=-1)+
+  scale_color_manual(values=c("darkblue","orange"))#+
+  #scale_color_binned(wacolors$sound_sunset, reverse=TRUE)
+  #scale_size_continuous(range=c(.7,1))#+
+  #scale_shape_manual( values = c(16,1))
+
+```
+
