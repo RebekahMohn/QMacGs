@@ -1,0 +1,12 @@
+centSize	centnum	centCsome	centEnd	albsigwins	muesigwins	stesigwins	lobsigwins	type	qalb	qlob	qmue	qste
+90000	11	Chr09	18040000	0	9	0	0	centInterArray	1	1	0.005	1
+680000	10	Chr01	45270000	0	68	0	0	centInterArray	1	1	0	1
+1510000	9	Chr12	24230000	0	0	0	0	centInterArray	1	1	1	1
+540000	8	Chr10	33820000	0	1	0	0	centInterArray	1	1	0.125	1
+3e+05	7	Chr09	17860000	0	30	0	5	centInterArray	1	0.085	0	1
+410000	6	Chr08	39950000	0	0	0	0	centInterArray	1	1	1	1
+1200000	5	Chr07	3e+07	28	9	0	0	centInterArray	0.125	1	0.23	1
+770000	4	Chr06	25550000	0	0	38	0	centInterArray	1	1	1	0.05
+820000	3	Chr05	50260000	0	0	0	0	centInterArray	1	1	1	1
+820000	2	Chr02	42100000	0	0	0	45	centInterArray	1	0.075	1	1
+680000	1	Chr01	44300000	0	68	0	0	centInterArray	1	1	0	1

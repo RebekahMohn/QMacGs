@@ -2,8 +2,8 @@
 #Identifying whether adaptive are more likely to be introgressed than non-adaptive
 ##### 2000
 gea<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/114_GEA/lfmmOut/AllC_lfmmpval_cor.txt",sep=" ")
-D_All_2000<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/Dall_mac_2000.txt",header = TRUE)
-D_SS25_2000<-subset(D_All_2000,d_f>0.25)
+Dmac_All_2000<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/Dall_mac_2000.txt",header = TRUE)
+D_SS25_2000<-subset(Dmac_All_2000,d_f>0.25)
 
 gea$CHR_Pos<-paste(gea$CHR,gea$BP,sep="Q")
 
@@ -69,24 +69,24 @@ ggplot(GEASAMPS)+
 ggplot(GEASAMPS)+
   geom_histogram(aes(x=albDstats),binwidth = 1)
 
-
-gea$mueDstats<-NA
-gea$steDstats<-NA
-gea$lobDstats<-NA
-gea$albDstats<-NA
+gea2<-gea
+gea2$mueDstats<-NA
+gea2$steDstats<-NA
+gea2$lobDstats<-NA
+gea2$albDstats<-NA
 
 for(j in 1:length(gea$CHR)){
-  chr1<-gea$CHR[j]
-  pos<-gea$BP[j]
-  gea$mueDstats[j]<-length(subset(D_SS25_2000,chr3==chr1&windowStart<pos&windowEnd>pos&d_f>0.25&species=="mue")$d_f)
-  gea$steDstats[j]<-length(subset(D_SS25_2000,chr3==chr1&windowStart<pos&windowEnd>pos&d_f>0.25&species=="ste")$d_f)
-  gea$lobDstats[j]<-length(subset(D_SS25_2000,chr3==chr1&windowStart<pos&windowEnd>pos&d_f>0.25&species=="lob")$d_f)
-  gea$albDstats[j]<-length(subset(D_SS25_2000,chr3==chr1&windowStart<pos&windowEnd>pos&d_f>0.25&species=="alb")$d_f)
+  chr1<-gea2$CHR[j]
+  pos<-gea2$BP[j]
+  gea2$mueDstats[j]<-length(subset(D_SS25_2000,chr3==chr1&windowStart<pos&windowEnd>pos&d_f>0.25&species=="mue")$d_f)
+  gea2$steDstats[j]<-length(subset(D_SS25_2000,chr3==chr1&windowStart<pos&windowEnd>pos&d_f>0.25&species=="ste")$d_f)
+  gea2$lobDstats[j]<-length(subset(D_SS25_2000,chr3==chr1&windowStart<pos&windowEnd>pos&d_f>0.25&species=="lob")$d_f)
+  gea2$albDstats[j]<-length(subset(D_SS25_2000,chr3==chr1&windowStart<pos&windowEnd>pos&d_f>0.25&species=="alb")$d_f)
 }
 
-gea_dstat<-subset(gea,mueDstats>3|albDstats>3|steDstats>3|lobDstats>3)
-gea_dstat_table<-bind_rows(mue=table(subset(gea_dstat,mueDstats>3)$ENV),ste=table(subset(gea_dstat,steDstats>3)$ENV),
-          lob=table(subset(gea_dstat,lobDstats>3)$ENV),alb=table(subset(gea_dstat,albDstats>3)$ENV),total=table(gea$ENV))
+gea_dstat_2<-subset(gea2,mueDstats>3|albDstats>3|steDstats>3|lobDstats>3)
+gea_dstat_2_table<-bind_rows(mue=table(subset(gea_dstat_2,mueDstats>3)$ENV),ste=table(subset(gea_dstat_2,steDstats>3)$ENV),
+          lob=table(subset(gea_dstat_2,lobDstats>3)$ENV),alb=table(subset(gea_dstat_2,albDstats>3)$ENV),total=table(gea2$ENV))
 
 write.table(gea_dstat_table,"C:/Users/rmohn/Documents/GitHub/QMacGs/20_ToMACROCARPA/10_ComboAnalysis/Output/gea_introgression.txt",sep="\t",quote=F,row.names = F)
 

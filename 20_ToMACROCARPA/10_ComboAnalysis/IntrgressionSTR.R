@@ -520,10 +520,10 @@ D_All_2000<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPO
 
 Dsp_All_2000<-data.frame(pop=character(),chr=character(),windowStart=integer(),windowEnd=integer(),D=double(),f_d=double(),f_dM=double(),d_f=double(),lat=double(),long=double(),windowmid=integer(),species=character(),chr2=character(),chr3=integer())
 for(j in 1:12){
-  i=min(D_All$windowmid)
-  while(i <= max(D_All$windowmid)){
-    if(i %in% subset(Dalb_All,chr3==j)$windowmid){
-      Dwind<-rbind(subset(Dalb_All,windowmid==i&chr3==j),subset(Dlob_All,windowmid==i&chr3==j),subset(Dmue_All,windowmid==i&chr3==j),subset(Dste_All,windowmid==i&chr3==j))
+  i=min(D_All_2000$windowmid)
+  while(i <= max(D_All_2000$windowmid)){
+    if(i %in% subset(D_All_2000,chr3==j)$windowmid){
+      Dwind<-rbind(subset(D_All_2000,windowmid==i&chr3==j))#,subset(Dlob_All,windowmid==i&chr3==j),subset(Dmue_All,windowmid==i&chr3==j),subset(Dste_All,windowmid==i&chr3==j))
       Dsp_All_2000<-rbind(Dsp_All_2000,(Dwind %>% group_by(pop) %>% top_n(1, d_f)))
     }
     i=i+500000
@@ -548,7 +548,7 @@ Dsp_Nall<-aggregate(count~chr+windowmid+species,data=subset(Dsp_NS_all,d_f>.25&M
 Dsp_Sall<-aggregate(count~chr+windowmid+species,data=subset(Dsp_NS_all,d_f>.25&MacPop=="S"),FUN=sum)
 
 
-ggplot(data=Dsp_NS_all)+
+QCsomes<-ggplot(data=Dsp_NS_all)+
   
   #geom_histogram(data=subset(Dsp_NS_all,d_f>.25&MacPop=="N"),mapping=aes(x=windowmid/1000000,fill=species),width=.5,binwidth = .5,position = "stack")+
   geom_col(data=Dsp_Sall,mapping=aes(x=windowmid/1000000,y=-count,fill=species),width=.5,position = "stack")+
@@ -562,11 +562,13 @@ ggplot(data=Dsp_NS_all)+
   #geom_vline(data=subset(Dsp_All_2000,chr3==j),mapping=aes(xintercept=i/1000000),color="red")+
   geom_blank(data=Dsp_All_2000,aes(x=windowmid/1000000))+
   scale_fill_manual(values=group.colors)+
-  facet_grid(.~chr)+
+  facet_grid(.~chr,switch = "both")+
   theme_light()+
-  labs(x="Genomic window (Mbp)",y="Pops")+
+  labs(x="Genomic window (Mbp)",y="")+
   scale_x_continuous(breaks = seq(0,100,20)) +
-  theme(panel.grid.major.x=element_blank(),panel.grid.minor.x=element_blank(),panel.grid.minor.y=element_blank(),panel.spacing.x=unit(0.2, "lines"),text = element_text(size = 8),panel.border = element_rect(color = "black", fill = NA, linewidth = .5))+
+  theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(), panel.grid.major.x=element_blank(),
+        panel.grid.minor.x=element_blank(),panel.grid.minor.y=element_blank(),panel.spacing.x=unit(0.02, "lines"),
+        text = element_text(size = 10),panel.border = element_rect(color = NA, fill = NA, linewidth = .5))+
   #coord_cartesian(xlim = c(0, NA), expand = FALSE)+
   coord_flip()#xlim(c(0,NA))+
   
