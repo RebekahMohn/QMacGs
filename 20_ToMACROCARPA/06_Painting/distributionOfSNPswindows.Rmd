@@ -1,0 +1,300 @@
+---
+title: "ThinkingPaint"
+author: "Rebekah Mohn"
+date: "2025-09-05"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+
+
+
+```{r}
+library(dplyr)
+
+library(ggplot2)
+samplemean<-subset(read.delim("C:/Users/rmohn/Desktop/10_Analysis/113_painting/highpower/mue_mac_bic_long_agg.txt"),Group.5=="macrocarpa")
+samplemean$chrwinds<-paste(samplemean$Group.6,samplemean$Group.3,sep="_")
+
+winds<-sample(x=seq(from=0,to=100000000, by=100000),size = 1000,replace=TRUE)
+chrs<-sample(x=c("Chr01","Chr02","Chr03","Chr04","Chr05","Chr06","Chr07","Chr08","Chr09","Chr10","Chr11","Chr12"),size = 1000,replace=TRUE)
+
+
+
+chr_winds<-paste(chrs,winds,sep="_")
+
+
+bootstrap.dat<-subset(samplemean,chrwinds %in% chr_winds)
+mean_sd_bootstrap<-aggregate(x.x ~ Group.3+Group.6,data=bootstrap.dat,FUN=function(x) c(mn=mean(x,na.rm=TRUE),sd.x=sd(x,na.rm = TRUE)))
+
+ggplot()+
+  geom_histogram(mapping=aes(x=mean_sd_bootstrap$x[,"mn"]),binwidth=.05)+
+  xlim(-.05,1.05)
+  
+ggplot()+
+  geom_histogram(mapping=aes(x=subset(samplemean,Group.5=="Chr01"&Group.2==46000000)$x),binwidth=.05)+
+  xlim(-.05,1.05)
+
+
+ggplot()+
+  geom_histogram(mapping=aes(x=mean_sd_bootstrap$x[,"sd.x"]),binwidth=.02)+
+  geom_vline(xintercept=sd(subset(samplemean,Group.5=="Chr01"&Group.2==46000000)$x))
+
+
+winds25<-sample(x=seq(from=0,to=50000000, by=100000),size = 25,replace=TRUE)
+chrs25<-sample(x=c("Chr01","Chr02","Chr03","Chr04","Chr05","Chr06","Chr07","Chr08","Chr09","Chr10","Chr11","Chr12"),size = 25,replace=TRUE)
+chr_winds25<-paste(chrs25,winds25,sep="_")
+
+#chr_winds25<-c("Chr08_3.8e+07","Chr09_2.5e+07","Chr03_34400000","Chr07_29400000","Chr09_37800000","Chr09_38500000")
+
+
+bootstrap.dat25<-subset(samplemean,chrwinds %in% chr_winds25)
+
+#install.packages("diptest")
+#library(diptest)
+for(i in chr_winds25){
+  tmpdata<-subset(bootstrap.dat25,chrwinds==i)
+  tmpdata<-tmpdata[rowSums(is.na(tmpdata[,7:8]))==0,]
+  #dipres<-dip.test(tmpdata$x,simulate.p.value = TRUE)
+  ncount=median(tmpdata$x.y)
+  nSamps=378
+  meanval=mean(tmpdata$x.x)
+  medianval=median(tmpdata$x.x)
+  
+  #p_dist<-dbinom(round(tmpdata$x.x*ncount,0),size=ncount, prob = meanval)
+  
+  if(!is.na(ncount)&ncount>20){
+    tmpdata$pvals<-NA
+    tmpdata$pvals[tmpdata$x.x<=meanval]<-pbinom(round(tmpdata$x.x[tmpdata$x.x<=meanval]*ncount,0),size=ncount, prob = meanval,lower.tail = T)
+    tmpdata$pvals[tmpdata$x.x>meanval]<-pbinom(round(tmpdata$x.x[tmpdata$x.x>meanval]*ncount,0),size=ncount, prob = meanval,lower.tail = F)
+    pval<-mean(tmpdata$pvals)
+  # tmpdata$pvals<-pbinom(round(tmpdata$x.x*ncount,0),size=ncount, prob = meanval)
+    countpvals<-sum(tmpdata$pvals<(0.025)/(378*7663))
+    print(ggplot()+
+      geom_histogram(data=tmpdata, mapping=aes(x=x.x),binwidth = .01,fill="gray75")+
+     # geom_histogram(mapping=aes(x=SNPdist(nSites=ncount[1], nSamples=nSamps,meanVal = meanval)),binwidth = .02,color="red4",fill=NA)+
+      geom_histogram(mapping=aes(x=(rbinom(n=378,size=ncount[1],prob=meanval)/ncount[1])),fill=NA,color="red4",binwidth = .01)+
+      xlim(-.05,1.05)+
+      labs(subtitle=paste("window", i," ncount = ",ncount[1]," p-value = ",signif(pval,2),"; p-values<",signif(0.25/(378*7663),2)," = ",countpvals,sep=""))+
+      theme_light())
+    
+    
+  #       tmpdata$medpvals<-NA
+  #   tmpdata$medpvals[tmpdata$x.x<=medianval]<-pbinom(round(tmpdata$x.x[tmpdata$x.x<=medianval]*ncount,0),size=ncount, prob = medianval,lower.tail = T)
+  #   tmpdata$medpvals[tmpdata$x.x>medianval]<-pbinom(round(tmpdata$x.x[tmpdata$x.x>medianval]*ncount,0),size=ncount, prob = medianval,lower.tail = F)
+  #   medpval<-median(tmpdata$medpvals)
+  # # tmpdata$pvals<-pbinom(round(tmpdata$x.x*ncount,0),size=ncount, prob = medianval)
+  #   countmedpvals<-sum(tmpdata$medpvals<0.0001)
+  #   print(ggplot()+
+  #     geom_histogram(data=tmpdata, mapping=aes(x=x.x),binwidth = .01)+
+  #    # geom_histogram(mapping=aes(x=SNPdist(nSites=ncount[1], nSamples=nSamps,medianVal = medianval)),binwidth = .02,color="red4",fill=NA)+
+  #     geom_histogram(mapping=aes(x=(rbinom(n=378,size=ncount[1],prob=medianval)/ncount[1])),fill=NA,color="red4",binwidth = .01)+
+  #     xlim(-.05,1.05)+
+  #     labs(subtitle=paste("window", i," ncount = ",ncount[1]," p-value = ",medpval,"; p-values<0.05 = ",countmedpvals,sep=""))+
+  #     theme_light())
+
+    # print(ggplot()+
+    #   geom_histogram(mapping=aes(x=p_dist),binwidth = .01)+
+    #   xlim(-.05,1.05)+
+    #   labs(subtitle=paste("p-value = ",pval,"; p-values<0.05 = ",countpvals,sep=""))+
+    #   theme_light())
+  }
+}
+
+meanval=median(normdatnum$mean)
+pval<-mean(pbinom(normdatnum$mean*4135,size=526, prob = meanval,lower.tail = FALSE))
+meanval=median(popsdatnum$mean)
+pvals<-pbinom(popsdatnum$mean*1988,size=526, prob = meanval,lower.tail = FALSE)
+countpvals<-sum(pvals<0.05)
+ggplot()+
+  geom_histogram(aes(x=pbinom(popsdatnum$mean*1988,size=526, prob = meanval,lower.tail = TRUE)))+
+  geom_histogram(aes(x=pbinom(popsdatnum$mean*1988,size=526, prob = meanval,lower.tail = FALSE)),color="blue")
+
+
+```
+
+
+```{r}
+SNPdist<- function(nSites,nSamples=378,meanVal){
+  replicate(nSamples, mean(rbinom(nSites,size=1,prob=meanVal)))
+}
+
+ggplot()+
+  geom_histogram(mapping=aes(x=SNPdist(nSites=4,meanVal = .5)),binwidth = .05)
+
+ggplot()+
+  geom_histogram(mapping=aes(x=SNPdist(nSites=50,meanVal = .5)),binwidth = .005)
+
+qbinom()
+
+i=chr_winds25[12]
+tmpdata<-subset(bootstrap.dat25,chrwinds==i)
+#dipres<-dip.test(tmpdata$x,simulate.p.value = TRUE)
+print(ggplot(data=tmpdata)+
+  geom_histogram(mapping=aes(x=x),binwidth = .01)+
+  xlim(-.05,1.05)+
+  labs(subtitle=paste("stat = ",dipres$statistic," p-value = ",dipres$p.value,sep=""))+
+  theme_light())
+
+meanval=median(tmpdata$x)
+
+ggplot()+
+  geom_histogram(mapping=aes(x=SNPdist(nSites=240, nSamples=189,meanVal = meanval)),binwidth = .02,color="red4",fill=NA)+
+  geom_histogram(mapping=aes(x=tmpdata$x),binwidth = .02,color="blue4",fill=NA)
+
+sd(SNPdist(nSites=40, nSamples=189,meanVal = meanval))
+sd(tmpdata$x)
+
+ggplot()+
+  geom_point(aes(x=tmpdata$x,y=qbinom(tmpdata$x,size=80,prob=meanval)))#+#
+#  geom_point(aes(x=tmpdata$x,y=qbinom(SNPdist(nSites=800, nSamples=300,meanVal = meanval),size=300,prob=meanval)))
+  
+  
+  
+ggplot()+
+  geom_histogram(mapping=aes(x=SNPdist(nSites=50, nSamples=300,meanVal = .05)),binwidth = .01,color="red4",fill=NA)+
+  xlim(0,1)
+
+ncount=240
+nSamps=300
+mean(pbinom(tmpdata$x*ncount,size=nSamps, prob = meanval,lower.tail = FALSE))
+
+
+ggplot()+
+  geom_histogram(mapping=aes(x=rbinom(n=7663,378,0.0001/7663)))
+
+
+sum(rbinom(n=7663,378,0.0001))
+```
+
+```{r}
+library(ggplot2)
+library(maps)
+library(mapdata)
+states <- map_data("state")
+counties <- map_data('county')
+
+
+
+GCoords<-data.frame(scaffold=c("Chr01","Chr01","Chr01"),window=c(22600000,19300000,46600000))
+
+#read in fixed file
+data<-read.delim(file="mue_mac_bic_100000.perl.txt",na.strings = "NA",sep="\t")
+samp_meta<-read.delim("/hpc/group/manoslab/QMACROCARPA_GENOMES/26_MAC_PAINTING/SampSpUpdate.txt")
+
+for(i in 1:length(GCoords$scaffold)){
+  extractGCoords<-subset(data,scaffold==GCoords$scaffold[i]&pos>GCoords$window[i]-50000&pos<GCoords$window[i]+50000)
+  extractGCoords_long<-reshape2::melt(data = extractGCoords,id.vars = c("scaffold","pos","p1","p2"))
+  extractGCoords_long<-merge(extractGCoords_long,samp_meta,by.x="variable",by.y="Bam",all.x = TRUE,all.y = FALSE)
+  extractGCoords_long<-subset(extractGCoords_long,Species_ept=="macrocarpa")
+  write.table(extractGCoords_long,paste(GCoords$scaffold[i],"_",GCoords$window[i],".tsv",sep=""),sep="\t")
+  #make long
+  pdf(file=paste(GCoords$scaffold[i],"_",GCoords$window[i],"_paint.pdf",sep=""),width=8,height=5)
+  
+
+
+  print(ggplot(extractGCoords_long)+
+
+      geom_tile(mapping=aes(x=pos,y=variable,fill=as.character(value)))+
+      labs(fill=NA)+
+      theme_light()+
+      theme(axis.text.y=element_blank(),
+        axis.ticks.y=element_blank(),panel.grid.major = element_blank(),panel.grid.minor = element_blank())+
+      scale_fill_manual(values=c("gold2","purple4")) 
+  )
+  print(ggplot(extractGCoords_long)+
+      geom_tile(mapping=aes(x=as.character(pos),y=variable,fill=as.character(value)))+
+      labs(fill=NA)+
+      theme_light()+
+      theme(axis.text.y=element_blank(),
+        axis.ticks.y=element_blank(),panel.grid.major = element_blank(),panel.grid.minor = element_blank())+
+     scale_fill_manual(values=c("gold2","purple4")) 
+    )
+  dev.off()
+
+  extractGCoords_long_agg<-aggregate(as.numeric(extractGCoords_long$value),by=list(extractGCoords_long$collectionNumber,extractGCoords_long$latitude.orig,extractGCoords_long$longitude.orig,extractGCoords_long$Species_ept,extractGCoords_long$scaffold),function(x) mean(x, na.rm=TRUE))
+  
+  pdf(file=paste(GCoords$scaffold[i],"_",GCoords$window[i],"_map.pdf",sep=""),height=5,width=5)
+  print(ggplot(data=extractGCoords_long_agg)+
+      geom_polygon(data = counties, aes(x = long, y = lat, group = group),fill = 'white', color = "white", lwd = 0.1)+
+      geom_polygon(data=states,aes(x = long, y = lat, group = group), fill = NA, color = "gray85")+
+      coord_map(xlim = c(-105,-68))+
+    #map background
+      geom_jitter(mapping=aes(x=Group.3,y=Group.2,color=x),height = .5,width = .5,size=1)+
+      scale_color_viridis_c(limits=c(0,1),direction=-1)+
+      theme_light())
+  dev.off()
+}
+```
+
+```{r}
+library(ggplot2)
+library(maps)
+library(mapdata)
+states <- map_data("state")
+counties <- map_data('county')
+Canada<-map_data("world", "Canada")
+
+
+GCoords<-read.delim(file="adaptIntCoords.txt",na.strings="NA",sep="\t")
+
+#read in fixed file
+data<-read.delim(file="mue_mac_bic.perl.txt",na.strings = "NA",sep="\t")
+samp_meta<-read.delim("/hpc/group/manoslab/QMACROCARPA_GENOMES/26_MAC_PAINTING/SampSpUpdate.txt")
+
+for(i in 1:length(GCoords$csome)){
+  extractGCoords<-subset(data,scaffold==GCoords$csome[i]&pos>GCoords$start[i]&pos<GCoords$stop[i])
+  extractGCoords_long<-reshape2::melt(data = extractGCoords,id.vars = c("scaffold","pos","p1","p2"))
+  extractGCoords_long<-merge(extractGCoords_long,samp_meta,by.x="variable",by.y="Bam",all.x = TRUE,all.y = FALSE)
+  extractGCoords_long<-subset(extractGCoords_long,Species_ept=="macrocarpa")
+  write.table(extractGCoords_long,paste(GCoords$csome[i],"_",GCoords$pos[i],".tsv",sep=""),sep="\t")
+  #make long
+  pdf(file=paste("mue_",GCoords$csome[i],"_",GCoords$pos[i],"_paint.pdf",sep=""),width=8,height=5)
+
+
+
+  print(ggplot(extractGCoords_long)+
+
+      geom_tile(mapping=aes(x=pos,y=variable,fill=as.character(value)))+
+      labs(fill=NA)+
+      theme_light()+
+      theme(axis.text.y=element_blank(),
+        axis.ticks.y=element_blank(),panel.grid.major = element_blank(),panel.grid.minor = element_blank())+
+      scale_fill_manual(values=c("gold2","purple4"))
+  )
+  print(ggplot(extractGCoords_long)+
+      geom_tile(mapping=aes(x=as.character(pos),y=variable,fill=as.character(value)))+
+      labs(fill=NA)+
+      theme_light()+
+      theme(axis.text.y=element_blank(),
+        axis.ticks.y=element_blank(),panel.grid.major = element_blank(),panel.grid.minor = element_blank())+
+     scale_fill_manual(values=c("gold2","purple4"))
+    )
+  dev.off()
+
+```
+
+
