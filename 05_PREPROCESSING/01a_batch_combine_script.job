@@ -1,0 +1,10 @@
+#!/bin/bash
+
+for file in /path/to/files/*_L001_R1_001.fastq.gz;
+do
+	samp=`basename ${file} _L001_R1_001.fastq.gz`
+        ##Loop through files and out put to sample_R1.fq.gz and sample_R2.fq.gz
+	cat /path/to/files/${samp}_L001_R1_001.fastq.gz /path/to/files/${samp}_L002_R1_001.fastq.gz /path/to/files/${samp}_L003_R1_001.fastq.gz /path/to/files/${samp}_L004_R1_001.fastq.gz /path/to/files/MANOS_922A/${samp}_L001_R1_001.fastq.gz > ${samp}_R1.fq.gz
+	cat /path/to/files/${samp}_L001_R2_001.fastq.gz /path/to/files/${samp}_L002_R2_001.fastq.gz /path/to/files/${samp}_L003_R2_001.fastq.gz /path/to/files/${samp}_L004_R2_001.fastq.gz /path/to/files/MANOS_922A/${samp}_L001_R2_001.fastq.gz > ${samp}_R2.fq.gz
+
+done

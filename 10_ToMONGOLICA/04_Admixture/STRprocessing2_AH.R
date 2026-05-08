@@ -56,15 +56,17 @@ All_S8_dat <-
 
 All_S8_long<-reshape2::melt(All_S8_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
 All_S8_long$SamVar<-paste(All_S8_long$Sample,All_S8_long$variable,sep="_")
+All_S8_long$species2<-paste("Q. ",sapply(strsplit(x=All_S8_long$species,split=c(" ")),"[",2),sep="")
 ggplot(data=All_S8_long)+
   geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack",width=1)+
-  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
-  labs(title = "All Chromosomes; 8 populations")+
-  facet_grid(.~species,scales = "free", space = "free")+
+  scale_fill_manual(values=c("#000000","#44AA99","#888888","#88CCEE","#CC6677","#661100","#DDCC77","#2C52CA","#999933","#882255","#AA4499","#117733"))+
+  labs(x="samples",fill="population")+
+  facet_grid(.~species2,scales = "free", space = "free")+
   theme(axis.text.x=element_blank(),
         axis.ticks.x=element_blank(),
         axis.text.y=element_blank(),
-        axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
+        axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0),
+        strip.text.x = element_text(angle = 90,face = "italic"))
 
 ######################
 ### STR_CI ###########

@@ -48,43 +48,43 @@ cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73",
 
 
 ```{r}
-full_het<-read.delim("../01_SummaryStats/HET_FULL.het")
-meta<-read.csv("../../00_Scripts_and_Labels/00_METADATA/metadata_sequenced_taxonomyfixed_outgroup.csv")
-full_het$O.HET<-full_het$N_SITES - full_het$O.HOM.
-full_het$P.HET<-full_het$O.HET / full_het$N_SITES
-full_het$Seq<-full_het$INDV
-full_het<-full_het %>%
-  dplyr::mutate(across('Seq',str_replace,'.bam',''))
-full_het_dat<-merge(x=full_het,y=meta,by.x="Seq",by.y="Seq",all.x=TRUE)
-
-ggplot(data=full_het_dat)+
-  geom_histogram(mapping=aes(x=O.HET, fill = GenomicVoucherID_USE_THIS))+
-  facet_grid(GenomicVoucherID_USE_THIS~., scale="free_y")+
-  scale_fill_manual(values=c("#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#888888","#44AA99","#AA4499","#999933","#000000","#882255", "yellow","lightgray"))+
-  theme(strip.text.y=element_text(angle=0))+
-  theme_light()
-
-
-ggplot(data=full_het_dat)+
-  geom_point(mapping=aes(x=O.HOM./N_SITES, y=N_SITES, color = GenomicVoucherID_USE_THIS))+
-  scale_color_manual(values=c("#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#888888","#44AA99","#AA4499","#999933","#000000","#882255", "yellow","lightgray"))+
-  theme_light()+
-  ylim(130000000,148000000)+
-  xlim(130000000,143000000)+
-  facet_grid(GenomicVoucherID_USE_THIS~.)
-
-ggplot(data=full_het_dat)+
-  geom_point(mapping=aes(x=O.HOM./N_SITES, y=N_SITES, color = GenomicVoucherID_USE_THIS))+
-  scale_color_manual(values=c("#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#888888","#44AA99","#AA4499","#999933","#000000","#882255", "yellow","lightgray"))+
-  theme_light()#+
-  facet_grid(GenomicVoucherID_USE_THIS~.)
-
-ggplot(data=full_het_dat)+
-  geom_point(mapping=aes(x=P.HET, y=N_SITES, color = GenomicVoucherID_USE_THIS))+
-  scale_color_manual(values=c("#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#888888","#44AA99","#AA4499","#999933","#000000","#882255", "yellow","lightgray"))+
-  ylim(130000000,148000000)+
-  xlim(.01,.025)+
-  theme_light()
+# full_het<-read.delim("../01_SummaryStats/HET_FULL.het")
+# meta<-read.csv("../../00_Scripts_and_Labels/00_METADATA/metadata_sequenced_taxonomyfixed_outgroup.csv")
+# full_het$O.HET<-full_het$N_SITES - full_het$O.HOM.
+# full_het$P.HET<-full_het$O.HET / full_het$N_SITES
+# full_het$Seq<-full_het$INDV
+# full_het<-full_het %>%
+#   dplyr::mutate(across('Seq',str_replace,'.bam',''))
+# full_het_dat<-merge(x=full_het,y=meta,by.x="Seq",by.y="Seq",all.x=TRUE)
+# 
+# ggplot(data=full_het_dat)+
+#   geom_histogram(mapping=aes(x=O.HET, fill = GenomicVoucherID_USE_THIS))+
+#   facet_grid(GenomicVoucherID_USE_THIS~., scale="free_y")+
+#   scale_fill_manual(values=c("#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#888888","#44AA99","#AA4499","#999933","#000000","#882255", "yellow","lightgray"))+
+#   theme(strip.text.y=element_text(angle=0))+
+#   theme_light()
+# 
+# 
+# ggplot(data=full_het_dat)+
+#   geom_point(mapping=aes(x=O.HOM./N_SITES, y=N_SITES, color = GenomicVoucherID_USE_THIS))+
+#   scale_color_manual(values=c("#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#888888","#44AA99","#AA4499","#999933","#000000","#882255", "yellow","lightgray"))+
+#   theme_light()+
+#   ylim(130000000,148000000)+
+#   xlim(130000000,143000000)+
+#   facet_grid(GenomicVoucherID_USE_THIS~.)
+# 
+# ggplot(data=full_het_dat)+
+#   geom_point(mapping=aes(x=O.HOM./N_SITES, y=N_SITES, color = GenomicVoucherID_USE_THIS))+
+#   scale_color_manual(values=c("#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#888888","#44AA99","#AA4499","#999933","#000000","#882255", "yellow","lightgray"))+
+#   theme_light()#+
+#   facet_grid(GenomicVoucherID_USE_THIS~.)
+# 
+# ggplot(data=full_het_dat)+
+#   geom_point(mapping=aes(x=P.HET, y=N_SITES, color = GenomicVoucherID_USE_THIS))+
+#   scale_color_manual(values=c("#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#888888","#44AA99","#AA4499","#999933","#000000","#882255", "yellow","lightgray"))+
+#   ylim(130000000,148000000)+
+#   xlim(.01,.025)+
+#   theme_light()
 
 ```
 
@@ -116,14 +116,7 @@ meta<-read.csv("../../00_Scripts_and_Labels/00_METADATA/metadata_sequenced_taxon
 simp_meta<-data.frame(cbind(Seq=meta$Seq,colnum=meta$collectionNumber,species=meta$GenomicVoucherID_USE_THIS,state=meta$state.provIndIowanace,site=meta$site,lat=meta$latitude.orig,long=meta$longitude.orig))
 
 STR_names<-read.delim("../SubsetFullSTR.txt",sep = "\t",header=FALSE)
-# All_STR3<-read.delim("All_LIST_FILTER10000.3.Q",sep = " ", header=FALSE)
-# All_STR3$Sample<-full_het$INDV
-# All_STR3<-All_STR3 %>%
-#   dplyr::mutate(across('Sample',str_replace,'.bam',''))
-# All_S3_dat<-merge(x=All_STR3,y=simp_meta,by.x="Sample",by.y="Seq",all.x=TRUE)
-# #All_STR3_sp<-merge(x=All_STR2,y=samp,by.x="Sample",by.y="Seq")
-# All_S3_long<-melt(All_S3_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
-# 
+ 
 All_STR6<-read.delim("ALLSTR_LIST_FILTER10000.6.Q",sep = " ", header=FALSE)
 All_STR6$Sample<-STR_names$V1
 All_STR6<-All_STR6 %>%
