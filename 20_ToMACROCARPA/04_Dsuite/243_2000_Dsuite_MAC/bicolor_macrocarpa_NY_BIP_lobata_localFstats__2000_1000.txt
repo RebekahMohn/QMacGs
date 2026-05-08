@@ -1,0 +1,1 @@
+chr	windowStart	windowEnd	D	f_d	f_dM	d_f
