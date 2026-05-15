@@ -1,0 +1,22 @@
+#!/bin/bash
+#SBATCH --ntasks=1
+#SBATCH --mem=80G
+#SBATCH -c 8
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=rmohn@mortonarb.org
+#SBATCH --time=4-00:00:00
+
+
+module load VCFtools
+cd /cwork/ram163/sweepfinder/
+csomes=("Chr01" "Chr02" "Chr03" "Chr04" "Chr05" "Chr06" "Chr07" "Chr08" "Chr09" "Chr10" "Chr11" "Chr12")
+for j in ${csomes[@]}
+	do
+	for f in /cwork/ram163/sweepfinder/mac*.pop.L
+		do
+		samp="$(basename ${f} .pop.L)"
+		#dos2unix -n ${f} ${samp}.pop.L
+		vcftools --gzvcf /hpc/group/manoslab/QMACROCARPA_GENOMES/24_VARIANTS_MACROCARPA/MAC99_MACREF_HQSNP2.vcf.gz --keep ${samp}.pop.L --max-missing 1 --min-alleles 2 --max-alleles 2 --remove-indels --counts2 --chr ${j} --out ${samp}.${j} --temp /scratch
+	done
+done
+

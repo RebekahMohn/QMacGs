@@ -1,0 +1,6 @@
+module load VCFtools
+module load R
+cd /cwork/ram163/sweepfinder/
+vcftools --gzvcf /hpc/group/manoslab/QMACROCARPA_GENOMES/24_VARIANTS_MACROCARPA/MAC99_MACREF_HQSNP2.vcf.gz --keep mac_IN_BOW.pop.L --max-missing 1 --min-alleles 2 --max-alleles 2 --remove-indels --counts2 --chr Chr02 --from-bp 70629850 --out mac_IN_BOW.Chr02_70629850 --temp /scratch
+Rscript /hpc/group/manoslab/QMACROCARPA_GENOMES/SCRIPTS/20_ToMACROCARPA/sweepfinder/sweepformat.R mac_IN_BOW.Chr02_70629850.frq.count
+SweepFinder2 -lg 2000 mac_IN_BOW.Chr02_70629850.alfreq mac_IN_BOW.all.pcf mac_IN_BOW.Chr02_70629850.pcf.sf2

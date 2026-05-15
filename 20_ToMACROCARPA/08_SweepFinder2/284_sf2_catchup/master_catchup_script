@@ -1,0 +1,10 @@
+#!/bin/bash
+#SBATCH --ntasks=1
+#SBATCH --mem=5G
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=rmohn@mortonarb.org
+#SBATCH --time=9-00:00:00
+#SBATCH --array=23-30
+#SBATCH -o slurm-%A_%a.out
+
+./SF2_catchups_${SLURM_ARRAY_TASK_ID}.cmd
