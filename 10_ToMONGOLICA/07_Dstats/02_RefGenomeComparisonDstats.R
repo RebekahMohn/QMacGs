@@ -35,7 +35,7 @@ for(j in 1:12){
 Dsp_All_2000Mong$g10<-Dsp_All_2000Mong$d_f>0.25
 
 Dsp_aggMong<-aggregate(g10~chr+windowmid+pop,data=Dsp_All_2000Mong,FUN=max)
-Dsp_SigMong<-aggregate(as.numeric(g10)~chr+windowmid,data=Dsp_agg,FUN=sum)
+Dsp_SigMong<-aggregate(as.numeric(g10)~chr+windowmid,data=Dsp_aggMong,FUN=sum)
 
 ggplot()+
   geom_histogram(mapping=aes(x=Dsp_SigMong$`as.numeric(g10)`),bins = 10)
@@ -59,28 +59,28 @@ Dlob_Mong_All_sigwins<-subset(Dlob_Mong_All_win,d_f>0.25)
 Dlob_Mong_All_sigwins$count<-1
 Dlob_Mong_All_countsigwins<-aggregate(count~pop+lat,data=Dlob_Mong_All_sigwins,FUN=sum)
 #merge distance to range edge
-samps_edge_dist<-read.delim("C:/Users/rmohn/Desktop/00_Scripts_and_Labels/00_METADATA/dist_range_margin_centroid.txt",sep="\t")
+samps_edge_dist<-read.delim("C:/Users/rmohn/Desktop/00_Scripts_and_Labels/00_METADATA/dist_range_margin_centroid2.txt",sep="\t")
 
 Dlob_Mong_All_countsigwins<-merge(Dlob_Mong_All_countsigwins,Oldpops,by.x="pop",by.y="OLD_Pop")
 Dlob_Mong_All_win_edge<-merge(Dlob_Mong_All_countsigwins,samps_edge_dist,by.x="NEW_Pop",by.y="Pop",all.x=T)
 #do regression
 lob_mong_distcent<-ggplot()+
-  geom_smooth(method=lm,mapping=aes(y = Dlob_Mong_All_win_edge$count, x=Dlob_Mong_All_win_edge$dist_fromCenter_EM))+
-  geom_point(mapping=aes(y = Dlob_Mong_All_win_edge$count, x=Dlob_Mong_All_win_edge$dist_fromCenter_EM,shape=Dlob_Mong_All_win_edge$MacPop.x, color=Dlob_Mong_All_win_edge$lat))+
+  geom_smooth(method=lm,mapping=aes(y = Dlob_Mong_All_win_edge$count, x=Dlob_Mong_All_win_edge$dist_fromCenter_EM/100000))+
+  geom_point(mapping=aes(y = Dlob_Mong_All_win_edge$count, x=Dlob_Mong_All_win_edge$dist_fromCenter_EM/100000, color=Dlob_Mong_All_win_edge$lat))+
   scale_color_viridis_b()+
-  labs(x="distance from centroid",y="windows",subtitle="Q. lobata")
+  labs(color="latitude",x="distance from centroid",y="windows",subtitle="Q. lobata")
 
 lob_mong_distedge<-ggplot()+
-  geom_smooth(method=lm, mapping=aes(y = Dlob_Mong_All_win_edge$count, x=Dlob_Mong_All_win_edge$dist_fromEdge))+
-  geom_jitter(mapping=aes(y = Dlob_Mong_All_win_edge$count, x=Dlob_Mong_All_win_edge$dist_fromEdge, shape=Dlob_Mong_All_win_edge$MacPop.x, color=Dlob_Mong_All_win_edge$lat))+
+  geom_smooth(method=lm, mapping=aes(y = Dlob_Mong_All_win_edge$count, x=Dlob_Mong_All_win_edge$dist_fromEdge/100000))+
+  geom_jitter(mapping=aes(y = Dlob_Mong_All_win_edge$count, x=Dlob_Mong_All_win_edge$dist_fromEdge/100000,  color=Dlob_Mong_All_win_edge$lat))+
   scale_color_viridis_b()+
-  labs(x="distance from edge",y="windows",subtitle="Q. lobata")
+  labs(color="latitude",x="distance from edge",y="windows",subtitle="Q. lobata")
 
 lob_mong_lat<-ggplot()+
-  geom_smooth(method=lm, mapping=aes(y = Dlob_Mong_All_win_edge$count, x=Dlob_Mong_All_win_edge$latitude.orig))+
-  geom_jitter(mapping=aes(y = Dlob_Mong_All_win_edge$count, x=Dlob_Mong_All_win_edge$latitude.orig, shape=Dlob_Mong_All_win_edge$MacPop.x, color=Dlob_Mong_All_win_edge$lat))+
+  geom_smooth(method=lm, mapping=aes(y = Dlob_Mong_All_win_edge$count, x=Dlob_Mong_All_win_edge$lat_fixed))+
+  geom_jitter(mapping=aes(y = Dlob_Mong_All_win_edge$count, x=Dlob_Mong_All_win_edge$lat_fixed,  color=Dlob_Mong_All_win_edge$lat))+
   scale_color_viridis_b()+
-  labs(x="latitude",y="windows",subtitle="Q. lobata")
+  labs(color="latitude",x="latitude",y="windows",subtitle="Q. lobata")
 
 ##PCA
 Dlob_Mong_All_win$chr_win<-paste(Dlob_Mong_All_win$chr,Dlob_Mong_All_win$windowmid,sep="_")
@@ -99,13 +99,13 @@ Dlob_Mong_PCs$Pop<-Dlob_Mong_All_win_wide$pop
 Dlob_Mong_PCs<-merge(Dlob_Mong_PCs,Oldpops,by.x="Pop",by.y="OLD_Pop")
 library(ggplot2)
 lobMongPC1PC2<-ggplot(data=Dlob_Mong_PCs)+
-  geom_point(aes(x=PC1, y=PC2,color=latitude.orig,size=longitude.orig,shape=MacPop),alpha=0.75)+
+  geom_point(aes(x=PC1, y=PC2,color=lat_fixed,size=long_fixed),alpha=0.75)+
   scale_color_viridis_c()+
-  labs(subtitle = "Q. lobata")
+  labs(color="latitude",subtitle = "Q. lobata")
 
 # library(ggplot2)
 # ggplot(data=Dlob_Mong_PCs)+
-#   geom_point(aes(x=PC1, y=latitude.orig))
+#   geom_point(aes(x=PC1, y=lat_fixed))
 
 #### Alba #####
 library(readxl)
@@ -120,28 +120,28 @@ Dalb_Mong_All_sigwins<-subset(Dalb_Mong_All_win,d_f>0.25)
 Dalb_Mong_All_sigwins$count<-1
 Dalb_Mong_All_countsigwins<-aggregate(count~pop+lat,data=Dalb_Mong_All_sigwins,FUN=sum)
 #merge distance to range edge
-samps_edge_dist<-read.delim("C:/Users/rmohn/Desktop/00_Scripts_and_Labels/00_METADATA/dist_range_margin_centroid.txt",sep="\t")
+samps_edge_dist<-read.delim("C:/Users/rmohn/Desktop/00_Scripts_and_Labels/00_METADATA/dist_range_margin_centroid2.txt",sep="\t")
 
 Dalb_Mong_All_countsigwins<-merge(Dalb_Mong_All_countsigwins,Oldpops,by.x="pop",by.y="OLD_Pop")
 Dalb_Mong_All_win_edge<-merge(Dalb_Mong_All_countsigwins,samps_edge_dist,by.x="NEW_Pop",by.y="Pop",all.x=T)
 #do regression
 alb_mong_distcent<-ggplot()+
-  geom_smooth(method=lm,mapping=aes(y = Dalb_Mong_All_win_edge$count, x=Dalb_Mong_All_win_edge$dist_fromCenter_EM))+
-  geom_point(mapping=aes(y = Dalb_Mong_All_win_edge$count, x=Dalb_Mong_All_win_edge$dist_fromCenter_EM,shape=Dalb_Mong_All_win_edge$MacPop.x, color=Dalb_Mong_All_win_edge$lat))+
+  geom_smooth(method=lm,mapping=aes(y = Dalb_Mong_All_win_edge$count, x=Dalb_Mong_All_win_edge$dist_fromCenter_EM/100000))+
+  geom_point(mapping=aes(y = Dalb_Mong_All_win_edge$count, x=Dalb_Mong_All_win_edge$dist_fromCenter_EM/100000, color=Dalb_Mong_All_win_edge$lat))+
   scale_color_viridis_b()+
-  labs(x="distance from centroid",y="windows",subtitle="Q. alba")
+  labs(color="latitude",x="distance from centroid",y="windows",subtitle="Q. alba")
 
 alb_mong_distedge<-ggplot()+
-  geom_smooth(method=lm,mapping=aes(y = Dalb_Mong_All_win_edge$count, x=Dalb_Mong_All_win_edge$dist_fromEdge))+
-  geom_jitter(mapping=aes(y = Dalb_Mong_All_win_edge$count, x=Dalb_Mong_All_win_edge$dist_fromEdge, shape=Dalb_Mong_All_win_edge$MacPop.x, color=Dalb_Mong_All_win_edge$lat))+
+  geom_smooth(method=lm,mapping=aes(y = Dalb_Mong_All_win_edge$count, x=Dalb_Mong_All_win_edge$dist_fromEdge/100000))+
+  geom_jitter(mapping=aes(y = Dalb_Mong_All_win_edge$count, x=Dalb_Mong_All_win_edge$dist_fromEdge/100000,  color=Dalb_Mong_All_win_edge$lat))+
   scale_color_viridis_b()+
-  labs(x="distance from edge",y="windows",subtitle="Q. alba")
+  labs(color="latitude",x="distance from edge",y="windows",subtitle="Q. alba")
 
 alb_mong_lat<-ggplot()+
-  geom_smooth(method=lm,mapping=aes(y = Dalb_Mong_All_win_edge$count, x=Dalb_Mong_All_win_edge$latitude.orig))+
-  geom_jitter(mapping=aes(y = Dalb_Mong_All_win_edge$count, x=Dalb_Mong_All_win_edge$latitude.orig, shape=Dalb_Mong_All_win_edge$MacPop.x, color=Dalb_Mong_All_win_edge$lat))+
+  geom_smooth(method=lm,mapping=aes(y = Dalb_Mong_All_win_edge$count, x=Dalb_Mong_All_win_edge$lat_fixed))+
+  geom_jitter(mapping=aes(y = Dalb_Mong_All_win_edge$count, x=Dalb_Mong_All_win_edge$lat_fixed,  color=Dalb_Mong_All_win_edge$lat))+
   scale_color_viridis_b()+
-  labs(x="latitude",y="windows",subtitle="Q. alba")
+  labs(color="latitude",x="latitude",y="windows",subtitle="Q. alba")
 
 ##PCA
 Dalb_Mong_All_win$chr_win<-paste(Dalb_Mong_All_win$chr,Dalb_Mong_All_win$windowmid,sep="_")
@@ -160,13 +160,13 @@ Dalb_Mong_PCs$Pop<-Dalb_Mong_All_win_wide$pop
 Dalb_Mong_PCs<-merge(Dalb_Mong_PCs,Oldpops,by.x="Pop",by.y="OLD_Pop")
 library(ggplot2)
 albMongPC1PC2<-ggplot(data=Dalb_Mong_PCs)+
-  geom_point(aes(x=PC1, y=PC2,color=latitude.orig,size=longitude.orig,shape=MacPop),alpha=0.75)+
+  geom_point(aes(x=PC1, y=PC2,color=lat_fixed,size=long_fixed),alpha=0.75)+
   scale_color_viridis_c()+
-  labs(subtitle = "Q. alba")
+  labs(color="latitude",subtitle = "Q. alba")
 
 # library(ggplot2)
 # ggplot(data=Dalb_Mong_PCs)+
-#   geom_point(aes(x=PC1, y=latitude.orig))
+#   geom_point(aes(x=PC1, y=lat_fixed))
 # 
 ### Muehlenbergii ###
 library(readxl)
@@ -180,28 +180,28 @@ Dmue_Mong_All_sigwins<-subset(Dmue_Mong_All_win,d_f>0.25)
 Dmue_Mong_All_sigwins$count<-1
 Dmue_Mong_All_countsigwins<-aggregate(count~pop+lat,data=Dmue_Mong_All_sigwins,FUN=sum)
 #merge distance to range edge
-samps_edge_dist<-read.delim("C:/Users/rmohn/Desktop/00_Scripts_and_Labels/00_METADATA/dist_range_margin_centroid.txt",sep="\t")
+samps_edge_dist<-read.delim("C:/Users/rmohn/Desktop/00_Scripts_and_Labels/00_METADATA/dist_range_margin_centroid2.txt",sep="\t")
 
 Dmue_Mong_All_countsigwins<-merge(Dmue_Mong_All_countsigwins,Oldpops,by.x="pop",by.y="OLD_Pop")
 Dmue_Mong_All_win_edge<-merge(Dmue_Mong_All_countsigwins,samps_edge_dist,by.x="NEW_Pop",by.y="Pop",all.x=T)
 #do regression
 mue_mong_distcent<-ggplot()+
-  geom_smooth(method=lm,mapping=aes(y = Dmue_Mong_All_win_edge$count, x=Dmue_Mong_All_win_edge$dist_fromCenter_EM))+
-  geom_point(mapping=aes(y = Dmue_Mong_All_win_edge$count, x=Dmue_Mong_All_win_edge$dist_fromCenter_EM,shape=Dmue_Mong_All_win_edge$MacPop.x, color=Dmue_Mong_All_win_edge$lat))+
+  geom_smooth(method=lm,mapping=aes(y = Dmue_Mong_All_win_edge$count, x=Dmue_Mong_All_win_edge$dist_fromCenter_EM/100000))+
+  geom_point(mapping=aes(y = Dmue_Mong_All_win_edge$count, x=Dmue_Mong_All_win_edge$dist_fromCenter_EM/100000, color=Dmue_Mong_All_win_edge$lat))+
   scale_color_viridis_b()+
-  labs(x="distance from centroid",y="windows",subtitle="Q. muehlenbergii")
+  labs(color="latitude",x="distance from centroid",y="windows",subtitle="Q. muehlenbergii")
 
 mue_mong_distedge<-ggplot()+
-  geom_smooth(method=lm,mapping=aes(y = Dmue_Mong_All_win_edge$count, x=Dmue_Mong_All_win_edge$dist_fromEdge))+
-  geom_jitter(mapping=aes(y = Dmue_Mong_All_win_edge$count, x=Dmue_Mong_All_win_edge$dist_fromEdge, shape=Dmue_Mong_All_win_edge$MacPop.x, color=Dmue_Mong_All_win_edge$lat))+
+  geom_smooth(method=lm,mapping=aes(y = Dmue_Mong_All_win_edge$count, x=Dmue_Mong_All_win_edge$dist_fromEdge/100000))+
+  geom_jitter(mapping=aes(y = Dmue_Mong_All_win_edge$count, x=Dmue_Mong_All_win_edge$dist_fromEdge/100000,  color=Dmue_Mong_All_win_edge$lat))+
   scale_color_viridis_b()+
-  labs(x="distance from edge",y="windows",subtitle="Q. muehlenbergii")
+  labs(color="latitude",x="distance from edge",y="windows",subtitle="Q. muehlenbergii")
 
 mue_mong_lat<-ggplot()+
-  geom_smooth(method=lm,mapping=aes(y = Dmue_Mong_All_win_edge$count, x=Dmue_Mong_All_win_edge$latitude.orig))+
-  geom_jitter(mapping=aes(y = Dmue_Mong_All_win_edge$count, x=Dmue_Mong_All_win_edge$latitude.orig, shape=Dmue_Mong_All_win_edge$MacPop.x, color=Dmue_Mong_All_win_edge$lat))+
+  geom_smooth(method=lm,mapping=aes(y = Dmue_Mong_All_win_edge$count, x=Dmue_Mong_All_win_edge$lat_fixed))+
+  geom_jitter(mapping=aes(y = Dmue_Mong_All_win_edge$count, x=Dmue_Mong_All_win_edge$lat_fixed,  color=Dmue_Mong_All_win_edge$lat))+
   scale_color_viridis_b()+
-  labs(x="latitude",y="windows",subtitle="Q. muehlenbergii")
+  labs(color="latitude",x="latitude",y="windows",subtitle="Q. muehlenbergii")
 
 ##PCA
 Dmue_Mong_All_win$chr_win<-paste(Dmue_Mong_All_win$chr,Dmue_Mong_All_win$windowmid,sep="_")
@@ -220,13 +220,13 @@ Dmue_Mong_PCs$Pop<-Dmue_Mong_All_win_wide$pop
 Dmue_Mong_PCs<-merge(Dmue_Mong_PCs,Oldpops,by.x="Pop",by.y="OLD_Pop")
 library(ggplot2)
 mueMongPC1PC2<-ggplot(data=Dmue_Mong_PCs)+
-  geom_point(aes(x=PC1, y=PC2,color=latitude.orig,size=longitude.orig,shape=MacPop),alpha=0.75)+
+  geom_point(aes(x=PC1, y=PC2,color=lat_fixed,size=long_fixed),alpha=0.75)+
   scale_color_viridis_c()+
-  labs(subtitle = "Q. muehlenbergii")
+  labs(color="latitude",subtitle = "Q. muehlenbergii")
 
 # library(ggplot2)
 # ggplot(data=Dmue_Mong_PCs)+
-#   geom_point(aes(x=PC1, y=latitude.orig))
+#   geom_point(aes(x=PC1, y=lat_fixed))
 
 #### Stellata #####
 library(readxl)
@@ -240,28 +240,28 @@ Dste_Mong_All_sigwins<-subset(Dste_Mong_All_win,d_f>0.25)
 Dste_Mong_All_sigwins$count<-1
 Dste_Mong_All_countsigwins<-aggregate(count~pop+lat,data=Dste_Mong_All_sigwins,FUN=sum)
 #merge distance to range edge
-samps_edge_dist<-read.delim("C:/Users/rmohn/Desktop/00_Scripts_and_Labels/00_METADATA/dist_range_margin_centroid.txt",sep="\t")
+samps_edge_dist<-read.delim("C:/Users/rmohn/Desktop/00_Scripts_and_Labels/00_METADATA/dist_range_margin_centroid2.txt",sep="\t")
 
 Dste_Mong_All_countsigwins<-merge(Dste_Mong_All_countsigwins,Oldpops,by.x="pop",by.y="OLD_Pop")
 Dste_Mong_All_win_edge<-merge(Dste_Mong_All_countsigwins,samps_edge_dist,by.x="NEW_Pop",by.y="Pop",all.x=T)
 #do regression
 ste_mong_distcent<-ggplot()+
-  geom_smooth(method=lm,mapping=aes(y = Dste_Mong_All_win_edge$count, x=Dste_Mong_All_win_edge$dist_fromCenter_EM))+
-  geom_point(mapping=aes(y = Dste_Mong_All_win_edge$count, x=Dste_Mong_All_win_edge$dist_fromCenter_EM,shape=Dste_Mong_All_win_edge$MacPop.x, color=Dste_Mong_All_win_edge$lat))+
+  geom_smooth(method=lm,mapping=aes(y = Dste_Mong_All_win_edge$count, x=Dste_Mong_All_win_edge$dist_fromCenter_EM/100000))+
+  geom_point(mapping=aes(y = Dste_Mong_All_win_edge$count, x=Dste_Mong_All_win_edge$dist_fromCenter_EM/100000, color=Dste_Mong_All_win_edge$lat))+
   scale_color_viridis_b()+
-  labs(x="distance from centroid",y="windows",subtitle="Q. stellata")
+  labs(color="latitude",x="distance from centroid",y="windows",subtitle="Q. stellata")
 
 ste_mong_distedge<-ggplot()+
-  geom_smooth(method=lm,mapping=aes(y = Dste_Mong_All_win_edge$count, x=Dste_Mong_All_win_edge$dist_fromEdge))+
-  geom_jitter(mapping=aes(y = Dste_Mong_All_win_edge$count, x=Dste_Mong_All_win_edge$dist_fromEdge, shape=Dste_Mong_All_win_edge$MacPop.x, color=Dste_Mong_All_win_edge$lat))+
+  geom_smooth(method=lm,mapping=aes(y = Dste_Mong_All_win_edge$count, x=Dste_Mong_All_win_edge$dist_fromEdge/100000))+
+  geom_jitter(mapping=aes(y = Dste_Mong_All_win_edge$count, x=Dste_Mong_All_win_edge$dist_fromEdge/100000,  color=Dste_Mong_All_win_edge$lat))+
   scale_color_viridis_b()+
-  labs(x="distance from edge",y="windows",subtitle="Q. stellata")
+  labs(color="latitude",x="distance from edge",y="windows",subtitle="Q. stellata")
 
 ste_mong_lat<-ggplot()+
-  geom_smooth(method=lm,aes(y = Dste_Mong_All_win_edge$count,x=Dste_Mong_All_win_edge$latitude.orig))+
-  geom_jitter(mapping=aes(y = Dste_Mong_All_win_edge$count, x=Dste_Mong_All_win_edge$latitude.orig, shape=Dste_Mong_All_win_edge$MacPop.x, color=Dste_Mong_All_win_edge$lat))+
+  geom_smooth(method=lm,aes(y = Dste_Mong_All_win_edge$count,x=Dste_Mong_All_win_edge$lat_fixed))+
+  geom_jitter(mapping=aes(y = Dste_Mong_All_win_edge$count, x=Dste_Mong_All_win_edge$lat_fixed,  color=Dste_Mong_All_win_edge$lat))+
   scale_color_viridis_b()+
-  labs(x="latitude",y="windows",subtitle="Q. stellata")
+  labs(color="latitude",x="latitude",y="windows",subtitle="Q. stellata")
 
 ##PCA
 Dste_Mong_All_win$chr_win<-paste(Dste_Mong_All_win$chr,Dste_Mong_All_win$windowmid,sep="_")
@@ -280,13 +280,13 @@ Dste_Mong_PCs$Pop<-Dste_Mong_All_win_wide$pop
 Dste_Mong_PCs<-merge(Dste_Mong_PCs,Oldpops,by.x="Pop",by.y="OLD_Pop")
 library(ggplot2)
 steMongPC1PC2<-ggplot(data=Dste_Mong_PCs)+
-  geom_point(aes(x=PC1, y=PC2,color=latitude.orig,size=longitude.orig,shape=MacPop),alpha=0.75)+
+  geom_point(aes(x=PC1, y=PC2,color=lat_fixed,size=long_fixed),alpha=0.75)+
   scale_color_viridis_c()+
-  labs(subtitle = "Q. stellata")
+  labs(color="latitude",color="latitude",subtitle = "Q. stellata")
 
 # library(ggplot2)
 # ggplot(data=Dste_Mong_PCs)+
-#   geom_point(aes(x=PC1, y=latitude.orig))
+#   geom_point(aes(x=PC1, y=lat_fixed))
 
 
 library(ggpubr)
@@ -294,3 +294,11 @@ ggarrange(albMongPC1PC2,lobMongPC1PC2,mueMongPC1PC2,steMongPC1PC2,ncol=2,nrow=2,
 ggarrange(alb_mong_distcent,lob_mong_distcent,mue_mong_distcent,ste_mong_distcent,common.legend = T,legend = "right")
 ggarrange(alb_mong_distedge,lob_mong_distedge,mue_mong_distedge,ste_mong_distedge,common.legend = T,legend = "right")
 ggarrange(alb_mong_lat,lob_mong_lat,mue_mong_lat,ste_mong_lat,common.legend = T,legend = "right")
+
+
+ggarrange(alb_Mac_distcent,lob_Mac_distcent,mue_Mac_distcent,ste_Mac_distcent,
+          alb_mong_distcent,lob_mong_distcent,mue_mong_distcent,ste_mong_distcent,
+          alb_Mac_distedge,lob_Mac_distedge,mue_Mac_distedge,ste_Mac_distedge,
+          alb_mong_distedge,lob_mong_distedge,mue_mong_distedge,ste_mong_distedge,
+          common.legend = T,legend = "right", labels = "auto")
+

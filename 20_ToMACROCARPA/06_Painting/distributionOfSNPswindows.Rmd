@@ -100,27 +100,7 @@ for(i in chr_winds25){
       xlim(-.05,1.05)+
       labs(subtitle=paste("window", i," ncount = ",ncount[1]," p-value = ",signif(pval,2),"; p-values<",signif(0.25/(378*7663),2)," = ",countpvals,sep=""))+
       theme_light())
-    
-    
-  #       tmpdata$medpvals<-NA
-  #   tmpdata$medpvals[tmpdata$x.x<=medianval]<-pbinom(round(tmpdata$x.x[tmpdata$x.x<=medianval]*ncount,0),size=ncount, prob = medianval,lower.tail = T)
-  #   tmpdata$medpvals[tmpdata$x.x>medianval]<-pbinom(round(tmpdata$x.x[tmpdata$x.x>medianval]*ncount,0),size=ncount, prob = medianval,lower.tail = F)
-  #   medpval<-median(tmpdata$medpvals)
-  # # tmpdata$pvals<-pbinom(round(tmpdata$x.x*ncount,0),size=ncount, prob = medianval)
-  #   countmedpvals<-sum(tmpdata$medpvals<0.0001)
-  #   print(ggplot()+
-  #     geom_histogram(data=tmpdata, mapping=aes(x=x.x),binwidth = .01)+
-  #    # geom_histogram(mapping=aes(x=SNPdist(nSites=ncount[1], nSamples=nSamps,medianVal = medianval)),binwidth = .02,color="red4",fill=NA)+
-  #     geom_histogram(mapping=aes(x=(rbinom(n=378,size=ncount[1],prob=medianval)/ncount[1])),fill=NA,color="red4",binwidth = .01)+
-  #     xlim(-.05,1.05)+
-  #     labs(subtitle=paste("window", i," ncount = ",ncount[1]," p-value = ",medpval,"; p-values<0.05 = ",countmedpvals,sep=""))+
-  #     theme_light())
 
-    # print(ggplot()+
-    #   geom_histogram(mapping=aes(x=p_dist),binwidth = .01)+
-    #   xlim(-.05,1.05)+
-    #   labs(subtitle=paste("p-value = ",pval,"; p-values<0.05 = ",countpvals,sep=""))+
-    #   theme_light())
   }
 }
 

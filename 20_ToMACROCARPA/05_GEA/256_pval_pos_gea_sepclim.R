@@ -30,7 +30,7 @@ for(j in c(1:6)){
   #pval_genome$pbonferroni<-p.adjust(pval_genome$x,method=c("bonferroni"),n=length(pval_genome$x))
   colnames(pval_genome_env)<-c("P","Count","uk","uk2","BP","CHR")
   pval_genome_env$SNP<-str_split_i(row.names(pval_genome_env)," ",2)
-  write.table(pval_genome_env,paste("C:/Users/rmohn/Desktop/10_Analysis/114_GEA/lfmmOut/AllC_e",j,"_lfmmpval.txt",sep=""),quote = FALSE,row.names = FALSE)
+  #write.table(pval_genome_env,paste("C:/Users/rmohn/Desktop/10_Analysis/114_GEA/lfmmOut/AllC_e",j,"_lfmmpval.txt",sep=""),quote = FALSE,row.names = FALSE) #these are output bellow
  # write.table(subset(pval_genome,pbonferroni<=0.05),paste("C:/Users/rmohn/Desktop/10_Analysis/114_GEA/lfmmOut/AllC_e",j,"_lfmmpval_cor.txt",sep=""),sep="\t")
 }
 
@@ -50,8 +50,8 @@ for(j in c(1:6)){
   ##pval_genome_env$pBH<-p.adjust(pval_genome_env$P,method=c("BH"),n=(6*genomesize/10000))
   ##pval_genome_env$pbonferroni<-p.adjust(pval_genome_env$P,method=c("bonferroni"),n=6*genomesize/10000)
   
-  #pval_genome_env$pBH<-p.adjust(pval_genome_env$P,method=c("BH"),n=(6*genomesize/10000))
-  #pval_genome_env$pbonferroni<-p.adjust(pval_genome_env$P,method=c("bonferroni"),n=6*genomesize/10000)
+  pval_genome_env$pBH<-p.adjust(pval_genome_env$P,method=c("BH"),n=(6*genomesize/10000)) #I believe this should be uncommented
+  pval_genome_env$pbonferroni<-p.adjust(pval_genome_env$P,method=c("bonferroni"),n=6*genomesize/10000) #I believe this are uncommented
   write.table(pval_genome_env,paste("C:/Users/rmohn/Desktop/10_Analysis/114_GEA/lfmmOut/AllC_e",j,"_lfmmpval.txt",sep=""),quote = FALSE,row.names = FALSE)
   write.table(subset(pval_genome_env,pbonferroni<0.05),paste("C:/Users/rmohn/Desktop/10_Analysis/114_GEA/lfmmOut/AllC_e",j,"_lfmmpval_cor.txt",sep=""),quote = FALSE,row.names = FALSE)
 }

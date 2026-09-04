@@ -29,7 +29,7 @@ setwd(dirname(current_path ))
 
 
 # read and process data
-meta <- read_xlsx("../../00_METADATA/meta_pops.xlsx",sheet="Sheet1")
+meta <- read_xlsx("C:/Users/rmohn/Desktop/00_Scripts_and_Labels/00_METADATA/meta_pops.xlsx",sheet="Sheet1")
 simp_meta <- data.frame(
   cbind(
     Seq=meta$Seq,
@@ -40,9 +40,9 @@ simp_meta <- data.frame(
     lat=meta$latitude.orig,
     long=meta$longitude.orig
     ))
-STR_names <- read.delim("../../10_ToMONGOLICA/04_Admixture/SubsetFullSTR.txt", sep = "\t", header=FALSE)
+STR_names <- read.delim("C:/Users/rmohn/Documents/GitHub/QMacGs/10_ToMONGOLICA/04_Admixture/SubsetFullSTR.txt", sep = "\t", header=FALSE)
 
-All_STR8 <- read.delim("../../10_ToMONGOLICA/04_Admixture/ALLSTR_LIST_FILTER10000.8.Q",sep = " ", header=FALSE)
+All_STR8 <- read.delim("C:/Users/rmohn/Documents/GitHub/QMacGs/10_ToMONGOLICA/04_Admixture/01_FullAdmixture/06_K8se_Output/ALLSTR_LIST_FILTER10000.8.Q",sep = " ", header=FALSE)
 
 All_STR8$Sample <- STR_names$V1
 All_STR8 <- All_STR8 %>%
@@ -56,16 +56,18 @@ All_S8_dat <-
 
 All_S8_long<-reshape2::melt(All_S8_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
 All_S8_long$SamVar<-paste(All_S8_long$Sample,All_S8_long$variable,sep="_")
+pdf(file = "C:/Users/rmohn/Documents/GitHub/QMacGs/10_ToMONGOLICA/04_Admixture/All_STR_Mong2.pdf",height=5.5,width=7.5)
 ggplot(data=All_S8_long)+
   geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack",width=1)+
-  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
-  labs(title = "All Chromosomes; 8 populations")+
+  scale_fill_manual(values=c("#000000","#44AA99","#888888","#88CCEE","#CC6677","#661100","#DDCC77","#332288","#AA4499","#999933","#882255"))+
+  labs(fill="population", x="sample", y="Q")+#title = "All Chromosomes; 8 populations")+
   facet_grid(.~species,scales = "free", space = "free")+
   theme(axis.text.x=element_blank(),
         axis.ticks.x=element_blank(),
         axis.text.y=element_blank(),
-        axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
-
+        axis.ticks.y=element_blank(),panel.grid = element_blank(),strip.text.y=element_text(angle=0),strip.text.x = element_text(angle = 90,face = "italic"))
+  
+dev.off()
 ######################
 ### STR_CI ###########
 ######################
