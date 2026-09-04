@@ -1,0 +1,37 @@
+PLINK v1.90b6.21 64-bit (19 Oct 2020)
+Options in effect:
+  --file /cwork/ram163/OAK_GENOMES/14_MAPPING/03_CALLED/MAC_LIST_FILTER10000
+  --out /cwork/ram163/OAK_GENOMES/14_MAPPING/03_CALLED/MAC_LIST_FILTER10000
+  --recode 12
+
+Hostname: dcc-core-39
+Working directory: /hpc/group/manoslab/QMACROCARPA_GENOMES/SCRIPTS/10_ToMONGOLICA
+Start time: Tue Jun 18 14:57:00 2024
+
+Random number seed: 1718737020
+611813 MB RAM detected; reserving 305906 MB for main workspace.
+Scanning .ped file... done.
+Performing single-pass .bed write (65646 variants, 337 people).
+--file:
+/cwork/ram163/OAK_GENOMES/14_MAPPING/03_CALLED/MAC_LIST_FILTER10000-temporary.bed
++
+/cwork/ram163/OAK_GENOMES/14_MAPPING/03_CALLED/MAC_LIST_FILTER10000-temporary.bim
++
+/cwork/ram163/OAK_GENOMES/14_MAPPING/03_CALLED/MAC_LIST_FILTER10000-temporary.fam
+written.
+65646 variants loaded from .bim file.
+337 people (0 males, 0 females, 337 ambiguous) loaded from .fam.
+Ambiguous sex IDs written to
+/cwork/ram163/OAK_GENOMES/14_MAPPING/03_CALLED/MAC_LIST_FILTER10000.nosex .
+Using 1 thread (no multithreaded calculations invoked).
+Before main variant filters, 337 founders and 0 nonfounders present.
+Calculating allele frequencies... done.
+Total genotyping rate is 0.989019.
+65646 variants and 337 people pass filters and QC.
+Note: No phenotypes present.
+--recode ped to
+/cwork/ram163/OAK_GENOMES/14_MAPPING/03_CALLED/MAC_LIST_FILTER10000.ped +
+/cwork/ram163/OAK_GENOMES/14_MAPPING/03_CALLED/MAC_LIST_FILTER10000.map ...
+done.
+
+End time: Tue Jun 18 14:57:02 2024
