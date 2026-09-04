@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH -e slurm_%A_%a.err
 #SBATCH -o slurm_%A_%a.out 
-#SBATCH --array=681-693
+#SBATCH --array=1-693
 #SBATCH --cpus-per-task=10
 #SBATCH --mem-per-cpu=3G
 #SBATCH --mail-type=ALL

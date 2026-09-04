@@ -1,0 +1,10 @@
+#!/bin/bash
+#SBATCH -e slurm_map_%A_%a.err
+#SBATCH -o slurm_map_%A_%a.out
+#SBATCH --array=1-23
+#SBATCH -c 10
+#SBATCH --mem=40G
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=xxx@xxx.org
+
+./STR_${SLURM_ARRAY_TASK_ID}.cmd

@@ -55,12 +55,12 @@ simp_meta<-data.frame(cbind(Seq=meta$Seq,colnum=meta$collectionNumber,species=me
 
 STR_names<-read.delim("../SubsetFullSTR.txt",sep = "\t",header=FALSE)
  
-# All_STR6<-read.delim("ALLSTR_LIST_FILTER10000.6.Q",sep = " ", header=FALSE)
-# All_STR6$Sample<-STR_names$V1
-# All_STR6<-All_STR6 %>%
-#   dplyr::mutate(across('Sample',str_replace,'.bam',''))
-# All_S6_dat<-merge(x=All_STR6,y=simp_meta,by.x="Sample",by.y="Seq",all.x=TRUE)
-# All_S6_long<-melt(All_S6_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+All_STR6<-read.delim("ALLSTR_LIST_FILTER10000.6.Q",sep = " ", header=FALSE)
+All_STR6$Sample<-STR_names$V1
+All_STR6<-All_STR6 %>%
+  dplyr::mutate(across('Sample',str_replace,'.bam',''))
+All_S6_dat<-merge(x=All_STR6,y=simp_meta,by.x="Sample",by.y="Seq",all.x=TRUE)
+All_S6_long<-melt(All_S6_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
 
 library(dplyr)
 All_STR8<-read.delim("ALLSTR_LIST_FILTER10000.8.Q",sep = " ", header=FALSE)
@@ -71,73 +71,56 @@ All_S8_dat<-merge(x=All_STR8,y=simp_meta,by.x="Sample",by.y="Seq",all.x=TRUE)
 All_S8_long<-melt(All_S8_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
 
 
-# 
-# All_STR10<-read.delim("ALLSTR_LIST_FILTER10000.10.Q",sep = " ", header=FALSE)
-# All_STR10$Sample<-STR_names$V1
-# All_STR10<-All_STR10 %>%
-#   dplyr::mutate(across('Sample',str_replace,'.bam',''))
-# All_S10_dat<-merge(x=All_STR10,y=simp_meta,by.x="Sample",by.y="Seq",all.x=TRUE)
-# #All_STR3_sp<-merge(x=All_STR2,y=samp,by.x="Sample",by.y="Seq")
-# All_S10_long<-melt(All_S10_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
-# write.csv(All_S10_long, "C:/Users/rmohn/Desktop/10_Analysis/02_STRUCTURE/S10_long.csv",row.names = FALSE)
-# 
-# 
-# All_STR12<-read.delim("ALLSTR_LIST_FILTER10000.12.Q",sep = " ", header=FALSE)
-# All_STR12$Sample<-STR_names$V1
-# All_STR12<-All_STR12 %>%
-#   dplyr::mutate(across('Sample',str_replace,'.bam',''))
-# All_S12_dat<-merge(x=All_STR12,y=simp_meta,by.x="Sample",by.y="Seq",all.x=TRUE)
-# #All_STR3_sp<-merge(x=All_STR2,y=samp,by.x="Sample",by.y="Seq")
-# All_S12_long<-melt(All_S12_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
-# write.csv(All_S12_long, "C:/Users/rmohn/Desktop/10_Analysis/02_STRUCTURE/S12_long.csv",row.names = FALSE)
-# 
-# # All_STR15<-read.delim("All_LIST_FILTER10000.15.Q",sep = " ", header=FALSE)
-# # All_STR15$Sample<-full_het$INDV
-# # All_STR15<-All_STR15 %>%
-# #   dplyr::mutate(across('Sample',str_replace,'.bam',''))
-# # All_S15_dat<-merge(x=All_STR15,y=simp_meta,by.x="Sample",by.y="Seq",all.x=TRUE)
-# # #All_STR3_sp<-merge(x=All_STR2,y=samp,by.x="Sample",by.y="Seq")
-# # All_S15_long<-melt(All_S15_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
-# 
-# All_STR16<-read.delim("ALLSTR_LIST_FILTER10000.16.Q",sep = " ", header=FALSE)
-# All_STR16$Sample<-STR_names$V1
-# All_STR16<-All_STR16 %>%
-#   dplyr::mutate(across('Sample',str_replace,'.bam',''))
-# All_S16_dat<-merge(x=All_STR15,y=simp_meta,by.x="Sample",by.y="Seq",all.x=TRUE)
-# 
-# All_S16_long<-melt(All_S16_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
-# 
-# 
-# All_STR17<-read.delim("ALLSTR_LIST_FILTER10000.17.Q",sep = " ", header=FALSE)
-# All_STR17$Sample<-STR_names$V1
-# All_STR17<-All_STR17 %>%
-#   dplyr::mutate(across('Sample',str_replace,'.bam',''))
-# All_S17_dat<-merge(x=All_STR17,y=simp_meta,by.x="Sample",by.y="Seq",all.x=TRUE)
-# #All_STR3_sp<-merge(x=All_STR2,y=samp,by.x="Sample",by.y="Seq")
-# All_S17_long<-melt(All_S17_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
-# 
-# 
-# 
-# # ggplot(data=All_S3_long)+
-# #   geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack")+
-# #   scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
-# #   labs(title = "All Chromosomes; 3 populations")+
-# #   facet_grid(species~.)+
-# #   theme(axis.text.x=element_blank(), 
-# #       axis.ticks.x=element_blank(), 
-# #       axis.text.y=element_blank(), 
-# #       axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
-# # 
-# # 
-# ggplot(data=All_S6_long)+
-#   geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack")+
-#   scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
-#   labs(title = "All Chromosomes; 3 populations")+
-#   facet_grid(species~.)+
-#   theme(axis.text.x=element_blank(),
-#       axis.ticks.x=element_blank(),
-#       axis.text.y=element_blank(),
-#       axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
+
+All_STR10<-read.delim("ALLSTR_LIST_FILTER10000.10.Q",sep = " ", header=FALSE)
+All_STR10$Sample<-STR_names$V1
+All_STR10<-All_STR10 %>%
+  dplyr::mutate(across('Sample',str_replace,'.bam',''))
+All_S10_dat<-merge(x=All_STR10,y=simp_meta,by.x="Sample",by.y="Seq",all.x=TRUE)
+#All_STR3_sp<-merge(x=All_STR2,y=samp,by.x="Sample",by.y="Seq")
+All_S10_long<-melt(All_S10_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+write.csv(All_S10_long, "C:/Users/rmohn/Desktop/10_Analysis/02_STRUCTURE/S10_long.csv",row.names = FALSE)
+
+
+All_STR12<-read.delim("ALLSTR_LIST_FILTER10000.12.Q",sep = " ", header=FALSE)
+All_STR12$Sample<-STR_names$V1
+All_STR12<-All_STR12 %>%
+  dplyr::mutate(across('Sample',str_replace,'.bam',''))
+All_S12_dat<-merge(x=All_STR12,y=simp_meta,by.x="Sample",by.y="Seq",all.x=TRUE)
+#All_STR3_sp<-merge(x=All_STR2,y=samp,by.x="Sample",by.y="Seq")
+All_S12_long<-melt(All_S12_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+write.csv(All_S12_long, "C:/Users/rmohn/Desktop/10_Analysis/02_STRUCTURE/S12_long.csv",row.names = FALSE)
+
+
+All_STR16<-read.delim("ALLSTR_LIST_FILTER10000.16.Q",sep = " ", header=FALSE)
+All_STR16$Sample<-STR_names$V1
+All_STR16<-All_STR16 %>%
+  dplyr::mutate(across('Sample',str_replace,'.bam',''))
+All_S16_dat<-merge(x=All_STR15,y=simp_meta,by.x="Sample",by.y="Seq",all.x=TRUE)
+
+All_S16_long<-melt(All_S16_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+
+
+All_STR17<-read.delim("ALLSTR_LIST_FILTER10000.17.Q",sep = " ", header=FALSE)
+All_STR17$Sample<-STR_names$V1
+All_STR17<-All_STR17 %>%
+  dplyr::mutate(across('Sample',str_replace,'.bam',''))
+All_S17_dat<-merge(x=All_STR17,y=simp_meta,by.x="Sample",by.y="Seq",all.x=TRUE)
+#All_STR3_sp<-merge(x=All_STR2,y=samp,by.x="Sample",by.y="Seq")
+All_S17_long<-melt(All_S17_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
+
+
+
+
+ggplot(data=All_S6_long)+
+  geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack")+
+  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
+  labs(title = "All Chromosomes; 3 populations")+
+  facet_grid(species~.)+
+  theme(axis.text.x=element_blank(),
+      axis.ticks.x=element_blank(),
+      axis.text.y=element_blank(),
+      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
 
 ggplot(data=All_S8_long)+
   geom_bar(mapping=aes(x=paste(species,state,Sample),y=value,fill=variable),stat="identity",position="stack")+
@@ -149,38 +132,16 @@ ggplot(data=All_S8_long)+
       axis.text.y=element_blank(), 
       axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
 
-ggplot(data=All_S7_long)+
+
+ggplot(data=All_S10_long)+
   geom_bar(mapping=aes(x=paste(species,state,Sample),y=value,fill=variable),stat="identity",position="stack")+
   scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
-  labs(title = "All Chromosomes; 8 populations")+
+  labs(title = "All Chromosomes; 3 populations")+
   facet_grid(species~.)+
-  theme(axis.text.x=element_blank(), 
-      axis.ticks.x=element_blank(), 
-      axis.text.y=element_blank(), 
+  theme(axis.text.x=element_blank(),
+      axis.ticks.x=element_blank(),
+      axis.text.y=element_blank(),
       axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
-
-
-
-ggplot(data=subset(All_S12_long))+
-  geom_bar(mapping=aes(x=paste(species,state,Sample),y=value,fill=variable),stat="identity",position="stack")+
-  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
-  labs(x=NULL, y="genetic composition (%)")+
-  theme_light()+
-  theme(axis.text.x=element_blank(), 
-      axis.ticks.x=element_blank(), 
-      axis.text.y=element_blank(), 
-      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
-
-
-# ggplot(data=All_S10_long)+
-#   geom_bar(mapping=aes(x=paste(species,state,Sample),y=value,fill=variable),stat="identity",position="stack")+
-#   scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
-#   labs(title = "All Chromosomes; 3 populations")+
-#   facet_grid(species~.)+
-#   theme(axis.text.x=element_blank(), 
-#       axis.ticks.x=element_blank(), 
-#       axis.text.y=element_blank(), 
-#       axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
 
 ggplot(data=All_S12_long)+
   geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack")+
@@ -212,15 +173,6 @@ ggplot(data=All_S17_long)+
       axis.text.y=element_blank(), 
       axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
 
-
-
-ggplot(data = states)+
-  geom_polygon(data = counties, aes(x = long, y = lat, group = group),fill = 'gray90', color = "white", lwd = 0.1)+
-  geom_polygon(aes(x = long, y = lat, group = group),
-                      fill = NA, color = "black")+
-  scale_fill_manual('Species cluster', values = cbbPalette)+
-  coord_map('albers', lat0=40, lat1=38)+
-  geom_scatterpie(aes(x = longitude.orig, y = latitude.orig,group=Sample), data = c12_S12_mue_coord, cols = c("V2","V12","remainder"), alpha = 1)
 
 
 ```
@@ -575,308 +527,9 @@ for(i in 1:727){
 
 ```
 
-```{r}
 
 
 
-samps_bord_dist<-read.csv("../Samps_border_dist.csv")
-samps_bord_dist_less<-cbind(Seq=samps_bord_dist[,3],samps_bord_dist[,48:56])
-Chr1_OutS10_bord<-merge(Chr1_OutS10,y=samps_bord_dist_less,by.x="Sample",by.y="Seq")
-Chr1_OutS10_bord$minborddist<-rep(0,693)
-for(i in 1:693){
-  Chr1_OutS10_bord[i,23]<-min(Chr1_OutS10_bord[i,14:22])
-}
-
-samps_glac<-read.csv("../../00_Scripts_and_Labels/00_METADATA/Samples_TimeSinceGlaciation.csv")
-samps_glac_less<-cbind(Seq=samps_glac[,3],samps_glac[,57])
-Chr1_OutS10_bord_glac<-merge(Chr1_OutS10_bord,y=samps_glac_less,by.x="Sample",by.y="Seq")
-# write.csv(c12_str_het_bord,"c12_str_het_bord.csv")
-# 
-# 
-# c12_str_het_bord_par<-read.csv("c12_str_het_bord_2.csv")
-# 
-
-ggplot()+
-  geom_histogram(mapping=aes(x=Chr1_OutS10_bord[Chr1_OutS10_bord[,13]!="hybrid",23]),fill="#332288",binwidth = .1)+
-  geom_histogram(mapping=aes(x=Chr1_OutS10_bord[Chr1_OutS10_bord[,13]=="hybrid",23]),fill="#DDCC77",binwidth = .1)+
-  theme_light()+
-  labs(x="distance to species boundary",subtitle = "blue are non-hybrids, yellow are hybrids")
-
-ggplot()+
-  geom_histogram(mapping=aes(x=as.numeric(Chr1_OutS10_bord_glac[Chr1_OutS10_bord_glac[,13]!="hybrid",24])),fill="#332288",binwidth = 1000)+
-  geom_histogram(mapping=aes(x=as.numeric(Chr1_OutS10_bord_glac[Chr1_OutS10_bord_glac[,13]=="hybrid",24])),fill="#DDCC77",binwidth = 1000)+
-  theme_light()+
-  labs(x="last glaciated",title = "all samples time since glaciated")
-
-                                                                                                                                                                                           
-
-
-
-# mean(c12_str_het_bord_par[c12_str_het_bord_par[,19]=="hybrid",49])
-# mean(c12_str_het_bord_par[c12_str_het_bord_par[,19]!="hybrid",49])
-# median(c12_str_het_bord_par[c12_str_het_bord_par[,19]=="hybrid",49])
-# median(c12_str_het_bord_par[c12_str_het_bord_par[,19]!="hybrid",49])
-# 
-# bootstr=c()
-# for(i in 1:100){
-#   bootstr[i]=mean(sample(x=c12_str_het_bord_par$minbordpare,size=29,replace=FALSE))
-#   }
-# 
-# ggplot()+
-#   geom_histogram(mapping=aes(x=bootstr),binwidth = .05)+
-#   geom_vline(xintercept=0.27,color="darkred")+
-#   theme_light()+
-#   labs(x="Sampling without replacement distance to species border (line is the mean for hybrids)" )
-
-
-dat_alb_bic_mac_mue<-Chr1_OutS10_bord_glac[Chr1_OutS10_bord_glac[,12]=="Quercus macrocarpa Michx."|Chr1_OutS10_bord_glac[,12]=="Quercus muehlenbergii Engelm."|Chr1_OutS10_bord_glac[,12]=="Quercus alba L."|Chr1_OutS10_bord_glac[,12]=="Quercus bicolor Willd."|Chr1_OutS10_bord_glac[,12]=="Quercus prinoides Willd.",]
-
-ggplot(data=dat_alb_bic_mac_mue)+
-  geom_histogram(mapping = aes(x=as.numeric(V2.y),fill=strpop),position="dodge",binwidth = 40000)+
-  theme_light()+
-  labs(x="last glaciated",title = "alba, macrocarpa, bicolor, muehlenbergii samples time since glaciated")
-
-dat_alb_bic_mac<-Chr1_OutS10_bord_glac[Chr1_OutS10_bord_glac[,12]=="Quercus macrocarpa Michx."|Chr1_OutS10_bord_glac[,12]=="Quercus alba L."|Chr1_OutS10_bord_glac[,12]=="Quercus bicolor Willd.",]
-
-ggplot(data=dat_alb_bic_mac)+
-  geom_histogram(mapping = aes(x=as.numeric(V2.y),fill=strpop),position="dodge",binwidth = 40000)+
-  theme_light()+
-  labs(x="last glaciated",title = "alba, macrocarpa, bicolor samples time since glaciated")
-
-```
-
-```{r}
-dat_bic_mac<-Chr1_OutS10_bord_glac[(Chr1_OutS10_bord_glac[,12]=="Quercus macrocarpa Michx."|Chr1_OutS10_bord_glac[,12]=="Quercus bicolor Willd.")&(Chr1_OutS10_bord_glac[,3]<0.05&Chr1_OutS10_bord_glac[,4]<0.05&Chr1_OutS10_bord_glac[,5]<0.05&Chr1_OutS10_bord_glac[,7]<0.05&Chr1_OutS10_bord_glac[,6]<0.05&Chr1_OutS10_bord_glac[,10]<0.05),]
-Pop_file<-read.csv("../../00_Scripts_and_Labels/00_METADATA/Seq_Pop_Coord.csv")
-dat_bic_mac_pop<-merge(dat_bic_mac,Pop_file,by.x="Sample",by.y="Seq")
-dat_bic_mac_pop$nSamps<-rep(1,361)
-dat_bic_mac_pop$hybrids<-rep(0,361)
-dat_bic_mac_pop$mac<-rep(0,361)
-dat_bic_mac_pop$bic<-rep(0,361)
-for(i in 1:361){
-  if(dat_bic_mac_pop[i,13] == "hybrid"){
-  dat_bic_mac_pop[i,35]<-1
-  }
-  if(dat_bic_mac_pop[i,12] == "Quercus macrocarpa Michx."){
-  dat_bic_mac_pop[i,36]<-1
-  }
-  if(dat_bic_mac_pop[i,12] == "Quercus bicolor Willd."){
-  dat_bic_mac_pop[i,37]<-1
-  }
-}
-pop_stats_sum<-aggregate(x = dat_bic_mac_pop[,34:37],by=list(dat_bic_mac_pop$site),FUN="sum")
-pop_stats_mean<-aggregate(x = dat_bic_mac_pop[,23],by=list(dat_bic_mac_pop$site,dat_bic_mac_pop$V2.y),FUN="mean")
-pop_stats_mean2<-aggregate(x = dat_bic_mac_pop[,32:33],by=list(dat_bic_mac_pop$site),FUN="mean")
-pop_stats<-merge(pop_stats_sum,pop_stats_mean,by="Group.1")
-pop_stats<-merge(pop_stats,pop_stats_mean2,by="Group.1")
-
-pop_stats_mac_bic<-pop_stats[pop_stats[,4]>0&pop_stats[,5]>0,]
-pop_stats_mac_bic$p_hybrid<-pop_stats_mac_bic$hybrids/pop_stats_mac_bic$nSamps
-
-ggplot()+
-  geom_boxplot(mapping=aes(x=pop_stats_mac_bic$Group.2,y=pop_stats_mac_bic$p_hybrid))+
-  geom_jitter(mapping=aes(x=pop_stats_mac_bic$Group.2,y=pop_stats_mac_bic$p_hybrid),height = 0)+
-  labs(x="time since glaciation (100,000 is Null)", y="percent of individuals hybridized", title = "Q. macrocarpa and Q. bicolor populations (10)" )+
-  theme_light()
-
-ggplot()+
-  geom_point(mapping=aes(x=pop_stats_mac_bic$x,y=pop_stats_mac_bic$p_hybrid,color=pop_stats_mac_bic$Group.2),size=2,alpha=.7)+
-  labs(color="time since glaciation (100,000 is Null)", y="percent of individuals hybridized",x="distance to range edge", title = "Q. macrocarpa and Q. bicolor populations (10)" )+
-  theme_light()
-
-```
-
-```{r}
-library(ggplot2)
-dat_alb_mac<-Chr1_OutS10_bord_glac[(Chr1_OutS10_bord_glac[,12]=="Quercus macrocarpa Michx."|Chr1_OutS10_bord_glac[,12]=="Quercus alba L.")&(Chr1_OutS10_bord_glac[,3]<0.05&Chr1_OutS10_bord_glac[,4]<0.05&Chr1_OutS10_bord_glac[,5]<0.05&Chr1_OutS10_bord_glac[,7]<0.05&Chr1_OutS10_bord_glac[,10]<0.05&Chr1_OutS10_bord_glac[,9]<0.05),]
-Pop_file<-read.csv("../../00_Scripts_and_Labels/00_METADATA/Seq_Pop_Coord.csv")
-dat_alb_mac_pop<-merge(dat_alb_mac,Pop_file,by.x="Sample",by.y="Seq")
-dat_alb_mac_pop$nSamps<-rep(1,456)
-dat_alb_mac_pop$hybrids<-rep(0,456)
-dat_alb_mac_pop$mac<-rep(0,456)
-dat_alb_mac_pop$alb<-rep(0,456)
-for(i in 1:456){
-  if(dat_alb_mac_pop[i,13] == "hybrid"){
-  dat_alb_mac_pop[i,35]<-1
-  }
-  if(dat_alb_mac_pop[i,12] == "Quercus macrocarpa Michx."){
-  dat_alb_mac_pop[i,36]<-1
-  }
-  if(dat_alb_mac_pop[i,12] == "Quercus alba L."){
-  dat_alb_mac_pop[i,37]<-1
-  }
-}
-pop_stats_sum<-aggregate(x = dat_alb_mac_pop[,34:37],by=list(dat_alb_mac_pop$site),FUN="sum")
-pop_stats_mean<-aggregate(x = dat_alb_mac_pop[,23],by=list(dat_alb_mac_pop$site,dat_alb_mac_pop$V2.y),FUN="min")
-pop_stats_mean2<-aggregate(x = dat_alb_mac_pop[,32:33],by=list(dat_alb_mac_pop$site),FUN="mean")
-pop_stats<-merge(pop_stats_sum,pop_stats_mean,by="Group.1")
-pop_stats<-merge(pop_stats,pop_stats_mean2,by="Group.1")
-
-pop_stats_mac_alb<-pop_stats[pop_stats[,4]>0&pop_stats[,5]>0,]
-pop_stats_mac_alb$p_hybrid<-pop_stats_mac_alb$hybrids/pop_stats_mac_alb$nSamps
-
-ggplot()+
-  geom_boxplot(mapping=aes(x=pop_stats_mac_alb$Group.2,y=pop_stats_mac_alb$p_hybrid),outlier.size = 0,outlier.colour = "white")+
-  geom_jitter(mapping=aes(x=pop_stats_mac_alb$Group.2,y=pop_stats_mac_alb$p_hybrid),height = 0)+
-  labs(x="time since glaciation (100,000 is Null)", y="percent of individuals hybridized", title = "Q. macrocarpa and Q. alba populations (25)" )+
-  theme_light()
-
-
-ggplot()+
-  geom_jitter(mapping=aes(x=pop_stats_mac_alb$x,y=pop_stats_mac_alb$p_hybrid,color=pop_stats_mac_alb$Group.2),size=2,alpha=.7)+
-  labs(color="time since glaciation (100,000 is Null)", y="percent of individuals hybridized",x="distance to range edge", title = "Q. macrocarpa and Q. alba populations (25)" )+
-  theme_light()
-
-aov(pop_stats_mac_alb$p_hybrid~pop_stats_mac_alb$Group.2+pop_stats_mac_alb$x)
-aov(pop_stats_mac_alb$p_hybrid~pop_stats_mac_alb$x)
-aov(pop_stats_mac_alb$p_hybrid~pop_stats_mac_alb$Group.2)
-
-```
-
-```{r}
-library(ggplot2)
-dat_mue_mac<-Chr1_OutS10_bord_glac[(Chr1_OutS10_bord_glac[,12]=="Quercus macrocarpa Michx."|Chr1_OutS10_bord_glac[,12]=="Quercus muehlenbergii Engelm."|Chr1_OutS10_bord_glac[,12]=="Quercus prinoides Willd.")&(Chr1_OutS10_bord_glac[,3]<0.05&Chr1_OutS10_bord_glac[,4]<0.05&Chr1_OutS10_bord_glac[,7]<0.05&Chr1_OutS10_bord_glac[,6]<0.05&Chr1_OutS10_bord_glac[,10]<0.05&Chr1_OutS10_bord_glac[,9]<0.05),]
-Pop_file<-read.csv("../../00_Scripts_and_Labels/00_METADATA/Seq_Pop_Coord.csv")
-dat_mue_mac_pop<-merge(dat_mue_mac,Pop_file,by.x="Sample",by.y="Seq")
-dat_mue_mac_pop$nSamps<-rep(1,425)
-dat_mue_mac_pop$hybrids<-rep(0,425)
-dat_mue_mac_pop$mac<-rep(0,425)
-dat_mue_mac_pop$mue<-rep(0,425)
-for(i in 1:425){
-  if(dat_mue_mac_pop[i,13] == "hybrid"){
-  dat_mue_mac_pop[i,35]<-1
-  }
-  if(dat_mue_mac_pop[i,12] == "Quercus macrocarpa Michx."){
-  dat_mue_mac_pop[i,36]<-1
-  }
-  if(dat_mue_mac_pop[i,12] == "Quercus muehlenbergii Engelm."|dat_mue_mac_pop[i,12] == "Quercus prinoides Willd."){
-  dat_mue_mac_pop[i,37]<-1
-  }
-}
-pop_stats_sum<-aggregate(x = dat_mue_mac_pop[,34:37],by=list(dat_mue_mac_pop$site),FUN="sum")
-pop_stats_mean<-aggregate(x = dat_mue_mac_pop[,23],by=list(dat_mue_mac_pop$site,dat_mue_mac_pop$V2.y),FUN="min")
-pop_stats_mean2<-aggregate(x = dat_mue_mac_pop[,32:33],by=list(dat_mue_mac_pop$site),FUN="mean")
-pop_stats<-merge(pop_stats_sum,pop_stats_mean,by="Group.1")
-pop_stats<-merge(pop_stats,pop_stats_mean2,by="Group.1")
-
-pop_stats_mac_mue<-pop_stats[pop_stats[,4]>0&pop_stats[,5]>0,]
-pop_stats_mac_mue$p_hybrid<-pop_stats_mac_mue$hybrids/pop_stats_mac_mue$nSamps
-
-ggplot()+
-  geom_boxplot(mapping=aes(x=pop_stats_mac_mue$Group.2,y=pop_stats_mac_mue$p_hybrid),outlier.size = 0,outlier.colour = "white")+
-  geom_jitter(mapping=aes(x=pop_stats_mac_mue$Group.2,y=pop_stats_mac_mue$p_hybrid),height = 0)+
-  labs(x="time since glaciation (100,000 is Null)", y="percent of individuals hybridized", title = "Q. macrocarpa and Q. muehlenbergii populations (16)" )+
-  theme_light()
-
-ggplot()+
-  geom_point(mapping=aes(x=pop_stats_mac_mue$x,y=pop_stats_mac_mue$p_hybrid,color=pop_stats_mac_mue$Group.2),size=2,alpha=.7)+
-  labs(color="time since glaciation (100,000 is Null)", y="percent of individuals hybridized",x="distance to range edge", title = "Q. macrocarpa and Q. muehlenbergii populations (16)" )+
-  theme_light()
-
-aov(pop_stats_mac_mue$p_hybrid~pop_stats_mac_mue$Group.2+pop_stats_mac_mue$x)
-aov(pop_stats_mac_mue$p_hybrid~pop_stats_mac_mue$x)
-aov(pop_stats_mac_mue$p_hybrid~pop_stats_mac_mue$Group.2)
-```
-
-#All species in glaciated regions
-```{r}
-library(ggplot2)
-dat_abmm<-Chr1_OutS10_bord_glac[(Chr1_OutS10_bord_glac[,12]=="Quercus macrocarpa Michx."|Chr1_OutS10_bord_glac[,12]=="Quercus muehlenbergii Engelm."|Chr1_OutS10_bord_glac[,12]=="Quercus alba L."|Chr1_OutS10_bord_glac[,12]=="Quercus bicolor Willd."|Chr1_OutS10_bord_glac[,12]=="Quercus prinoides Willd.")&(Chr1_OutS10_bord_glac[,7]<0.05&Chr1_OutS10_bord_glac[,3]<0.05&Chr1_OutS10_bord_glac[,4]<0.05&Chr1_OutS10_bord_glac[,10]<0.05),]
-Pop_file<-read.csv("../../00_Scripts_and_Labels/00_METADATA/Seq_Pop_Coord.csv")
-dat_abmm_pop<-merge(dat_abmm,Pop_file,by.x="Sample",by.y="Seq")
-dat_abmm_pop$nSamps<-rep(1,600)
-dat_abmm_pop$hybrids<-rep(0,600)
-dat_abmm_pop$mac<-rep(0,600)
-dat_abmm_pop$mue<-rep(0,600)
-dat_abmm_pop$alb<-rep(0,600)
-dat_abmm_pop$bic<-rep(0,600)
-for(i in 1:600){
-  if(dat_abmm_pop[i,13] == "hybrid"){
-  dat_abmm_pop[i,35]<-1
-  }
-  if(dat_abmm_pop[i,12] == "Quercus macrocarpa Michx."){
-  dat_abmm_pop[i,36]<-1
-  }
-  if(dat_abmm_pop[i,12] == "Quercus muehlenbergii Engelm."){
-  dat_abmm_pop[i,37]<-1
-  }
-    if(dat_abmm_pop[i,12] == "Quercus alba L."){
-  dat_abmm_pop[i,38]<-1
-  }
-  if(dat_abmm_pop[i,12] == "Quercus bicolor Willd."){
-  dat_abmm_pop[i,39]<-1
-  }
-}
-pop_stats_sum<-aggregate(x = dat_abmm_pop[,34:39],by=list(dat_abmm_pop$site),FUN="sum")
-pop_stats_mean<-aggregate(x = dat_abmm_pop[,23],by=list(dat_abmm_pop$site,dat_abmm_pop$V2.y),FUN="min")
-pop_stats_mean2<-aggregate(x = dat_abmm_pop[,32:33],by=list(dat_abmm_pop$site),FUN="mean")
-pop_stats<-merge(pop_stats_sum,pop_stats_mean,by="Group.1")
-pop_stats<-merge(pop_stats,pop_stats_mean2,by="Group.1")
-
-pop_stats_abmm<-pop_stats[pop_stats[,4]>0&(pop_stats[,5]>0|pop_stats[,6]>0|pop_stats[,7]>0),]
-pop_stats_abmm$p_hybrid<-pop_stats_abmm$hybrids/pop_stats_abmm$nSamps
-
-ggplot()+
-  geom_boxplot(mapping=aes(x=pop_stats_abmm$Group.2,y=pop_stats_abmm$p_hybrid),outlier.size = 0,outlier.colour = "white")+
-  geom_jitter(mapping=aes(x=pop_stats_abmm$Group.2,y=pop_stats_abmm$p_hybrid),height = 0)+
-  labs(x="time since glaciation (100,000 is Null)", y="percent of individuals hybridized", title = "Q. macrocarpa, Q. bicolor, Q. muehlenbergii, Q.alba populations (34)" )+
-  theme_light()
-
-ggplot()+
-  geom_point(mapping=aes(x=pop_stats_abmm$x,y=pop_stats_abmm$p_hybrid,color=pop_stats_abmm$Group.2),size=2,alpha=.7)+
-  labs(color="time since glaciation (100,000 is Null)", y="percent of individuals hybridized",x="distance to range edge", title = "Q. macrocarpa, Q. bicolor, Q. muehlenbergii, Q.alba populations (34)" )+
-  theme_light()
-
-aov(pop_stats_abmm$p_hybrid~pop_stats_abmm$Group.2+pop_stats_abmm$x)
-aov(pop_stats_abmm$p_hybrid~pop_stats_abmm$x)
-aov(pop_stats_abmm$p_hybrid~pop_stats_abmm$Group.2)
-```
-```{r}
-library(ggplot2)
-dat_alb_bic<-Chr1_OutS10_bord_glac[(Chr1_OutS10_bord_glac[,12]=="Quercus bicolor Willd."|Chr1_OutS10_bord_glac[,12]=="Quercus alba L.")&(Chr1_OutS10_bord_glac[,2]<0.05&Chr1_OutS10_bord_glac[,3]<0.05&Chr1_OutS10_bord_glac[,4]<0.05&Chr1_OutS10_bord_glac[,5]<0.05&Chr1_OutS10_bord_glac[,8]<0.05&Chr1_OutS10_bord_glac[,7]<0.05&Chr1_OutS10_bord_glac[,10]<0.05&Chr1_OutS10_bord_glac[,11]<0.05),]
-Pop_file<-read.csv("../../00_Scripts_and_Labels/00_METADATA/Seq_Pop_Coord.csv")
-dat_alb_bic_pop<-merge(dat_alb_bic,Pop_file,by.x="Sample",by.y="Seq")
-dat_alb_bic_pop$nSamps<-rep(1,145)
-dat_alb_bic_pop$hybrids<-rep(0,145)
-dat_alb_bic_pop$bic<-rep(0,145)
-dat_alb_bic_pop$alb<-rep(0,145)
-for(i in 1:145){
-  if(dat_alb_bic_pop[i,13] == "hybrid"){
-  dat_alb_bic_pop[i,35]<-1
-  }
-  if(dat_alb_bic_pop[i,12] == "Quercus bicolor Willd."){
-  dat_alb_bic_pop[i,36]<-1
-  }
-  if(dat_alb_bic_pop[i,12] == "Quercus alba L."){
-  dat_alb_bic_pop[i,37]<-1
-  }
-}
-pop_stats_sum<-aggregate(x = dat_alb_bic_pop[,34:37],by=list(dat_alb_bic_pop$site),FUN="sum")
-pop_stats_mean<-aggregate(x = dat_alb_bic_pop[,23],by=list(dat_alb_bic_pop$site,dat_alb_bic_pop$V2.y),FUN="min")
-pop_stats_mean2<-aggregate(x = dat_alb_bic_pop[,32:33],by=list(dat_alb_bic_pop$site),FUN="mean")
-pop_stats<-merge(pop_stats_sum,pop_stats_mean,by="Group.1")
-pop_stats<-merge(pop_stats,pop_stats_mean2,by="Group.1")
-
-pop_stats_bic_alb<-pop_stats[pop_stats[,4]>0&pop_stats[,5]>0,]
-pop_stats_bic_alb$p_hybrid<-pop_stats_bic_alb$hybrids/pop_stats_bic_alb$nSamps
-
-ggplot()+
-  geom_boxplot(mapping=aes(x=pop_stats_bic_alb$Group.2,y=pop_stats_bic_alb$p_hybrid),outlier.size = 0,outlier.colour = "white")+
-  geom_jitter(mapping=aes(x=pop_stats_bic_alb$Group.2,y=pop_stats_bic_alb$p_hybrid),height = 0)+
-  labs(x="time since glaciation (100,000 is Null)", y="percent of individuals hybridized", title = "Q. bicolor and Q. alba populations (25)" )+
-  theme_light()
-
-
-ggplot()+
-  geom_jitter(mapping=aes(x=pop_stats_bic_alb$x,y=pop_stats_bic_alb$p_hybrid,color=pop_stats_bic_alb$Group.2),size=2,alpha=.7)+
-  labs(color="time since glaciation (100,000 is Null)", y="percent of individuals hybridized",x="distance to range edge", title = "Q. bicolor and Q. alba populations (25)" )+
-  theme_light()
-
-aov(pop_stats_bic_alb$p_hybrid~pop_stats_bic_alb$Group.2+pop_stats_bic_alb$x)
-aov(pop_stats_bic_alb$p_hybrid~pop_stats_bic_alb$x)
-aov(pop_stats_bic_alb$p_hybrid~pop_stats_bic_alb$Group.2)
-
-```
 ```{r}
 meta<-read.csv("../../00_Scripts_and_Labels/00_METADATA/metadata_specimensSequenced_Duke_taxonomyfixed.csv")
 meta$count<-rep(1,693)
@@ -886,488 +539,7 @@ sum_meta<-aggregate(x = meta$count,by=list(meta$GenomicVoucherID_USE_THIS),FUN="
 
 
 
-#SUBSET
-```{r}
-simp_meta<-data.frame(cbind(Seq=meta$Seq,colnum=meta$collectionNumber,species=meta$GenomicVoucherID_USE_THIS,state=meta$state.provIndIowanace,site=meta$site,lat=meta$latitude.orig,long=meta$longitude.orig))
-SS10_names<-read.delim("../Subset10Species.txt",sep = "\t",header=FALSE)
 
-# SS10_STR6<-read.delim("SS10_LIST_FILTER10000.6.Q",sep = " ", header=FALSE)
-# SS10_STR6$Sample<-SS10_names$V1
-# SS10_STR6<-SS10_STR6 %>%
-#   dplyr::mutate(across('Sample',str_replace,'.bam',''))
-# SS10_S6_dat<-merge(x=SS10_STR6,y=simp_meta,by.x="Sample",by.y="Seq",SS10.x=TRUE)
-# #SS10_STR3_sp<-merge(x=SS10_STR2,y=samp,by.x="Sample",by.y="Seq")
-# SS10_S6_long<-melt(SS10_S6_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
-
-SS10_STR7<-read.delim("SS10/SS10_LIST_FILTER10000.7.Q",sep = " ", header=FALSE)
-SS10_STR7$Sample<-SS10_names$V1
-SS10_STR7<-SS10_STR7 %>%
-  dplyr::mutate(across('Sample',str_replace,'.bam',''))
-SS10_S7_dat<-merge(x=SS10_STR7,y=simp_meta,by.x="Sample",by.y="Seq",SS10.x=TRUE)
-#SS10_STR3_sp<-merge(x=SS10_STR2,y=samp,by.x="Sample",by.y="Seq")
-SS10_S7_long<-melt(SS10_S7_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
-# 
-# SS10_STR8<-read.delim("SS10_LIST_FILTER10000.8.Q",sep = " ", header=FALSE)
-# SS10_STR8$Sample<-SS10_names$V1
-# SS10_STR8<-SS10_STR8 %>%
-#   dplyr::mutate(across('Sample',str_replace,'.bam',''))
-# SS10_S8_dat<-merge(x=SS10_STR8,y=simp_meta,by.x="Sample",by.y="Seq",SS10.x=TRUE)
-# #SS10_STR3_sp<-merge(x=SS10_STR2,y=samp,by.x="Sample",by.y="Seq")
-# SS10_S8_long<-melt(SS10_S8_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
-# 
-# SS10_STR10<-read.delim("SS10_LIST_FILTER10000.10.Q",sep = " ", header=FALSE)
-# SS10_STR10$Sample<-SS10_names$V1
-# SS10_STR10<-SS10_STR10 %>%
-#   dplyr::mutate(across('Sample',str_replace,'.bam',''))
-# SS10_S10_dat<-merge(x=SS10_STR10,y=simp_meta,by.x="Sample",by.y="Seq",SS10.x=TRUE)
-# #SS10_STR3_sp<-merge(x=SS10_STR2,y=samp,by.x="Sample",by.y="Seq")
-# SS10_S10_long<-melt(SS10_S10_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
-# write.csv(SS10_S10_long, "C:/Users/rmohn/Desktop/10_Analysis/02_STRUCTURE/S10_long.csv",row.names = FALSE)
-# 
-
-SS10_STR12<-read.delim("SS10/SS10_LIST_FILTER10000.12.Q",sep = " ", header=FALSE)
-SS10_STR12$Sample<-SS10_names$V1
-SS10_STR12<-SS10_STR12 %>%
-  dplyr::mutate(across('Sample',str_replace,'.bam',''))
-SS10_S12_dat<-merge(x=SS10_STR12,y=simp_meta,by.x="Sample",by.y="Seq",SS10.x=TRUE)
-#SS10_STR3_sp<-merge(x=SS10_STR2,y=samp,by.x="Sample",by.y="Seq")
-SS10_S12_long<-melt(SS10_S12_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
-write.csv(SS10_S12_long, "C:/Users/rmohn/Desktop/10_Analysis/02_STRUCTURE/S12_long.csv",row.names = FALSE)
-
-
-# ggplot(data=SS10_S6_long)+
-#   geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack")+
-#   scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
-#   labs(title = "SS10 Chromosomes; 6 populations")+
-#   facet_grid(.~species,scales = "free", space = "free")+
-#   theme(axis.text.x=element_blank(), 
-#       axis.ticks.x=element_blank(), 
-#       axis.text.y=element_blank(), 
-#       axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
-
-ggplot(data=SS10_S7_long)+
-  geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack")+
-  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
-  labs(title = "SS10 Chromosomes; 7 populations")+
-  facet_grid(.~species,scales = "free", space = "free")+
-  theme(axis.text.x=element_blank(), 
-      axis.ticks.x=element_blank(), 
-      axis.text.y=element_blank(), 
-      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
-
-# ggplot(data=SS10_S8_long)+
-#   geom_bar(mapping=aes(x=paste(species,state,Sample),y=value,fill=variable),stat="identity",position="stack")+
-#   scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
-#   labs(title = "SS10 Chromosomes; 8 populations")+
-#   facet_grid(.~species,scales = "free", space = "free")+
-#   theme(axis.text.x=element_blank(), 
-#       axis.ticks.x=element_blank(), 
-#       axis.text.y=element_blank(), 
-#       axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
-
-# ggplot(data=SS10_S10_long)+
-#   geom_bar(mapping=aes(x=paste(species,state,Sample),y=value,fill=variable),stat="identity",position="stack")+
-#   scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
-#   labs(title = "SS10 Chromosomes; 10 populations")+
-#   facet_grid(.~species,scales = "free", space = "free")+
-#   theme(axis.text.x=element_blank(), 
-#       axis.ticks.x=element_blank(), 
-#       axis.text.y=element_blank(), 
-#       axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
-
-ggplot(data=SS10_S12_long)+
-  geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack")+
-  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
-  labs(title = "SS10 Chromosomes; 12 populations")+
-  facet_grid(.~species,scales = "free", space = "free")+
-  theme(axis.text.x=element_blank(), 
-      axis.ticks.x=element_blank(), 
-      axis.text.y=element_blank(), 
-      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
-
-```
-
-```{r}
-simp_meta<-data.frame(cbind(Seq=meta$Seq,colnum=meta$collectionNumber,species=meta$GenomicVoucherID_USE_THIS,state=meta$state.provIndIowanace,site=meta$site,lat=meta$latitude.orig,long=meta$longitude.orig))
-SS20_names<-read.delim("../Subset20Species.txt",sep = "\t",header=FALSE)
-
-SS20_STR5<-read.delim("SS20_LIST_FILTER10000.5.Q",sep = " ", header=FALSE)
-SS20_STR5$Sample<-SS20_names$V1
-SS20_STR5<-SS20_STR5 %>%
-  dplyr::mutate(across('Sample',str_replace,'.bam',''))
-SS20_S5_dat<-merge(x=SS20_STR5,y=simp_meta,by.x="Sample",by.y="Seq",SS20.x=TRUE)
-#SS20_STR3_sp<-merge(x=SS20_STR2,y=samp,by.x="Sample",by.y="Seq")
-SS20_S5_long<-melt(SS20_S5_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
-
-SS20_STR6<-read.delim("SS20_LIST_FILTER10000.6.Q",sep = " ", header=FALSE)
-SS20_STR6$Sample<-SS20_names$V1
-SS20_STR6<-SS20_STR6 %>%
-  dplyr::mutate(across('Sample',str_replace,'.bam',''))
-SS20_S6_dat<-merge(x=SS20_STR6,y=simp_meta,by.x="Sample",by.y="Seq",SS20.x=TRUE)
-#SS20_STR3_sp<-merge(x=SS20_STR2,y=samp,by.x="Sample",by.y="Seq")
-SS20_S6_long<-melt(SS20_S6_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
-
-SS20_STR7<-read.delim("SS20/SS20_LIST_FILTER10000.7.Q",sep = " ", header=FALSE)
-SS20_STR7$Sample<-SS20_names$V1
-SS20_STR7<-SS20_STR7 %>%
-  dplyr::mutate(across('Sample',str_replace,'.bam',''))
-SS20_S7_dat<-merge(x=SS20_STR7,y=simp_meta,by.x="Sample",by.y="Seq",SS20.x=TRUE)
-#SS20_STR3_sp<-merge(x=SS20_STR2,y=samp,by.x="Sample",by.y="Seq")
-SS20_S7_long<-melt(SS20_S7_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
-
-SS20_STR8<-read.delim("SS20_LIST_FILTER10000.8.Q",sep = " ", header=FALSE)
-SS20_STR8$Sample<-SS20_names$V1
-SS20_STR8<-SS20_STR8 %>%
-  dplyr::mutate(across('Sample',str_replace,'.bam',''))
-SS20_S8_dat<-merge(x=SS20_STR8,y=simp_meta,by.x="Sample",by.y="Seq",SS20.x=TRUE)
-#SS20_STR3_sp<-merge(x=SS20_STR2,y=samp,by.x="Sample",by.y="Seq")
-SS20_S8_long<-melt(SS20_S8_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
-
-SS20_STR10<-read.delim("SS20/SS20_LIST_FILTER10000.10.Q",sep = " ", header=FALSE)
-SS20_STR10$Sample<-SS20_names$V1
-SS20_STR10<-SS20_STR10 %>%
-  dplyr::mutate(across('Sample',str_replace,'.bam',''))
-SS20_S10_dat<-merge(x=SS20_STR10,y=simp_meta,by.x="Sample",by.y="Seq",SS20.x=TRUE)
-#SS20_STR3_sp<-merge(x=SS20_STR2,y=samp,by.x="Sample",by.y="Seq")
-SS20_S10_long<-melt(SS20_S10_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
-write.csv(SS20_S10_long, "C:/Users/rmohn/Desktop/10_Analysis/02_STRUCTURE/S10_long.csv",row.names = FALSE)
-
-
-# SS20_STR12<-read.delim("SS20_LIST_FILTER10000.12.Q",sep = " ", header=FALSE)
-# SS20_STR12$Sample<-SS20_names$V1
-# SS20_STR12<-SS20_STR12 %>%
-#   dplyr::mutate(across('Sample',str_replace,'.bam',''))
-# SS20_S12_dat<-merge(x=SS20_STR12,y=simp_meta,by.x="Sample",by.y="Seq",SS20.x=TRUE)
-# #SS20_STR3_sp<-merge(x=SS20_STR2,y=samp,by.x="Sample",by.y="Seq")
-# SS20_S12_long<-melt(SS20_S12_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
-# write.csv(SS20_S12_long, "C:/Users/rmohn/Desktop/10_Analysis/02_STRUCTURE/S12_long.csv",row.names = FALSE)
-# 
-
-ggplot(data=SS20_S5_long)+
-  geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack")+
-  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
-  labs(title = "SS20 Chromosomes; 5 populations")+
-  facet_grid(.~species,scales = "free", space = "free")+
-  theme(axis.text.x=element_blank(), 
-      axis.ticks.x=element_blank(), 
-      axis.text.y=element_blank(), 
-      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
-
-ggplot(data=SS20_S6_long)+
-  geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack")+
-  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
-  labs(title = "SS20 Chromosomes; 6 populations")+
-  facet_grid(.~species,scales = "free", space = "free")+
-  theme(axis.text.x=element_blank(), 
-      axis.ticks.x=element_blank(), 
-      axis.text.y=element_blank(), 
-      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
-
-ggplot(data=SS20_S7_long)+
-  geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack")+
-  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
-  labs(title = "SS20 Chromosomes; 7 populations")+
-  facet_grid(.~species,scales = "free", space = "free")+
-  theme(axis.text.x=element_blank(), 
-      axis.ticks.x=element_blank(), 
-      axis.text.y=element_blank(), 
-      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
-
-ggplot(data=SS20_S8_long)+
-  geom_bar(mapping=aes(x=paste(species,state,Sample),y=value,fill=variable),stat="identity",position="stack")+
-  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
-  labs(title = "SS20 Chromosomes; 8 populations")+
-  facet_grid(.~species,scales = "free", space = "free")+
-  theme(axis.text.x=element_blank(),
-      axis.ticks.x=element_blank(),
-      axis.text.y=element_blank(),
-      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
-
-ggplot(data=SS20_S10_long)+
-  geom_bar(mapping=aes(x=paste(species,state,Sample),y=value,fill=variable),stat="identity",position="stack")+
-  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
-  labs(title = "SS20 Chromosomes; 10 populations")+
-  facet_grid(.~species,scales = "free", space = "free")+
-  theme(axis.text.x=element_blank(), 
-      axis.ticks.x=element_blank(), 
-      axis.text.y=element_blank(), 
-      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
-
-# ggplot(data=SS20_S12_long)+
-#   geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack")+
-#   scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
-#   labs(title = "SS20 Chromosomes; 12 populations")+
-#   facet_grid(.~species,scales = "free", space = "free")+
-#   theme(axis.text.x=element_blank(), 
-#       axis.ticks.x=element_blank(), 
-#       axis.text.y=element_blank(), 
-#       axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
-```
-
-
-```{r}
-meta<-read.csv("../../00_Scripts_and_Labels/00_METADATA/metadata_sequenced_taxonomyfixed_outgroup.csv")
-simp_meta<-data.frame(cbind(Seq=meta$Seq,colnum=meta$collectionNumber,species=meta$GenomicVoucherID_USE_THIS,state=meta$state.provIndIowanace,site=meta$site,lat=meta$latitude.orig,long=meta$longitude.orig))
-SS30_names<-read.delim("../Subset30Species.txt",sep = "\t",header=FALSE)
-
-SS30_STR5<-read.delim("SS30_LIST_FILTER10000.5.Q",sep = " ", header=FALSE)
-SS30_STR5$Sample<-SS30_names$V1
-SS30_STR5<-SS30_STR5 %>%
-  dplyr::mutate(across('Sample',str_replace,'.bam',''))
-SS30_S5_dat<-merge(x=SS30_STR5,y=simp_meta,by.x="Sample",by.y="Seq",SS30.x=TRUE)
-#SS30_STR3_sp<-merge(x=SS30_STR2,y=samp,by.x="Sample",by.y="Seq")
-SS30_S5_long<-melt(SS30_S5_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
-
-SS30_STR6<-read.delim("SS30_LIST_FILTER10000.6.Q",sep = " ", header=FALSE)
-SS30_STR6$Sample<-SS30_names$V1
-SS30_STR6<-SS30_STR6 %>%
-  dplyr::mutate(across('Sample',str_replace,'.bam',''))
-SS30_S6_dat<-merge(x=SS30_STR6,y=simp_meta,by.x="Sample",by.y="Seq",SS30.x=TRUE)
-#SS30_STR3_sp<-merge(x=SS30_STR2,y=samp,by.x="Sample",by.y="Seq")
-SS30_S6_long<-melt(SS30_S6_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
-
-SS30_STR7<-read.delim("SS30_LIST_FILTER10000.7.Q",sep = " ", header=FALSE)
-SS30_STR7$Sample<-SS30_names$V1
-SS30_STR7<-SS30_STR7 %>%
-  dplyr::mutate(across('Sample',str_replace,'.bam',''))
-SS30_S7_dat<-merge(x=SS30_STR7,y=simp_meta,by.x="Sample",by.y="Seq",SS30.x=TRUE)
-#SS30_STR3_sp<-merge(x=SS30_STR2,y=samp,by.x="Sample",by.y="Seq")
-SS30_S7_long<-melt(SS30_S7_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
-
-SS30_STR8<-read.delim("SS30/SS30_LIST_FILTER10000.8.Q",sep = " ", header=FALSE)
-SS30_STR8$Sample<-SS30_names$V1
-SS30_STR8<-SS30_STR8 %>%
-  dplyr::mutate(across('Sample',str_replace,'.bam',''))
-SS30_S8_dat<-merge(x=SS30_STR8,y=simp_meta,by.x="Sample",by.y="Seq",SS30.x=TRUE)
-#SS30_STR3_sp<-merge(x=SS30_STR2,y=samp,by.x="Sample",by.y="Seq")
-SS30_S8_long<-melt(SS30_S8_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
-
-SS30_STR10<-read.delim("SS30/SS30_LIST_FILTER10000.10.Q",sep = " ", header=FALSE)
-SS30_STR10$Sample<-SS30_names$V1
-SS30_STR10<-SS30_STR10 %>%
-  dplyr::mutate(across('Sample',str_replace,'.bam',''))
-SS30_S10_dat<-merge(x=SS30_STR10,y=simp_meta,by.x="Sample",by.y="Seq",SS30.x=TRUE)
-#SS30_STR3_sp<-merge(x=SS30_STR2,y=samp,by.x="Sample",by.y="Seq")
-SS30_S10_long<-melt(SS30_S10_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
-write.csv(SS30_S10_long, "C:/Users/rmohn/Desktop/10_Analysis/02_STRUCTURE/S10_long.csv",row.names = FALSE)
-
-SS30_STR11<-read.delim("SS30_LIST_FILTER10000.11.Q",sep = " ", header=FALSE)
-SS30_STR11$Sample<-SS30_names$V1
-SS30_STR11<-SS30_STR11 %>%
-  dplyr::mutate(across('Sample',str_replace,'.bam',''))
-SS30_S11_dat<-merge(x=SS30_STR11,y=simp_meta,by.x="Sample",by.y="Seq",SS30.x=TRUE)
-#SS30_STR3_sp<-merge(x=SS30_STR2,y=samp,by.x="Sample",by.y="Seq")
-SS30_S11_long<-melt(SS30_S11_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
-write.csv(SS30_S11_long, "C:/Users/rmohn/Desktop/10_Analysis/02_STRUCTURE/S11_long.csv",row.names = FALSE)
-
-SS30_STR12<-read.delim("SS30_LIST_FILTER10000.12.Q",sep = " ", header=FALSE)
-SS30_STR12$Sample<-SS30_names$V1
-SS30_STR12<-SS30_STR12 %>%
-  dplyr::mutate(across('Sample',str_replace,'.bam',''))
-SS30_S12_dat<-merge(x=SS30_STR12,y=simp_meta,by.x="Sample",by.y="Seq",SS30.x=TRUE)
-#SS30_STR3_sp<-merge(x=SS30_STR2,y=samp,by.x="Sample",by.y="Seq")
-SS30_S12_long<-melt(SS30_S12_dat,id.vars =  c("Sample","colnum","species","state","site","lat","long"))
-write.csv(SS30_S12_long, "C:/Users/rmohn/Desktop/10_Analysis/02_STRUCTURE/S12_long.csv",row.names = FALSE)
-
-
-ggplot(data=SS30_S5_long)+
-  geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack")+
-  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
-  labs(title = "SS30 Chromosomes; 5 populations")+
-  facet_grid(.~species,scales = "free", space = "free")+
-  theme(axis.text.x=element_blank(), 
-      axis.ticks.x=element_blank(), 
-      axis.text.y=element_blank(), 
-      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
-
-ggplot(data=SS30_S6_long)+
-  geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack")+
-  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
-  labs(title = "SS30 Chromosomes; 6 populations")+
-  facet_grid(.~species,scales = "free", space = "free")+
-  theme(axis.text.x=element_blank(), 
-      axis.ticks.x=element_blank(), 
-      axis.text.y=element_blank(), 
-      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
-
-ggplot(data=SS30_S7_long)+
-  geom_bar(mapping=aes(x=paste(species,Sample),y=value,fill=variable),stat="identity",position="stack")+
-  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
-  labs(title = "SS30 Chromosomes; 7 populations")+
-  facet_grid(.~species,scales = "free", space = "free")+
-  theme(axis.text.x=element_blank(), 
-      axis.ticks.x=element_blank(), 
-      axis.text.y=element_blank(), 
-      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
-
-ggplot(data=SS30_S8_long)+
-  geom_bar(mapping=aes(x=paste(species,state,Sample),y=value,fill=variable),stat="identity",position="stack")+
-  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
-  labs(title = "SS30 Chromosomes; 8 populations")+
-  facet_grid(.~species,scales = "free", space = "free")+
-  theme(axis.text.x=element_blank(),
-      axis.ticks.x=element_blank(),
-      axis.text.y=element_blank(),
-      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
-
-ggplot(data=SS30_S10_long)+
-  geom_bar(mapping=aes(x=paste(species,state,Sample),y=value,fill=variable),stat="identity",position="stack")+
-  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
-  labs(title = "SS30 Chromosomes; 10 populations")+
-  facet_grid(.~species,scales = "free", space = "free")+
-  theme(axis.text.x=element_blank(), 
-      axis.ticks.x=element_blank(), 
-      axis.text.y=element_blank(), 
-      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
-
-ggplot(data=SS30_S11_long)+
-  geom_bar(mapping=aes(x=paste(species,state,Sample),y=value,fill=variable),stat="identity",position="stack")+
-  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
-  labs(title = "SS30 Chromosomes; 11 populations")+
-  facet_grid(.~species,scales = "free", space = "free")+
-  theme(axis.text.x=element_blank(), 
-      axis.ticks.x=element_blank(), 
-      axis.text.y=element_blank(), 
-      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
-
-ggplot(data=SS30_S12_long)+
-  geom_bar(mapping=aes(x=paste(species,state,Sample),y=value,fill=variable),stat="identity",position="stack")+
-  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
-  labs(title = "SS30 Chromosomes; 12 populations")+
-  facet_grid(.~species,scales = "free", space = "free")+
-  theme(axis.text.x=element_blank(), 
-      axis.ticks.x=element_blank(), 
-      axis.text.y=element_blank(), 
-      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
-
-```
-
-
-
-###MUE
-```{r}
-###Qmac Structure
-
-meta<-read.csv("../../00_Scripts_and_Labels/00_METADATA/metadata_sequenced_taxonomyfixed_outgroup.csv")
-
-simp_meta<-data.frame(cbind(Seq=meta$Seq,colnum=meta$collectionNumber,species=meta$GenomicVoucherID_USE_THIS,state=meta$state.provIndIowanace,site=meta$site,lat=meta$latitude.orig,long=meta$longitude.orig))
-
-
-Qmue_Sam<-read.delim("../mue_str.txt",header = FALSE)
-
-Qmue_STR2<-read.delim("Mue60_FILTER10000.2.Q",sep = " ", header=FALSE)
-Qmue_STR2[,(length(Qmue_STR2[1,])+1)]=Qmue_Sam
-Qmue_STR2<-Qmue_STR2 %>%
-  dplyr::mutate(across('V1.1',str_replace,'.bam',''))
-
-Qmue_STR2_sp<-merge(x=Qmue_STR2,y=meta,by.x="V1.1",by.y="Seq",all.x=TRUE,all.y=FALSE)
-Qmue_STR2_long<-melt(Qmue_STR2_sp,id.vars =  c("V1.1","GenomicVoucherID_USE_THIS","Pop","state.provIndIowanace","latitude.orig","longitude.orig"),measure.vars = c("V1","V2"))
-
-Qmue_STR3<-read.delim("Mue60_FILTER10000.3.Q",sep = " ", header=FALSE)
-Qmue_STR3[,(length(Qmue_STR3[1,])+1)]=Qmue_Sam
-Qmue_STR3<-Qmue_STR3 %>%
-  dplyr::mutate(across('V1.1',str_replace,'.bam',''))
-
-Qmue_STR3_sp<-merge(x=Qmue_STR3,y=meta,by.x="V1.1",by.y="Seq",all.x=TRUE,all.y=FALSE)
-Qmue_STR3_long<-melt(Qmue_STR3_sp,id.vars =  c("V1.1","GenomicVoucherID_USE_THIS","Pop","state.provIndIowanace","latitude.orig","longitude.orig"),measure.vars = c("V1","V2","V3"))
-
-# Qmac_STR3<-read.delim("../chr1-12_Qmac.3.Q",sep = " ", header=FALSE)
-# Qmac_STR3[,(length(Qmac_STR3[1,])+1):(length(Qmac_STR3[1,])+3)]=Qmac_Samp
-# Qmac_STR3_sp<-merge(x=Qmac_STR3,y=samp,by.x="V1.1",by.y="Seq")
-# Qmac_STR3_long<-melt(Qmac_STR3_sp,id.vars =  c("V1.1","Sp","Sp_Pop","Pop","St","latitude.orig","longitude.orig"))
-# 
-# Qmac_STR4<-read.delim("../chr1-12_Qmac.4.Q",sep = " ", header=FALSE)
-# Qmac_STR4[,(length(Qmac_STR4[1,])+1):(length(Qmac_STR4[1,])+3)]=Qmac_Samp
-# Qmac_STR4_sp<-merge(x=Qmac_STR4,y=samp,by.x="V1.1",by.y="Seq")
-# Qmac_STR4_long<-melt(Qmac_STR4_sp,id.vars =  c("V1.1","Sp","Sp_Pop","Pop","St","latitude.orig","longitude.orig"))
-# 
-# Qmac_STR5<-read.delim("../chr1-12_Qmac.5.Q",sep = " ", header=FALSE)
-# Qmac_STR5[,(length(Qmac_STR5[1,])+1):(length(Qmac_STR5[1,])+3)]=Qmac_Samp
-# Qmac_STR5_sp<-merge(x=Qmac_STR5,y=samp,by.x="V1.1",by.y="Seq")
-# Qmac_STR5_long<-melt(Qmac_STR5_sp,id.vars =  c("V1.1","Sp","Sp_Pop","Pop","St","latitude.orig","longitude.orig"))
-# 
-# Qmac_STR6<-read.delim("../chr1-12_Qmac.6.Q",sep = " ", header=FALSE)
-# Qmac_STR6[,(length(Qmac_STR6[1,])+1):(length(Qmac_STR6[1,])+3)]=Qmac_Samp
-# Qmac_STR6_sp<-merge(x=Qmac_STR6,y=samp,by.x="V1.1",by.y="Seq")
-# Qmac_STR6_long<-melt(Qmac_STR6_sp,id.vars =  c("V1.1","Sp","Sp_Pop","Pop","St","latitude.orig","longitude.orig"))
-
-
-
-#Qmu_STR2_long$STR<-rep("STR2",length(Qmac_STR2_long[,1]))
-# Qmac_STR3_long$STR<-rep("STR3",length(Qmac_STR3_long[,1]))
-# Qmac_STR4_long$STR<-rep("STR4",length(Qmac_STR4_long[,1]))
-# Qmac_STR5_long$STR<-rep("STR5",length(Qmac_STR5_long[,1]))
-# Qmac_STR6_long$STR<-rep("STR6",length(Qmac_STR6_long[,1]))
-# Qmac_STR7_long$STR<-rep("STR7",length(Qmac_STR7_long[,1]))
-# Qmac_STR8_long$STR<-rep("STR8",length(Qmac_STR8_long[,1]))
-# Qmac_STR9_long$STR<-rep("STR9",length(Qmac_STR9_long[,1]))
-
-# Qmac_STRall_long<-rbind(Qmac_STR2_long,Qmac_STR3_long,Qmac_STR4_long,Qmac_STR5_long,Qmac_STR6_long,Qmac_STR7_long,Qmac_STR8_long,Qmac_STR9_long)
-# 
-# ggplot(data=Qmac_STRall_long)+
-#   geom_bar(mapping=aes(x=paste(Pop,V1.1),y=value,fill=variable),stat="identity",position="stack")+
-#   scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255"))+
-#   labs(title = "Q. macrocarpa samples, All chromosomes")+
-#   facet_grid(STR~.)+
-#   theme(axis.text.x=element_blank(), 
-#       axis.ticks.x=element_blank(), 
-#       axis.text.y=element_blank(), 
-#       axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
-
-
-
-
-cbbPalette2.5=c("#888888","#88CCEE","#CC6677","#117733","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255")
-
-ggplot(data = states)+
-  geom_polygon(data = counties, aes(x = long, y = lat, group = group),fill = 'white', color = "gray90", lwd = 0.1)+
-  geom_polygon(aes(x = long, y = lat, group = group),
-                      fill = NA, color = "black")+
-  scale_fill_manual('Species cluster', values = cbbPalette2.5)+
-  coord_map(xlim = c(-105,-68))+
-  geom_scatterpie(aes(x = longitude.orig, y = latitude.orig,group=Pop), data = Qmue_STR2_sp, cols = c("V1","V2"), alpha = 1)+
-  facet_grid(.~GenomicVoucherID_USE_THIS)
-
-ggplot(data = states)+
-  geom_polygon(data = counties, aes(x = long, y = lat, group = group),fill = 'white', color = "gray90", lwd = 0.1)+
-  geom_polygon(aes(x = long, y = lat, group = group),
-                      fill = NA, color = "black")+
-  scale_fill_manual('Species cluster', values = cbbPalette2.5)+
-  coord_map(xlim = c(-105,-92), ylim=c(35,50))+
-  geom_scatterpie(aes(x = longitude.orig, y = latitude.orig,group=Pop), data = Qmue_STR3_sp, cols = c("V1","V2","V3"), alpha = 1)+
-  facet_grid(.~GenomicVoucherID_USE_THIS)
-
-ggplot(data=Qmue_STR2_long)+
-  geom_bar(mapping=aes(x=paste(GenomicVoucherID_USE_THIS,V1.1),y=value,fill=variable),stat="identity",position="stack")+
-  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","green","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255","lightgreen","lightpink","orange","darkgreen","lightyellow","yellow"))+
-  labs(title = "All Chromosomes; 2 populations")+
-  facet_grid(GenomicVoucherID_USE_THIS~state.provIndIowanace,scales = "free", space = "free")+
-  theme(axis.text.x=element_blank(), 
-      axis.ticks.x=element_blank(), 
-      axis.text.y=element_blank(), 
-      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
-
-ggplot(data=Qmue_STR2_long)+
-  geom_bar(mapping=aes(x=paste(GenomicVoucherID_USE_THIS,V1.1),y=value,fill=variable),stat="identity",position="stack")+
-  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","green","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255","lightgreen","lightpink","orange","darkgreen","lightyellow","yellow"))+
-  labs(title = "All Chromosomes; 2 populations")+
-  facet_grid(GenomicVoucherID_USE_THIS~state.provIndIowanace,scales = "free", space = "free")+
-  theme(axis.text.x=element_blank(), 
-      axis.ticks.x=element_blank(), 
-      axis.text.y=element_blank(), 
-      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
-
-ggplot(data=Qmue_STR3_long)+
-  geom_bar(mapping=aes(x=paste(GenomicVoucherID_USE_THIS,V1.1),y=value,fill=variable),stat="identity",position="stack")+
-  scale_fill_manual(values=c("#888888","#88CCEE","#CC6677","green","#661100","#DDCC77","#332288","#44AA99","#AA4499","#999933","#000000","#882255","lightgreen","lightpink","orange","darkgreen","lightyellow","yellow"))+
-  labs(title = "All Chromosomes; 3 populations")+
-  facet_grid(GenomicVoucherID_USE_THIS~state.provIndIowanace,scales = "free", space = "free")+
-  theme(axis.text.x=element_blank(), 
-      axis.ticks.x=element_blank(), 
-      axis.text.y=element_blank(), 
-      axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
-
-```
 
 
 ```{r}
@@ -1429,46 +601,7 @@ for(i in 1:694){
   }
 write.csv(All_S12_dat2, "C:/Users/rmohn/Desktop/10_Analysis/02_STRUCTURE/S12_hyb.csv",row.names = FALSE)
 
-# All_STR12_dat2$maxstrpop<-rep("v0",693)
-# All_STR12_dat2[,21]<-colnames(All_STR12_dat2)[1+apply(All_STR12_dat2[,2:13],1,which.max)]
-# All_STR12_dat2$maxstrsp<-rep("sp",693)
-# for(i in 1:693){
-#     if(All_STR7_sp2[i,21]=="V3"){
-#       All_STR7_sp2[i,22]<-"Qalb"
-#     }else{
-#       if(All_STR7_sp2[i,21]=="V6"){
-#         All_STR7_sp2[i,22]<-"Qlyr_Qbic"
-#         if(All_STR7_sp2[i,14]=="Qlyr"|All_STR7_sp2[i,14]=="Qbic"){
-#          All_STR7_sp2[i,22]<-All_STR7_sp2[i,14]
-#         }
-#       }else{
-#        if(All_STR7_sp2[i,21]=="V1"){
-#         All_STR7_sp2[i,22]<-"Qmic_Qmon"
-#         if(All_STR7_sp2[i,14]=="Qmic"|All_STR7_sp2[i,14]=="Qmon"){
-#           All_STR7_sp2[i,22]<-All_STR7_sp2[i,14]
-#           }
-#         }else{
-#             if(All_STR7_sp2[i,21]=="V4"){
-#               All_STR7_sp2[i,22]<-"Qste_Qmar_Qsin"
-#               if(All_STR7_sp2[i,14]=="Qste"|All_STR7_sp2[i,14]=="Qmar"|All_STR7_sp2[i,14]=="Qsin"){
-#                 All_STR7_sp2[i,22]<-All_STR7_sp2[i,14]
-#               }
-#             }else{
-#               if(All_STR7_sp2[i,21]=="V7"){
-#                 All_STR7_sp2[i,22]<-"Qmue_Qpri"
-#                 if(All_STR7_sp2[i,14]=="Qmue"|All_STR7_sp2[i,14]=="Qpri"){
-#                   All_STR7_sp2[i,22]<-All_STR7_sp2[i,14]
-#                 }
-#               }else{
-#                 if(All_STR7_sp2[i,21]=="V2"|All_STR7_sp2[i,21]=="V5"){
-#                   All_STR7_sp2[i,22]<-"Qmac"
-#                 }
-#               }
-#         }
-#       }
-#     }
-#   }
-# }
+## map of hybrids
 
 ggplot(data = states)+
   geom_polygon(data = counties, aes(x = long, y = lat, group = group),fill = 'white', color = "white", lwd = 0.1)+
