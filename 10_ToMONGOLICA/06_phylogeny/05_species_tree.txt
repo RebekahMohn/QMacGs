@@ -1,0 +1,26 @@
+#!/bin/bash
+#SBATCH -c 1
+#SBATCH --mem=10G
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=rmohn@mortonarb.org
+
+cd /cwork/ram163/GENOME_REGIONS/all
+
+for f in /cwork/ram163/GENOME_REGIONS/all/*.treefile;
+       do
+       samp="$(basename ${f} .treefile)";
+       pxrr -t ${f} -g SRR24768763.bam,SRR24768723.bam,SRR24768754.bam,SRR24768716.bam,SRR24768736.bam -o /cwork/ram163/GENOME_REGIONS/all/rooted/${samp}.rooted.tre;
+done
+less *.treefile > gregion.trees
+astral -i gregion.trees -o allRegionAstral.tre
+
+
+pxrr -t /cwork/ram163/GENOME_REGIONS/all/allRegionAstral.tre -g SRR24768763.bam,SRR24768723.bam,SRR24768754.bam,SRR24768716.bam,SRR24768736.bam -o /cwork/ram163/GENOME_REGIONS/all/allRegionAstral.rooted.tre;
+
+
+mkdir 15_phylo/
+
+cd /hpc/group/manoslab/QMACROCARPA_GENOMES/15_phylo/
+java -Xmx180g -jar /hpc/group/manoslab/ram163/phyparts/target/phyparts-0.0.1-SNAPSHOT-jar-with-dependencies.jar -a 1 -d /cwork/ram163/GENOME_REGIONS/all/rooted -m /cwork/ram163/GENOME_REGIONS/all/allRegionAstral.rooted.tre -o /hpc/group/manoslab/QMACROCARPA_GENOMES/15_phylo/allRegionAstral80 -s 80
+xvfb-run python3.1 /hpc/group/manoslab/ram163/phyloscripts/phypartspiecharts/phypartspiecharts.py /cwork/ram163/GENOME_REGIONS/all/allRegionAstral.rooted.tre /hpc/group/manoslab/QMACROCARPA_GENOMES/15_phylo/allRegionAstral80 5159 --svg_name allRegionAstral80 #--taxon_subst /hpc/group/manoslab/QMACROCARPA_GENOMES/00a_SUBSETS/Phyools_5species.csv
+

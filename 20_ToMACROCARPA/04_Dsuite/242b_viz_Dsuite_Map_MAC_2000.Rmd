@@ -1,0 +1,1068 @@
+---
+title: "DsuiteMap_MAC"
+author: "Rebekah Mohn"
+date: "2025-01-28"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+###alb
+```{r}
+#combining all dstatistics and metadata for Q. alb
+library(dplyr)
+library(plyr)
+library(readxl)
+library(stringr)
+meta_pop<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_DSuite_MACREF/Pops.txt")
+
+Dalb_All<-data.frame(pop=character(),chr=character(),windowStart=integer(),windowEnd=integer(),D=double(),f_d=double(),f_dM=double(),d_f=double(),lat=double(),long=double(),windowmid=integer())
+
+for(i in 1:length(meta_pop$Pop)){
+  pop<-meta_pop$Pop[i]
+  lat<-meta_pop$latitude.orig[i]
+  long<-meta_pop$longitude.orig[i]
+  if(file.exists(paste("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/bicolor_macrocarpa_",pop,"_alba_localFstats__2000_1000.txt",sep=""))){
+    Dalb_pop<-subset(read.delim(paste("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/bicolor_macrocarpa_",pop,"_alba_localFstats__2000_1000.txt",sep="")),chr=="Chr01"|chr=="Chr02"|chr=="Chr03"|chr=="Chr04"|chr=="Chr05"|chr=="Chr06"|chr=="Chr07"|chr=="Chr08"|chr=="Chr09"|chr=="Chr10"|chr=="Chr11"|chr=="Chr12")
+    Dalb_pop<-Dalb_pop[seq_len(nrow(Dalb_pop)) %% 2 == 0, ]
+    Dalb_pop$pop<-rep(pop,length(Dalb_pop$chr))
+    Dalb_pop$lat<-rep(lat,length(Dalb_pop$chr))
+    Dalb_pop$long<-rep(long,length(Dalb_pop$chr))
+    Dalb_pop$windowmid<-round_any(rowMeans(Dalb_pop[,2:3]),500000)
+    Dalb_All<-rbind(Dalb_All,Dalb_pop)
+  }
+  #Dalb_pop$Loc<-paste(Dalb_pop$CHROM,Dalb_pop$BIN_START,sep="_")
+  
+}
+Dalb_All$chr2<-Dalb_All$chr
+Dalb_All<-Dalb_All %>%
+  dplyr::mutate(across('chr2',str_replace,'Chr',''))
+Dalb_All$chr3<-as.numeric(Dalb_All$chr2)
+
+write.table(Dalb_All,file="C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/bic_mac_alb_2000.txt",row.names=FALSE,quote=FALSE,sep="\t")
+#I don't know that window number is the best method
+
+```
+
+
+
+####MUE
+```{r}
+#combining all dstatistics and metadata for Q. mue
+library(plyr)
+meta_pop<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_DSuite_MACREF/Pops.txt")
+#macABF_mue<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/bicolor_macrocarpa_ABF_mue_localFstats__2000_1000.txt")
+Dmue_All<-data.frame(pop=character(),chr=character(),windowStart=integer(),windowEnd=integer(),D=double(),f_d=double(),f_dM=double(),d_f=double(),lat=double(),long=double(),windowmid=integer())
+
+for(i in 1:length(meta_pop$Pop)){
+  pop<-meta_pop$Pop[i]
+  lat<-meta_pop$latitude.orig[i]
+  long<-meta_pop$longitude.orig[i]
+  if(file.exists(paste("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/bicolor_macrocarpa_",pop,"_muehlenbergii_localFstats__2000_1000.txt",sep=""))){
+    Dmue_pop<-subset(read.delim(paste("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/bicolor_macrocarpa_",pop,"_muehlenbergii_localFstats__2000_1000.txt",sep="")),chr=="Chr01"|chr=="Chr02"|chr=="Chr03"|chr=="Chr04"|chr=="Chr05"|chr=="Chr06"|chr=="Chr07"|chr=="Chr08"|chr=="Chr09"|chr=="Chr10"|chr=="Chr11"|chr=="Chr12")
+    Dmue_pop<-Dmue_pop[seq_len(nrow(Dmue_pop)) %% 2 == 0, ]
+    Dmue_pop$pop<-rep(pop,length(Dmue_pop$chr))
+    Dmue_pop$lat<-rep(lat,length(Dmue_pop$chr))
+    Dmue_pop$long<-rep(long,length(Dmue_pop$chr))
+    Dmue_pop$windowmid<-round_any(rowMeans(Dmue_pop[,2:3]),500000)
+    Dmue_All<-rbind(Dmue_All,Dmue_pop)
+  }
+  #Dmue_pop$Loc<-paste(Dmue_pop$CHROM,Dmue_pop$BIN_START,sep="_")
+  
+}
+
+Dmue_All$chr2<-Dmue_All$chr
+Dmue_All<-Dmue_All %>%
+  dplyr::mutate(across('chr2',str_replace,'Chr',''))
+Dmue_All$chr3<-as.numeric(Dmue_All$chr2)
+
+write.table(Dmue_All,file="C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/bic_mac_mue_2000.txt",row.names=FALSE,quote=FALSE,sep="\t")
+#I don't know that window number is the best method
+
+```
+
+
+
+##STE
+```{r}
+#combining all dstatistics and metadata for Q. ste
+library(plyr)
+meta_pop<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_DSuite_MACREF/Pops.txt")
+#macABF_ste<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/bicolor_macrocarpa_ABF_ste_localFstats__2000_1000.txt")
+Dste_All<-data.frame(pop=character(),chr=character(),windowStart=integer(),windowEnd=integer(),D=double(),f_d=double(),f_dM=double(),d_f=double(),lat=double(),long=double(),windowmid=integer())
+
+for(i in 1:length(meta_pop$Pop)){
+  pop<-meta_pop$Pop[i]
+  lat<-meta_pop$latitude.orig[i]
+  long<-meta_pop$longitude.orig[i]
+  if(file.exists(paste("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/bicolor_macrocarpa_",pop,"_stellata_localFstats__2000_1000.txt",sep=""))){
+    Dste_pop<-subset(read.delim(paste("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/bicolor_macrocarpa_",pop,"_stellata_localFstats__2000_1000.txt",sep="")),chr=="Chr01"|chr=="Chr02"|chr=="Chr03"|chr=="Chr04"|chr=="Chr05"|chr=="Chr06"|chr=="Chr07"|chr=="Chr08"|chr=="Chr09"|chr=="Chr10"|chr=="Chr11"|chr=="Chr12")
+    Dste_pop<-Dste_pop[seq_len(nrow(Dste_pop)) %% 2 == 0, ]
+    Dste_pop$pop<-rep(pop,length(Dste_pop$chr))
+    Dste_pop$lat<-rep(lat,length(Dste_pop$chr))
+    Dste_pop$long<-rep(long,length(Dste_pop$chr))
+    Dste_pop$windowmid<-round_any(rowMeans(Dste_pop[,2:3]),500000)
+    Dste_All<-rbind(Dste_All,Dste_pop)
+  }
+  #Dste_pop$Loc<-paste(Dste_pop$CHROM,Dste_pop$BIN_START,sep="_")
+  
+}
+Dste_All$chr2<-Dste_All$chr
+Dste_All<-Dste_All %>%
+  dplyr::mutate(across('chr2',str_replace,'Chr',''))
+Dste_All$chr3<-as.numeric(Dste_All$chr2)
+
+write.table(Dste_All,file="C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/bic_mac_ste_2000.txt",row.names=FALSE,quote=FALSE,sep="\t")
+#I don't know that window number is the best method
+
+
+
+```
+
+
+####LOB
+```{r}
+#combining all dstatistics and metadata for Q. lob
+library(plyr)
+meta_pop<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_DSuite_MACREF/Pops.txt")
+#macABF_lob<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/bicolor_macrocarpa_ABF_lob_localFstats__2000_1000.txt")
+Dlob_All<-data.frame(pop=character(),chr=character(),windowStart=integer(),windowEnd=integer(),D=double(),f_d=double(),f_dM=double(),d_f=double(),lat=double(),long=double(),windowmid=integer())
+
+for(i in 1:length(meta_pop$Pop)){
+  pop<-meta_pop$Pop[i]
+  lat<-meta_pop$latitude.orig[i]
+  long<-meta_pop$longitude.orig[i]
+  if(file.exists(paste("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/bicolor_macrocarpa_",pop,"_lobata_localFstats__2000_1000.txt",sep=""))){
+    Dlob_pop<-subset(read.delim(paste("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/bicolor_macrocarpa_",pop,"_lobata_localFstats__2000_1000.txt",sep="")),chr=="Chr01"|chr=="Chr02"|chr=="Chr03"|chr=="Chr04"|chr=="Chr05"|chr=="Chr06"|chr=="Chr07"|chr=="Chr08"|chr=="Chr09"|chr=="Chr10"|chr=="Chr11"|chr=="Chr12")
+    Dlob_pop<-Dlob_pop[seq_len(nrow(Dlob_pop)) %% 2 == 0, ]
+    Dlob_pop$pop<-rep(pop,length(Dlob_pop$chr))
+    Dlob_pop$lat<-rep(lat,length(Dlob_pop$chr))
+    Dlob_pop$long<-rep(long,length(Dlob_pop$chr))
+    Dlob_pop$windowmid<-round_any(rowMeans(Dlob_pop[,2:3]),500000)
+    Dlob_All<-rbind(Dlob_All,Dlob_pop)
+  }
+  #Dlob_pop$Loc<-paste(Dlob_pop$CHROM,Dlob_pop$BIN_START,sep="_")
+  
+}
+
+Dlob_All$chr2<-Dlob_All$chr
+Dlob_All<-Dlob_All %>%
+  dplyr::mutate(across('chr2',str_replace,'Chr',''))
+Dlob_All$chr3<-as.numeric(Dlob_All$chr2)
+write.table(Dlob_All,file="C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/bic_mac_lob_2000.txt",row.names=FALSE,quote=FALSE,sep="\t")
+#I don't know that window number is the best method
+
+```
+
+
+
+```{r}
+#combining all species dstatistics+metadata into one spreadsheet for all species
+Dlob_All<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/bic_mac_lob_2000.txt",sep="\t")
+Dlob_All$species<-rep("lob",length(Dlob_All$chr))
+Dalb_All<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/bic_mac_alb_2000.txt",sep="\t")
+Dalb_All$species<-rep("alb",length(Dalb_All$chr))
+Dste_All<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/bic_mac_ste_2000.txt",sep="\t")
+Dste_All$species<-rep("ste",length(Dste_All$chr))
+Dmue_All<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/bic_mac_mue_2000.txt",sep="\t")
+Dmue_All$species<-rep("mue",length(Dmue_All$chr))
+
+
+D_All<-rbind(Dalb_All,Dlob_All,Dmue_All,Dste_All)
+D_All$windowMid<-rowMeans(D_All[,2:3])
+D_All$chr2<-D_All$chr
+D_All<-D_All %>%
+  dplyr::mutate(across('chr2',str_replace,'Chr',''))
+D_All$chr3<-as.numeric(D_All$chr2)
+write.table(D_All,file="C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/Dall_mac_2000.txt",row.names=FALSE,quote=FALSE,sep="\t")
+
+# Dbi_All$chr2<-Dbi_All$chr
+# Dbi_All<-Dbi_All %>%
+#   dplyr::mutate(across('chr2',str_replace,'Chr',''))
+# Dbi_All$chr3<-as.numeric(Dbi_All$chr2)
+
+##for 500,000 bp windows, saiving the max d_f for each population (this helps with visualizing)
+
+Dsp_All<-data.frame(pop=character(),chr=character(),windowStart=integer(),windowEnd=integer(),D=double(),f_d=double(),f_dM=double(),d_f=double(),lat=double(),long=double(),windowmid=integer(),species=character(),chr2=character(),chr3=integer())
+for(j in 1:12){
+  i=min(D_All$windowmid)
+  while(i <= max(D_All$windowmid)){
+    if(i %in% subset(Dbi_All,chr3==j)$windowmid){
+      Dwind<-rbind(subset(Dalb_All,windowmid==i&chr3==j),subset(Dbi_All,windowmid==i&chr3==j),subset(Dlob_All,windowmid==i&chr3==j),subset(Dly_All,windowmid==i&chr3==j),subset(Dmue_All,windowmid==i&chr3==j),subset(Dste_All,windowmid==i&chr3==j))
+      Dsp_All<-rbind(Dsp_All,(Dwind %>% group_by(pop) %>% top_n(1, d_f)))
+    }
+    i=i+500000
+  }
+}
+
+write.table(Dsp_All,file="C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/Dsp2000Max5E5_mac.txt",row.names=FALSE,quote=FALSE,sep="\t")
+
+```
+
+
+```{r}
+D_All<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/Dall_mac.txt",header = TRUE)
+
+library(goft)
+ggplot()+
+geom_histogram(mapping=aes(x=D_All$d_f,y =..density..),binwidth = 0.02)+
+stat_function(fun = dcauchy, args = list(location = 0, scale= (sd(D_All$d_f)/2)),color="red")+
+theme_light()
+
+ggplot()+
+geom_histogram(mapping=aes(x=D_All$d_f,y =..density..),binwidth = 0.02)+
+stat_function(fun = dnorm, args = list(x, scale= (sd(D_All$d_f)/2)),color="red")+
+theme_light()
+
+shapiro.test(sample(D_All$d_f,size=5000,replace = F)) ### It is not normal
+#cauchy_test(x=D_All$d_f)
+
+quantile(x=D_All$d_f,probs = c(0.0001,0.9999))
+HighDALL<-subset(D_All,d_f>0.88)
+```
+
+
+```{r}
+#install.packages("ggpubr")
+library(ggpubr)
+library(dplyr)
+library(ggplot2)
+library(ggmap)
+library(maps)
+library(mapdata)
+library(adegenet)
+library(data.table)
+library(readxl)
+library(stringr)
+states <- map_data("state")
+counties <- map_data('county')
+Canada<-map_data("world", "Canada")
+
+D_All<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/Dall_mac.txt",header = TRUE)
+# D_All$chr2<-D_All$chr
+# D_All<-D_All %>%
+#   dplyr::mutate(across('chr2',str_replace,'Chr',''))
+# D_All$chr2<-as.numeric(D_All$chr2)
+Dsp_All<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/DspMax5E5_mac.txt",header = TRUE)
+# Dsp_All$chr2<-Dsp_All$chr
+# Dsp_All<-Dsp_All %>%
+#   dplyr::mutate(across('chr2',str_replace,'Chr',''))
+# Dsp_All$chr2<-as.numeric(Dsp_All$chr2)
+group.colors<-c(lyr="#000000",bic="#88CCEE",lob="#116644",mue="#AA5599",ste="#E69F00",alb="#332288")
+
+# highTD<-read_excel("C:/Users/rmohn/Desktop/10_Analysis/001_subsets/highTajima.D.xlsx",sheet = "Sheet1",col_names = TRUE,na = "NA")
+# highTD$chr<-highTD$CHROM
+# highTD$chr2<-highTD$CHROM
+# highTD<-highTD %>%
+#   dplyr::mutate(across('chr2',str_replace,'Chr',''))
+# highTD$numpops<-rowSums(highTD[,7:50])
+
+# Dmse_highregions<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/DMSE_High_mac.txt",header=TRUE) 
+# Dmse_highregions_chr<-Dmse_highregions
+# Dmse_highregions_chr$chr2<-Dmse_highregions_chr$chr
+# Dmse_highregions_chr$chr<-paste("Chr",Dmse_highregions_chr$chr2,sep="")
+
+#making the figure legend
+leg<-cbind(percentile=c("<95%",">95%",">99%",">99.9%"),perc=c(94,96,99.5,99.99),long=c(-80,-85,-90,-95),lat=c(40,40,40,40))
+leg<-cbind(percentile=c("<25%",">25%",">50%",">75%"),perc=c(94,96,99.5,99.99),long=c(-80,-85,-90,-95),lat=c(40,40,40,40))
+leg2<-ggplot()+
+  geom_point(data=leg,mapping=aes(x=long, y=lat,shape=percentile,size=percentile))+
+  scale_shape_manual(values=c(17,16, 21, 21))+
+  scale_size_manual(values=c(0.75,1,2.5,4))+
+  theme(text = element_text(size = 8))+
+  theme_light()
+  
+  
+# genes<-subset(read.delim(file = "C:/Users/rmohn/Downloads/Quercus_mongolica_gff3.gff3",sep="\t",header = FALSE),(V1=="Chr01"|V1=="Chr02"|V1=="Chr03"|V1=="Chr04"|V1=="Chr05"|V1=="Chr06"|V1=="Chr07"|V1=="Chr08"|V1=="Chr09"|V1=="Chr10"|V1=="Chr11"|V1=="Chr12")&V3=="CDS")
+# genes$chr<-genes$V1
+# genes$chr2<-genes$V1
+# genes<-genes %>%
+#   dplyr::mutate(across('chr2',str_replace,'Chr',''))
+
+cents<-read_excel("C:/Users/rmohn/Desktop/10_Analysis/20_MacGenomeRegions/MacGenomeRegionsB.xlsx",sheet = "Sheet1")
+cents$chr2<-cents$scaffold
+cents<-cents %>%
+  dplyr::mutate(across('chr2',str_replace,'Chr',''))
+cents$chr3<-as.numeric(cents$chr2)
+  
+
+# pdf(file="C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/Max_figs.pdf",height=4.5,width=8)
+for(j in 1:12){
+  pdf(file=paste("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/FigsC",j,".pdf",sep=""),height=4.5,width=8)
+  i=min(subset(Dsp_All,chr3==j)$windowmid)
+  while(i <= max(subset(Dsp_All,chr3==j)$windowmid)){
+    if(i %in% subset(Dsp_All,chr3==j)$windowmid){
+      DwindMax<-subset(Dsp_All,windowmid==i&chr3==j)
+      sp_fig<-ggplot()+
+        geom_polygon(data = counties, aes(x = long, y = lat, group = group),fill = 'white', color = "white", lwd = 0.1)+
+        geom_polygon(data = states, aes(x = long, y = lat, group = group),
+                     fill = NA, color = "gray85")+
+        geom_polygon(data = Canada, aes(x = long, y = lat, group = group),
+                     fill = "white", color = "gray85")+
+        coord_map(xlim = c(-105,-68),ylim = c(29,50))+
+        scale_size(limits=c(.1,1),range=c(2,8))+
+        geom_point(data=subset(DwindMax,d_f<.24),mapping=aes(x=long, y=lat), color = "black",size = .5,shape=17)+
+        geom_point(data=subset(DwindMax,d_f>=.24),mapping=aes(x=long, y=lat, color = species),size = 1, shape= 16)+
+        geom_point(data=subset(DwindMax,d_f>.50),mapping=aes(x=long, y=lat, color = species),size = 2.5, shape= 21)+
+        geom_point(data=subset(DwindMax,d_f>.79),mapping=aes(x=long, y=lat, color = species),size = 4, shape= 21)+
+        #geom_point(data=subset(DwindMax,d_f>.75),mapping=aes(x=long, y=lat, color = species),size = 5.5, shape= 21)+
+        scale_color_manual(values=group.colors)+
+        theme(axis.title = element_blank(),text = element_text(size = 8))+
+        labs(caption=paste("Chr ",j,": ",i,sep=""))+
+        guides(color="none",size="none",shape="none")
+      
+      
+      Csome_fig<-ggplot(data=Dsp_All)+
+        #geom_rect(data=Dsd_highregions_chr,aes(ymin=-10,ymax=0,xmin=window,xmax=windowend),fill="#F0E442",alpha=.5)+
+        geom_histogram(data=subset(Dsp_All,d_f>.5),mapping=aes(x=windowmid/1000000,fill=species),width=.5,binwidth = .5,position = "stack")+
+        #geom_col(data=subset(highTD,chr=="Chr01"|chr=="Chr02"|chr=="Chr03"|chr=="Chr04"|chr=="Chr5"|chr=="Chr06"),mapping=aes(x=as.integer(START),y=-numpops),width=500000,alpha=.3)+
+        geom_vline(data=subset(Dsp_All,chr3==j),mapping=aes(xintercept=i/1000000),color="red")+
+        geom_blank(data=Dsp_All,aes(x=windowmid/1000000))+
+        scale_fill_manual(values=group.colors)+
+        facet_grid(.~as.numeric(chr2), scales = "free_x",space="free_x")+
+        theme_light()+
+        labs(x="Genomic window (Mbp)",y="Pops")+
+        scale_x_continuous(breaks = seq(0,100,20)) +
+        theme(panel.grid.major.x=element_blank(),panel.grid.minor.x=element_blank(),panel.grid.minor.y=element_blank(),panel.spacing.x=unit(0, "lines"),strip.text = element_blank(),text = element_text(size = 8),panel.border = element_rect(color = "black", fill = NA, linewidth = .5))+
+        coord_cartesian(xlim = c(0, NA), ylim=c(0,55),expand = FALSE)#xlim(c(0,NA))
+      
+      
+      dfpoint<-ggplot(data=subset(D_All,chr3==j&windowMid>i-450000&windowMid<i+450000))+
+        #geom_rect(data=subset(Dmse_highregions_chr,chr2==j),aes(ymin=-1,ymax=1,xmin=windowstart/1000000,xmax=windowend/1000000),fill="darkgray",alpha=.25)+
+        geom_rect(mapping=aes(ymin=-1,ymax=1,xmin=(i-250000)/1000000,xmax=(i+250000)/1000000),color="red",fill=NA)+
+        coord_cartesian(xlim=c((i-450000)/1000000,(i+450000)/1000000), ylim=c(-1,1),expand = FALSE)+
+        scale_color_manual(values=group.colors)+
+        facet_grid(species~.)+
+        geom_point(aes(x=windowMid/1000000,y=d_f,group=pop,color=species),size=.5)+
+        #geom_vline(data=subset(D_All,chr==paste("Chr",j,sep="")),mapping=aes(xintercept=i),color="red")+
+      #geom_line(aes(x=windowMid,y=d_f,color=species,group=pop))+
+        theme_light()+
+        theme(panel.spacing.y=unit(0.5, "lines"),strip.text = element_blank(),text = element_text(size = 8))+
+        guides(color="none")+
+        ylab(bquote(d[f]))+
+        xlab("window (Mbp)")
+      
+      legmap<-as_ggplot(get_legend(leg2))
+      
+      # gen_dens<-ggplot(data=subset(genes,chr2==j))+
+      #   geom_rect(data=subset(cents,chr2==j),mapping=aes(ymin=0,ymax=.035,xmin=centStart/1000000,xmax=centEnd/1000000),fill="lightblue",color="lightblue")+
+      #   geom_vline(xintercept=i/1000000,color="red",linetype="dashed")+
+      #   geom_density(data=subset(genes,chr2==j),aes(x=V4/1000000),bw=.5)+
+      #   theme_light()+
+      #   labs(x="window (Mbp)",y="gene density")+
+      #   scale_x_continuous(breaks = seq(0,100,20)) +
+      #     theme(panel.grid.major.x=element_blank(),panel.grid.minor.x=element_blank(),panel.grid.minor.y=element_blank(),text = element_text(size = 8))+
+      #   coord_cartesian( ylim=c(0,.035),expand = FALSE)+
+      #   theme(text = element_text(size = 8))+
+      #   guides(color="none")
+      print(
+        ggarrange(Csome_fig,
+                  ggarrange(dfpoint,sp_fig,
+                            ggarrange(legmap,ncol=1,heights=c(2,1)),
+                            nrow=1,ncol=3,widths = c(1.3,3,1)),             
+                  heights=c(1,3),ncol=1,nrow=2,common.legend = TRUE, legend = "right"))
+      #ggsave(sp_fig,filename=paste("df_max_S",j,"_",i,".jpg",sep=""),device="jpeg",height=4,width=6,units="in")
+    }
+    i=i+500000
+  }
+  dev.off()
+}
+
+
+
+```
+
+
+```{r}
+Dly_All<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/bic_lyr_mac.txt",sep="\t")
+Dly_All$species<-rep("lyr",length(Dly_All$chr))
+Dlob_All<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/bic_mac_lob.txt",sep="\t")
+Dlob_All$species<-rep("lob",length(Dlob_All$chr))
+Dalb_All<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/bic_mac_alb.txt",sep="\t")
+Dalb_All$species<-rep("alb",length(Dalb_All$chr))
+Dste_All<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/bic_mac_ste.txt",sep="\t")
+Dste_All$species<-rep("ste",length(Dste_All$chr))
+Dmue_All<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/bic_mac_mue.txt",sep="\t")
+Dmue_All$species<-rep("mue",length(Dmue_All$chr))
+Dbi_All<-Dly_All
+Dbi_All$d_f<-(-Dbi_All$d_f)
+Dbi_All$species<-rep("bic",length(Dbi_All$chr))
+group.colors<-c(lyr="#000000",bic="#88CCEE",lob="#116644",mue="#AA5599",ste="#E69F00",alb="#332288")
+
+Dsp_All<-data.frame(pop=character(),chr=character(),windowStart=integer(),windowEnd=integer(),D=double(),f_d=double(),f_dM=double(),d_f=double(),lat=double(),long=double(),windowmid=integer(),species=character())
+
+for(j in 1:12){
+  i=min(Dbi_All$windowmid)
+  while(i <= max(Dbi_All$windowmid)){
+    if(i %in% subset(Dbi_All,chr==paste("Chr",j,sep=""))$windowmid){
+      Dwind<-rbind(subset(Dalb_All,windowmid==i&chr==paste("Chr",j,sep="")),subset(Dbi_All,windowmid==i&chr==paste("Chr",j,sep="")),subset(Dlob_All,windowmid==i&chr==paste("Chr",j,sep="")),subset(Dly_All,windowmid==i&chr==paste("Chr",j,sep="")),subset(Dmue_All,windowmid==i&chr==paste("Chr",j,sep="")),subset(Dste_All,windowmid==i&chr==paste("Chr",j,sep="")))
+      Dsp_All<-rbind(Dsp_All,(Dwind %>% group_by(pop) %>% top_n(1, d_f)))
+    }
+    i=i+500000
+  }
+}
+
+ggplot(data=subset(Dsp_All,d_f>.5))+
+  geom_histogram(mapping=aes(x=windowmid,fill=species),width=1,binwidth = 500000)+
+  scale_fill_manual(values=group.colors)+
+  facet_grid(.~chr)+
+  theme_light()+
+  theme(panel.grid.major.x=element_blank(),panel.grid.minor.x=element_blank())#, 
+      # axis.ticks.x=element_blank(), 
+      # axis.text.y=element_blank(), 
+      # axis.ticks.y=element_blank(),strip.text.y=element_text(angle=0))
+
+
+# ggplot(data=subset(Dsp_All,d_f>.5))+
+#         geom_histogram(mapping=aes(x=windowmid,fill=species),width=1,binwidth = 500000)+
+#         geom_vline(data=subset(Dsp_All,d_f>.5&chr==paste("Chr",j,sep="")),aes(xintercept=i),color="red")+
+#         scale_fill_manual(values=group.colors)+
+#         facet_grid(.~chr, scales = "free_x",space="free_x")+
+#         theme_light()+
+#         theme(panel.grid.major.x=element_blank(),panel.grid.minor.x=element_blank())
+
+
+highTD<-read_excel("C:/Users/rmohn/Desktop/10_Analysis/001_subsets/highTajima.D.xlsx",sheet = "Sheet1",col_names = TRUE,na = "NA")
+highTD$chr<-highTD$CHROM
+highTD$numpops<-rowSums(highTD[,7:50])
+ggplot(data=Dsp_All)+
+  geom_histogram(data=subset(Dsp_All,d_f>.5),mapping=aes(x=windowmid,fill=species),width=1,binwidth = 500000)+
+  geom_col(data=subset(highTD,chr=="Chr01"|chr=="Chr02"|chr=="Chr03"|chr=="Chr04"),mapping=aes(x=as.integer(START),y=-numpops),width=500000,alpha=.3)+
+  scale_fill_manual(values=group.colors)+
+  facet_grid(.~chr, scales = "free_x",space="free_x")+
+  theme_light()+
+  theme(panel.grid.major.x=element_blank(),panel.grid.minor.x=element_blank(),panel.spacing.x=unit(0, "lines"))
+
+```
+
+```{r}
+D_All<-rbind(Dalb_All,Dbi_All,Dlob_All,Dly_All,Dmue_All,Dste_All)
+for(j in 1:12){
+  i=min(subset(D_All,chr==paste("Chr",j,sep=""))$windowmid)
+  while(i <= max(subset(D_All,chr==paste("Chr",j,sep=""))$windowmid)){
+    ggplot(data=subset(D_All,windowStart>i-500000&windowStart<i+500000))+
+      
+     # coord_cartesian(ylim(0.25,1),expand=FALSE)+
+      xlim(i-500000,i+500000)+
+      scale_color_manual(values=group.colors)+
+      facet_grid(species~.)+
+      geom_point(aes(x=windowStart,y=d_f,alpha=lat,group=pop,color=species),size=1)+
+      #geom_line(aes(x=windowStart,y=d_f,color=species,group=pop))+
+      theme_light()
+    p+
+      geom_point(aes(x=windowStart,y=d_f,fill=lat,group=pop),size=1,shape=21)+
+      scale_color_viridis_b()
+    i=i+500000
+  }
+  
+}
+
+```
+
+
+```{r}
+D_All<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/Dall_mac.txt",header = TRUE)
+```
+
+
+```{r}
+library(readxl)
+library(ggplot2)
+pops<-read_excel("C:/Users/rmohn/Desktop/00_Scripts_and_Labels/00_METADATA/metadata_pops.xlsx",sheet="metadata_pops")
+Dlob_All<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/bic_mac_lob_2000.txt",sep="\t")
+Dlob_All$species<-rep("lob",length(Dlob_All$chr))
+
+library(dplyr)
+Dlob_All_win<-Dlob_All %>% group_by(pop,windowmid,chr) %>% top_n(1, d_f)
+Dlob_All_sigwins<-subset(Dlob_All_win,d_f>0.25)
+Dlob_All_sigwins$count<-1
+Dlob_All_countsigwins<-aggregate(count~pop+lat,data=Dlob_All_sigwins,FUN=sum)
+Dlob_All_countsigwins<-merge(Dlob_All_countsigwins,pops,by.x = "pop",by.y="Pop")
+#merge distance to range edge
+samps_edge_dist<-read.delim("C:/Users/rmohn/Desktop/00_Scripts_and_Labels/00_METADATA/dist_range_margin_centroid.txt",sep="\t")
+
+Dlob_All_win_edge<-merge(Dlob_All_countsigwins,samps_edge_dist,by.x="pop",by.y="Pop",all.x=T)
+#do regression
+lob_distcent<-ggplot()+
+  geom_smooth(formula = Dlob_All_win_edge$d_f~Dlob_All_win_edge$dist_fromCenter_EM,color="black")+
+  geom_point(mapping=aes(y = Dlob_All_win_edge$count, x=Dlob_All_win_edge$dist_fromCenter_EM,shape=Dlob_All_win_edge$MacPop, color=Dlob_All_win_edge$lat))+
+  scale_color_viridis_c(name = "latitude")+
+  labs(x="distance from centroid",y="windows",subtitle="Q. lobata")+
+  theme_light()
+
+lob_distedge<-ggplot()+
+  geom_smooth(formula = Dlob_All_win_edge$d_f~Dlob_All_win_edge$dist_fromEdge)+
+  geom_jitter(mapping=aes(y = Dlob_All_win_edge$count, x=Dlob_All_win_edge$dist_fromEdge, shape=Dste_All_win_edge$MacPop, color=Dlob_All_win_edge$lat))+
+  scale_color_viridis_c(name = "latitude")+
+  labs(x="distance from edge",y="windows",subtitle="Q. lobata")+
+  theme_light()
+
+lob_lat<-ggplot()+
+  geom_smooth(method=lm,mapping=aes(y = Dlob_All_win_edge$count, x=Dlob_All_win_edge$lat))+
+  geom_jitter(mapping=aes(y = Dlob_All_win_edge$count, x=Dlob_All_win_edge$lat, shape=Dlob_All_win_edge$lob))+
+  scale_color_viridis_c(name = "latitude")+
+  labs(x="latitude",y="windows")+
+  scale_shape_manual(values=c(n=4,y=16))+
+  theme_light()
+
+
+##PCA
+Dlob_All_win$chr_win<-paste(Dlob_All_win$chr,Dlob_All_win$windowmid,sep="_")
+Dlob_All_win_small<-Dlob_All_win[,-c(1:6,9:14)]
+
+library(tidyr)
+Dlob_All_win_wide<-pivot_wider(Dlob_All_win_small,names_from=chr_win,values_from=d_f)
+Dlob_All_win_wide<-Dlob_All_win_wide %>% 
+  dplyr::select(where(~!any(is.na(.))))
+
+
+Dlob_PCA<-prcomp(Dlob_All_win_wide[,-1])
+summary(Dlob_PCA)
+Dlob_PCs<-as.data.frame(Dlob_PCA$x)
+Dlob_PCs$Pop<-Dlob_All_win_wide$pop
+Dlob_PCs<-merge(Dlob_PCs,pops,by="Pop")
+library(ggplot2)
+lobPC1PC2<-ggplot(data=Dlob_PCs)+
+  geom_point(aes(y=PC1, x=latitude.orig,shape=lob))+
+#  geom_point(aes(x=PC1, y=PC2,color=latitude.orig,shape=lob))+
+  #geom_point(aes(x=PC1, y=PC2,color=latitude.orig,size=longitude.orig,shape=lob),alpha=0.75)+
+  scale_color_viridis_c(name = "latitude")+
+  labs()+
+  scale_shape_manual(values=c(n=4,y=16))+
+  theme_light()
+
+library(ggplot2)
+ggplot(data=Dlob_PCs)+
+  geom_point(aes(x=PC1, y=latitude.orig,color=stateAbb))
+
+
+```
+
+```{r}
+Dmue_All<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/bic_mac_mue_2000.txt",sep="\t")
+Dmue_All$species<-rep("mue",length(Dmue_All$chr))
+
+
+Dmue_All_win<-Dmue_All %>% group_by(pop,windowmid,chr) %>% top_n(1, d_f)
+Dmue_All_sigwins<-subset(Dmue_All_win,d_f>0.25)
+Dmue_All_sigwins$count<-1
+Dmue_All_countsigwins<-aggregate(count~pop+lat,data=Dmue_All_sigwins,FUN=sum)
+Dmue_All_countsigwins<-merge(Dmue_All_countsigwins,pops,by.x = "pop",by.y="Pop")
+#merge distance to range edge
+samps_edge_dist<-read.delim("C:/Users/rmohn/Desktop/00_Scripts_and_Labels/00_METADATA/dist_range_margin_centroid.txt",sep="\t")
+
+Dmue_All_win_edge<-merge(Dmue_All_countsigwins,samps_edge_dist,by.x="pop",by.y="Pop",all.x=T)
+#do regression
+mue_distcent<-ggplot()+
+  geom_smooth(formula = Dmue_All_win_edge$d_f~Dmue_All_win_edge$dist_fromCenter_EM,color="black")+
+  geom_point(mapping=aes(y = Dmue_All_win_edge$count, x=Dmue_All_win_edge$dist_fromCenter_EM,shape=Dmue_All_win_edge$MacPop, color=Dmue_All_win_edge$lat))+
+  scale_color_viridis_c(name = "latitude")+
+  labs(x="distance from centroid",y="windows",subtitle="Q. muehlenbergii")+
+  theme_light()
+
+mue_distedge<-ggplot()+
+  geom_smooth(formula = Dmue_All_win_edge$d_f~Dmue_All_win_edge$dist_fromEdge)+
+  geom_jitter(mapping=aes(y = Dmue_All_win_edge$count, x=Dmue_All_win_edge$dist_fromEdge, shape=Dste_All_win_edge$MacPop, color=Dmue_All_win_edge$lat))+
+  scale_color_viridis_c(name = "latitude")+
+  labs(x="distance from edge",y="windows",subtitle="Q. muehlenbergii")+
+  theme_light()
+
+mue_lat<-ggplot()+
+  geom_smooth(method=lm,mapping=aes(y = Dmue_All_win_edge$count, x=Dmue_All_win_edge$lat))+
+  geom_jitter(mapping=aes(y = Dmue_All_win_edge$count, x=Dmue_All_win_edge$lat, shape=Dmue_All_win_edge$mue))+
+  scale_color_viridis_c(name = "latitude")+
+  labs(x="latitude",y="windows")+
+  scale_shape_manual(values=c(n=4,y=16))+
+  theme_light()
+
+
+
+##PCA
+Dmue_All_win$chr_win<-paste(Dmue_All_win$chr,Dmue_All_win$windowmid,sep="_")
+Dmue_All_win_small<-Dmue_All_win[,-c(1:6,9:14)]
+
+library(tidyr)
+library(dplyr)
+Dmue_All_win_wide<-pivot_wider(Dmue_All_win_small,names_from=chr_win,values_from=d_f)
+Dmue_All_win_wide<-Dmue_All_win_wide %>% 
+  dplyr::select(where(~!any(is.na(.))))
+
+
+Dmue_PCA<-prcomp(Dmue_All_win_wide[,-1])
+summary(Dmue_PCA)
+Dmue_PCs<-as.data.frame(Dmue_PCA$x)
+Dmue_PCs$Pop<-Dmue_All_win_wide$pop
+Dmue_PCs<-merge(Dmue_PCs,pops,by="Pop")
+library(ggplot2)
+muePC1PC2<-ggplot(data=Dmue_PCs)+
+  geom_point(aes(y=PC1, x=latitude.orig,shape=mue))+
+  scale_color_viridis_c(name = "latitude")+
+  labs()+
+  scale_shape_manual(values=c(n=4,y=16))+
+  theme_light()
+
+library(ggplot2)
+ggplot(data=Dmue_PCs)+
+  geom_point(aes(x=PC1, y=latitude.orig,color=stateAbb))
+
+```
+
+
+```{r}
+pops<-read_excel("C:/Users/rmohn/Desktop/00_Scripts_and_Labels/00_METADATA/metadata_pops.xlsx",sheet="metadata_pops")
+Dalb_All<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/bic_mac_alb_2000.txt",sep="\t")
+Dalb_All$species<-rep("alb",length(Dalb_All$chr))
+#Dalb_All$d_f<-as.numeric(Dalb_All$d_f)
+
+Dalb_All<-subset(Dalb_All,!duplicated(paste(Dalb_All$pop,Dalb_All$chr, Dalb_All$windowmid,Dalb_All$d_f)))
+
+Dalb_All_win<-Dalb_All %>% group_by(pop,windowmid,chr) %>% top_n(1, d_f)
+Dalb_All_sigwins<-subset(Dalb_All_win,d_f>0.25)
+Dalb_All_sigwins$count<-1
+Dalb_All_countsigwins<-aggregate(count~pop+lat,data=Dalb_All_sigwins,FUN=sum)
+Dalb_All_countsigwins<-merge(Dalb_All_countsigwins,pops,by.x = "pop",by.y="Pop")
+#merge distance to range edge
+samps_edge_dist<-read.delim("C:/Users/rmohn/Desktop/00_Scripts_and_Labels/00_METADATA/dist_range_margin_centroid.txt",sep="\t")
+
+Dalb_All_win_edge<-merge(Dalb_All_countsigwins,samps_edge_dist,by.x="pop",by.y="Pop",all.x=T)
+#do regression
+alb_distcent<-ggplot()+
+  geom_smooth(formula = Dalb_All_win_edge$d_f~Dalb_All_win_edge$dist_fromCenter_EM,color="black")+
+  geom_point(mapping=aes(y = Dalb_All_win_edge$count, x=Dalb_All_win_edge$dist_fromCenter_EM,shape=Dalb_All_win_edge$MacPop, color=Dalb_All_win_edge$lat))+
+  scale_color_viridis_c(name = "latitude")+
+  labs(x="distance from centroid",y="windows",subtitle="Q. alba")+
+  theme_light()
+
+
+alb_distedge<-ggplot()+
+  geom_smooth(formula = Dalb_All_win_edge$d_f~Dalb_All_win_edge$dist_fromEdge)+
+  geom_jitter(mapping=aes(y = Dalb_All_win_edge$count, x=Dalb_All_win_edge$dist_fromEdge, color=Dalb_All_win_edge$lat,shape=Dste_All_win_edge$MacPop))+
+  scale_color_viridis_c(name = "latitude")+
+  labs(x="distance from range edge",y="windows",subtitle="Q. alba")+
+  theme_light()
+
+alb_lat<-ggplot()+
+  geom_smooth(method=lm,mapping=aes(y = Dalb_All_win_edge$count, x=Dalb_All_win_edge$lat))+
+  geom_jitter(mapping=aes(y = Dalb_All_win_edge$count, x=Dalb_All_win_edge$lat, shape=Dalb_All_win_edge$alb))+
+  scale_color_viridis_c(name = "latitude")+
+  labs(x="latitude",y="windows")+
+  scale_shape_manual(values=c(n=4,y=16))+
+  theme_light()
+
+
+
+
+##PCA
+Dalb_All_win$chr_win<-paste(Dalb_All_win$chr,Dalb_All_win$windowmid,sep="_")
+Dalb_All_win_small<-Dalb_All_win[,-c(1:6,9:14)]
+
+library(tidyr)
+Dalb_All_win_wide<-pivot_wider(Dalb_All_win_small,names_from=chr_win,values_from=d_f)
+#########################
+## Need to look at #######
+###############################
+Dalb_All_win_wide<-Dalb_All_win_wide %>% 
+  dplyr::select(where(~!any(is.na(.))))
+
+
+Dalb_PCA<-prcomp(Dalb_All_win_wide[,-1])
+summary(Dalb_PCA)
+Dalb_PCs<-as.data.frame(Dalb_PCA$x)
+Dalb_PCs$Pop<-Dalb_All_win_wide$pop
+Dalb_PCs<-merge(Dalb_PCs,pops,by="Pop")
+library(ggplot2)
+albPC1PC2<-ggplot(data=Dalb_PCs)+
+  geom_point(aes(y=PC1, x=latitude.orig,shape=alb))+
+  scale_color_viridis_c(name = "latitude")+
+  scale_shape_manual(values=c(n=4,y=16))+
+  theme_light()+
+  labs()+
+  theme_light()
+
+library(ggplot2)
+ggplot(data=Dalb_PCs)+
+  geom_point(aes(x=PC1, y=latitude.orig,color=stateAbb))
+
+```
+
+```{r}
+library(readxl)
+library(dplyr)
+pops<-read_excel("C:/Users/rmohn/Desktop/00_Scripts_and_Labels/00_METADATA/metadata_pops.xlsx",sheet="metadata_pops")
+
+Dste_All<-read.delim("C:/Users/rmohn/Desktop/10_Analysis/107_Dsuite_MACREF/DPOPS/bic_mac_ste_2000.txt",sep="\t")
+Dste_All$species<-rep("ste",length(Dste_All$chr))
+
+Dste_All_win<-Dste_All %>% group_by(pop,windowmid,chr) %>% top_n(1, d_f)
+Dste_All_sigwins<-subset(Dste_All_win,d_f>0.25)
+Dste_All_sigwins$count<-1
+Dste_All_countsigwins<-aggregate(count~pop+lat,data=Dste_All_sigwins,FUN=sum)
+Dste_All_countsigwins<-merge(Dste_All_countsigwins,pops,by.x = "pop",by.y="Pop")
+#merge distance to range edge
+samps_edge_dist<-read.delim("C:/Users/rmohn/Desktop/00_Scripts_and_Labels/00_METADATA/dist_range_margin_centroid.txt",sep="\t")
+
+Dste_All_win_edge<-merge(Dste_All_countsigwins,samps_edge_dist,by.x="pop",by.y="Pop",all.x=T)
+#do regression
+ste_distcent<-ggplot()+
+  geom_smooth(formula = Dste_All_win_edge$d_f~Dste_All_win_edge$dist_fromCenter_EM,color="black")+
+  geom_point(mapping=aes(y = Dste_All_win_edge$count, x=Dste_All_win_edge$dist_fromCenter_EM,shape=Dste_All_win_edge$MacPop, color=Dste_All_win_edge$lat))+
+  scale_color_viridis_c(name = "latitude")+
+  labs(x="distance from centroid",y="windows",subtitle="Q. stellata")+
+  theme_light()
+
+ste_distedge<-ggplot()+
+  geom_smooth(formula = Dste_All_win_edge$d_f~Dste_All_win_edge$dist_fromEdge)+
+  geom_jitter(mapping=aes(y = Dste_All_win_edge$count, x=Dste_All_win_edge$dist_fromEdge, shape=Dste_All_win_edge$MacPop, color=Dste_All_win_edge$lat))+
+  scale_color_viridis_c(name = "latitude")+
+  labs(x="distance from range edge",y="windows",subtitle="Q. stellata")+
+  theme_light()
+
+ste_lat<-ggplot()+
+  geom_smooth(method=lm,mapping=aes(y = Dste_All_win_edge$count, x=Dste_All_win_edge$lat))+
+  geom_jitter(mapping=aes(y = Dste_All_win_edge$count, x=Dste_All_win_edge$lat, shape=Dste_All_win_edge$ste))+
+  scale_shape_manual(values=c(n=4,y=16))+
+  scale_color_viridis_c(name = "latitude")+
+  labs(x="latitude",y="windows",shape="ste")+
+  theme_light()
+
+
+
+##PCA
+Dste_All_win$chr_win<-paste(Dste_All_win$chr,Dste_All_win$windowmid,sep="_")
+Dste_All_win_small<-Dste_All_win[,-c(1:6,9:14)]
+
+library(tidyr)
+Dste_All_win_wide<-pivot_wider(Dste_All_win_small,names_from=chr_win,values_from=d_f)
+Dste_All_win_wide<-Dste_All_win_wide %>% 
+  dplyr::select(where(~!any(is.na(.))))
+
+
+Dste_PCA<-prcomp(Dste_All_win_wide[,-1])
+summary(Dste_PCA)
+Dste_PCs<-as.data.frame(Dste_PCA$x)
+Dste_PCs$Pop<-Dste_All_win_wide$pop
+Dste_PCs<-merge(Dste_PCs,pops,by="Pop")
+library(ggplot2)
+stePC1PC2<-ggplot(data=Dste_PCs)+
+  geom_point(aes(y=PC1,x=latitude.orig,shape=ste))+
+  scale_shape_manual(values=c(n=4,y=16))+
+  scale_color_viridis_c(name = "latitude")+
+  labs(subtitle="Q. stellata")+
+  theme_light()
+
+library(ggplot2)
+ggplot(data=Dste_PCs)+
+  geom_point(aes(x=PC1, y=latitude.orig,color=stateAbb))
+
+```
+
+#Figure 4
+
+```{r}
+library(dplyr)
+#library(reshape2)
+library(tidyr)
+library(ggpubr)
+library(ggplot2)
+library(ggmap)
+library(maps)
+library(mapdata)
+library(adegenet)
+library(data.table)
+library(readxl)
+library(stringr)
+library(scatterpie)
+#install.packages("ggstar")
+library(ggstar)
+#install.packages("sf")
+library(sf)
+mac_range<- st_read("C:/Users/rmohn/Desktop/04_Mapping/quercus_shapefiles/quermacr.shp")
+alb_range<- st_read("C:/Users/rmohn/Desktop/04_Mapping/quercus_shapefiles/queralba.shp")
+mue_range<- st_read("C:/Users/rmohn/Desktop/04_Mapping/quercus_shapefiles/quermueh.shp")
+ste_range<- st_read("C:/Users/rmohn/Desktop/04_Mapping/quercus_shapefiles/querstel.shp")
+lob_range<- st_read("C:/Users/rmohn/Desktop/04_Mapping/shapefiles/querloba/querloba.shp")
+group.colors<-c(lyr="#000000",lob="#88CCEE",bic="#116644",mue="#AA5599",ste="#E69F00",alb="#332288",chromosome="black",none="white",CenArray="gray20",centromere="darkcyan", IntraSpInv="blue4",InterSpInv="blue4",inversion="darkred")
+
+
+group.colors<-c(lyr="#000000",lob="#88CCEE",bic="#116644",mue="#AA5599",ste="#E69F00",alb="#332288",chromosome="black",none="white",CenArray="gray20",centromere="darkcyan", IntraSpInv="blue4",InterSpInv="blue4",inversion="darkred")
+
+states <- map_data("state")
+counties <- map_data('county')
+Canada<-map_data("world", "Canada")
+meta<-read_excel("C:/Users/rmohn/Desktop/00_Scripts_and_Labels/00_METADATA/meta_pops.xlsx",sheet="Sheet1")
+
+simp_meta<-data.frame(cbind(Seq=meta$Seq,colnum=meta$collectionNumber,species=meta$GenomicVoucherID_USE_THIS,state=meta$State,site=meta$Pop,lat=meta$latitude.orig,long=meta$longitude.orig))
+
+meta_pops<-read_excel("C:/Users/rmohn/Desktop/00_Scripts_and_Labels/00_METADATA/metadata_pops.xlsx",sheet="metadata_pops")
+
+
+lobmap<-ggplot()+
+  
+  #geom_polygon(data = counties, aes(x = long, y = lat, group = group),fill = 'white', color = "gray", lwd = 0.1)+
+  geom_polygon(data = states,aes(x = long, y = lat, group = group),
+               fill = "white", color = "gray85")+
+  geom_polygon(data = Canada,aes(x = long, y = lat, group = group),
+               fill = "white", color = "gray85")+
+  geom_sf(data=mac_range,fill="gold", color = "gold4",alpha=.2)+
+  geom_sf(data=lob_range,fill="#88CCEE", color = "#88CCEE",alpha=.3)+
+  coord_sf(xlim = c(-123,-68),ylim = c(29,52))+
+  geom_point(data=meta_pops,mapping = aes(x=longitude.orig,y=latitude.orig,,shape=lob),color="black")+
+  scale_shape_manual(values=c(n=4,y=16))+
+  theme_light()+
+  theme(panel.background=element_rect(fill="gray90"))
+
+albmap<-ggplot()+
+  
+  #geom_polygon(data = counties, aes(x = long, y = lat, group = group),fill = 'white', color = "gray", lwd = 0.1)+
+  geom_polygon(data = states,aes(x = long, y = lat, group = group),
+               fill = "white", color = "gray85")+
+  geom_polygon(data = Canada,aes(x = long, y = lat, group = group),
+               fill = "white", color = "gray85")+
+  geom_sf(data=mac_range,fill="gold", color = "gold4",alpha=.2)+
+  scale_shape_manual(values=c(n=4,y=16))+
+  geom_sf(data=alb_range,fill="#332288", color = "#332288",alpha=.3)+
+  coord_sf(xlim = c(-123,-68),ylim = c(29,52))+
+  geom_point(data=meta_pops,mapping = aes(x=longitude.orig,y=latitude.orig,shape=alb),color="black")+
+  theme_light()+
+  theme(panel.background=element_rect(fill="gray90"))
+
+stemap<-ggplot()+
+  
+  #geom_polygon(data = counties, aes(x = long, y = lat, group = group),fill = 'white', color = "gray", lwd = 0.1)+
+  geom_polygon(data = states,aes(x = long, y = lat, group = group),
+               fill = "white", color = "gray85")+
+  geom_polygon(data = Canada,aes(x = long, y = lat, group = group),
+               fill = "white", color = "gray85")+
+  geom_sf(data=mac_range,fill="gold", color = "gold4",alpha=.2)+
+  geom_sf(data=ste_range,fill="#E69F00", color = "#E69F00",alpha=.3)+
+  scale_shape_manual(values=c(n=4,y=16))+
+  coord_sf(xlim = c(-123,-68),ylim = c(29,52))+
+  geom_point(data=meta_pops,mapping = aes(x=longitude.orig,y=latitude.orig,shape=ste),color="black")+
+  theme_light()+
+  theme(panel.background=element_rect(fill="gray90"))
+
+muemap<-ggplot()+
+  
+  #geom_polygon(data = counties, aes(x = long, y = lat, group = group),fill = 'white', color = "gray", lwd = 0.1)+
+  geom_polygon(data = states,aes(x = long, y = lat, group = group),
+               fill = "white", color = "gray85")+
+  geom_polygon(data = Canada,aes(x = long, y = lat, group = group),
+               fill = "white", color = "gray85")+
+  geom_sf(data=mac_range,fill="gold", color = "gold4",alpha=.2)+
+  geom_sf(data=mue_range,fill="#AA5599", color = "#AA5599",alpha=.3)+
+  scale_shape_manual(values=c(n=4,y=16))+
+  coord_sf(xlim = c(-123,-68),ylim = c(29,52))+
+  geom_point(data=meta_pops,mapping = aes(x=longitude.orig,y=latitude.orig,shape=mue),color="black")+
+  theme_light()+
+  theme(panel.background=element_rect(fill="gray90"))
+
+
+macmap<-ggplot()+
+  
+  #geom_polygon(data = counties, aes(x = long, y = lat, group = group),fill = 'white', color = "gray", lwd = 0.1)+
+  geom_polygon(data = states,aes(x = long, y = lat, group = group),
+               fill = "white", color = "gray85")+
+  geom_polygon(data = Canada,aes(x = long, y = lat, group = group),
+               fill = "white", color = "gray85")+
+  geom_sf(data=mac_range,fill="gold", color = "gold4",alpha=.2)+
+  #geom_sf(data=mue_range,fill="#AA5599", color = "#AA5599",alpha=.3)+
+  #scale_shape_manual(values=c(n=4,y=16))+
+  coord_sf(xlim = c(-105,-68),ylim = c(29,52))+
+  geom_point(data=meta_pops,mapping = aes(x=longitude.orig,y=latitude.orig),color="black",size=1)+
+  geom_star(mapping=aes(x=-88.0819105300,y=41.8210688800),color="deepskyblue",fill="deepskyblue",size=4)+
+  theme_light()+
+  theme(panel.background=element_rect(fill="gray80"))
+
+
+
+```
+
+
+
+```{r}
+library(ggpubr)
+Qmaps<-ggarrange(albmap,lobmap,muemap,stemap,ncol=1,nrow=4)
+QPCAs<-ggarrange(albPC1PC2,lobPC1PC2,muePC1PC2,stePC1PC2,ncol=1,nrow=4,common.legend = T,legend = "right")
+ggarrange(alb_distcent,lob_distcent,mue_distcent,ste_distcent,common.legend = T,legend = "right")
+#ggarrange(alb_distedge,lob_distedge,mue_distedge,ste_distedge,common.legend = T,legend = "right")
+Qwinds<-ggarrange(alb_lat,lob_lat,mue_lat,ste_lat,ncol=1,nrow=4,common.legend = T,legend = "right")
+ggarrange(Qmaps, QPCAs, Qwinds, ncol=3,nrow=1)
+
+
+
+
+
+Qmaps<-ggarrange(albmap,lobmap,muemap,stemap,ncol=4,nrow=1,common.legend=T,legend="right")
+#QPCAs<-ggarrange(albPC1PC2,lobPC1PC2,muePC1PC2,stePC1PC2,ncol=1,nrow=4,common.legend = T,legend = "right")
+#ggarrange(alb_distcent,lob_distcent,mue_distcent,ste_distcent,common.legend = T,legend = "right")
+#ggarrange(alb_distedge,lob_distedge,mue_distedge,ste_distedge,common.legend = T,legend = "right")
+Qwinds<-ggarrange(alb_lat,lob_lat,mue_lat,ste_lat,ncol=4,nrow=1,common.legend = T,legend = "right")
+ggarrange(Qmaps, Qwinds, ncol=1,nrow=2)
+
+ggarrange(albmap,lobmap,muemap,stemap,alb_lat,lob_lat,mue_lat,ste_lat, nrow=2, ncol=4,common.legend=T,legend="right")
+#QPCAs<-ggarrange(albPC1PC2,lobPC1PC2,muePC1PC2,stePC1PC2,ncol=1,nrow=4,common.legend = T,legend = "right")
+#ggarrange(alb_distcent,lob_distcent,mue_distcent,ste_distcent,common.legend = T,legend = "right")
+#ggarrange(alb_distedge,lob_distedge,mue_distedge,ste_distedge,common.legend = T,legend = "right")
+Qwinds<-ggarrange(alb_lat,lob_lat,mue_lat,ste_lat,ncol=4,nrow=1,common.legend = T,legend = "right")
+ggarrange(Qmaps, Qwinds, ncol=1,nrow=2)
+
+
+ggarrange(ggarrange(albmap,lobmap,muemap,stemap,alb_lat,lob_lat,mue_lat,ste_lat, nrow=2, ncol=4,common.legend=T,legend="right"),QCsomes,ncol=1)
+
+```
+
+```{r}
+lobmap<-ggplot()+
+  
+  #geom_polygon(data = counties, aes(x = long, y = lat, group = group),fill = 'white', color = "gray", lwd = 0.1)+
+  geom_polygon(data = states,aes(x = long, y = lat, group = group),
+               fill = "white", color = "gray85")+
+  geom_polygon(data = Canada,aes(x = long, y = lat, group = group),
+               fill = "white", color = "gray85")+
+  geom_sf(data=mac_range,fill="gold", color = "gold4",alpha=.2)+
+  geom_sf(data=lob_range,fill="#005530", color = "#005530",alpha=.4)+
+  coord_sf(xlim = c(-123,-68),ylim = c(29,52))+
+  geom_point(data=meta_pops,mapping = aes(x=longitude.orig,y=latitude.orig,,shape=lob),color="black")+
+  scale_shape_manual(values=c(n=4,y=16))+
+  theme_light()+
+  theme(panel.background=element_rect(fill="gray90"))
+
+albmap<-ggplot()+
+  
+  #geom_polygon(data = counties, aes(x = long, y = lat, group = group),fill = 'white', color = "gray", lwd = 0.1)+
+  geom_polygon(data = states,aes(x = long, y = lat, group = group),
+               fill = "white", color = "gray85")+
+  geom_polygon(data = Canada,aes(x = long, y = lat, group = group),
+               fill = "white", color = "gray85")+
+  geom_sf(data=mac_range,fill="gold", color = "gold4",alpha=.2)+
+  scale_shape_manual(values=c(n=4,y=16))+
+  geom_sf(data=alb_range,fill="#332288", color = "#332288",alpha=.4)+
+  coord_sf(xlim = c(-123,-68),ylim = c(29,52))+
+  geom_point(data=meta_pops,mapping = aes(x=longitude.orig,y=latitude.orig,shape=alb),color="black")+
+  theme_light()+
+  theme(panel.background=element_rect(fill="gray90"))
+
+stemap<-ggplot()+
+  
+  #geom_polygon(data = counties, aes(x = long, y = lat, group = group),fill = 'white', color = "gray", lwd = 0.1)+
+  geom_polygon(data = states,aes(x = long, y = lat, group = group),
+               fill = "white", color = "gray85")+
+  geom_polygon(data = Canada,aes(x = long, y = lat, group = group),
+               fill = "white", color = "gray85")+
+  geom_sf(data=mac_range,fill="gold", color = "gold4",alpha=.2)+
+  geom_sf(data=ste_range,fill="#F69F00", color = "#F69F00",alpha=.4)+
+  scale_shape_manual(values=c(n=4,y=16))+
+  coord_sf(xlim = c(-123,-68),ylim = c(29,52))+
+  geom_point(data=meta_pops,mapping = aes(x=longitude.orig,y=latitude.orig,shape=ste),color="black")+
+  theme_light()+
+  theme(panel.background=element_rect(fill="gray90"))
+
+muemap<-ggplot()+
+  
+  #geom_polygon(data = counties, aes(x = long, y = lat, group = group),fill = 'white', color = "gray", lwd = 0.1)+
+  geom_polygon(data = states,aes(x = long, y = lat, group = group),
+               fill = "white", color = "gray85")+
+  geom_polygon(data = Canada,aes(x = long, y = lat, group = group),
+               fill = "white", color = "gray85")+
+  geom_sf(data=mac_range,fill="gold", color = "gold4",alpha=.2)+
+  geom_sf(data=mue_range,fill="#AA5599", color = "#AA5599",alpha=.4)+
+  scale_shape_manual(values=c(n=4,y=16))+
+  coord_sf(xlim = c(-123,-68),ylim = c(29,52))+
+  geom_point(data=meta_pops,mapping = aes(x=longitude.orig,y=latitude.orig,shape=mue),color="black")+
+  theme_light()+
+  theme(panel.background=element_rect(fill="gray90"))
+
+
+ggarrange(albmap,lobmap,muemap,stemap,nrow=2, ncol=2,common.legend=T,legend="right")
+
+
+
+"#88CCEE"
+
+
+lobmap<-ggplot()+
+  
+  #geom_polygon(data = counties, aes(x = long, y = lat, group = group),fill = 'white', color = "gray", lwd = 0.1)+
+  geom_polygon(data = states,aes(x = long, y = lat, group = group),
+               fill = "white", color = "gray85")+
+  geom_polygon(data = Canada,aes(x = long, y = lat, group = group),
+               fill = "white", color = "gray85")+
+  geom_sf(data=mac_range,fill="gold", color = "gold4",alpha=.2)+
+  geom_sf(data=lob_range,fill="#88CCEE", color = "#88CCEE",alpha=.5)+
+  coord_sf(xlim = c(-123,-68),ylim = c(29,52))+
+  geom_point(data=meta_pops,mapping = aes(x=longitude.orig,y=latitude.orig,,shape=lob),color="black")+
+  scale_shape_manual(values=c(n=4,y=16))+
+  theme_light()+
+  theme(panel.background=element_rect(fill="gray90"))
+
+albmap<-ggplot()+
+  
+  #geom_polygon(data = counties, aes(x = long, y = lat, group = group),fill = 'white', color = "gray", lwd = 0.1)+
+  geom_polygon(data = states,aes(x = long, y = lat, group = group),
+               fill = "white", color = "gray85")+
+  geom_polygon(data = Canada,aes(x = long, y = lat, group = group),
+               fill = "white", color = "gray85")+
+  geom_sf(data=mac_range,fill="gold", color = "gold4",alpha=.2)+
+  scale_shape_manual(values=c(n=4,y=16))+
+  geom_sf(data=alb_range,fill="#332288", color = "#332288",alpha=.4)+
+  coord_sf(xlim = c(-123,-68),ylim = c(29,52))+
+  geom_point(data=meta_pops,mapping = aes(x=longitude.orig,y=latitude.orig,shape=alb),color="black")+
+  theme_light()+
+  theme(panel.background=element_rect(fill="gray90"))
+
+stemap<-ggplot()+
+  
+  #geom_polygon(data = counties, aes(x = long, y = lat, group = group),fill = 'white', color = "gray", lwd = 0.1)+
+  geom_polygon(data = states,aes(x = long, y = lat, group = group),
+               fill = "white", color = "gray85")+
+  geom_polygon(data = Canada,aes(x = long, y = lat, group = group),
+               fill = "white", color = "gray85")+
+  geom_sf(data=mac_range,fill="gold", color = "gold4",alpha=.2)+
+  geom_sf(data=ste_range,fill="#F69F00", color = "#F69F00",alpha=.4)+
+  scale_shape_manual(values=c(n=4,y=16))+
+  coord_sf(xlim = c(-123,-68),ylim = c(29,52))+
+  geom_point(data=meta_pops,mapping = aes(x=longitude.orig,y=latitude.orig,shape=ste),color="black")+
+  theme_light()+
+  theme(panel.background=element_rect(fill="gray90"))
+
+muemap<-ggplot()+
+  
+  #geom_polygon(data = counties, aes(x = long, y = lat, group = group),fill = 'white', color = "gray", lwd = 0.1)+
+  geom_polygon(data = states,aes(x = long, y = lat, group = group),
+               fill = "white", color = "gray85")+
+  geom_polygon(data = Canada,aes(x = long, y = lat, group = group),
+               fill = "white", color = "gray85")+
+  geom_sf(data=mac_range,fill="gold", color = "gold4",alpha=.2)+
+  geom_sf(data=mue_range,fill="#AA5599", color = "#AA5599",alpha=.4)+
+  scale_shape_manual(values=c(n=4,y=16))+
+  coord_sf(xlim = c(-123,-68),ylim = c(29,52))+
+  geom_point(data=meta_pops,mapping = aes(x=longitude.orig,y=latitude.orig,shape=mue),color="black")+
+  theme_light()+
+  theme(panel.background=element_rect(fill="gray90"))
+
+
+ggarrange(albmap,lobmap,muemap,stemap,nrow=2, ncol=2,common.legend=T,legend="right")
+```
+

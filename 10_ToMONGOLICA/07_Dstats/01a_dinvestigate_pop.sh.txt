@@ -1,0 +1,11 @@
+#!/bin/bash
+#SBATCH -c 20
+#SBATCH --mem=50G
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=rmohn@mortonarb.org
+
+Dsuite Dinvestigate -w 2000,2000 /hpc/group/manoslab/QMACROCARPA_GENOMES/14_VARIANTS_MONGOLICA/ALL_LIST.gvcf.gz /hpc/group/manoslab/QMACROCARPA_GENOMES/00a_SUBSETS/SetsGR.tsv /hpc/group/manoslab/QMACROCARPA_GENOMES/00a_SUBSETS/trios_popsALB.txt
+Dsuite Dinvestigate -w 2000,2000 /hpc/group/manoslab/QMACROCARPA_GENOMES/14_VARIANTS_MONGOLICA/ALL_LIST.gvcf.gz /hpc/group/manoslab/QMACROCARPA_GENOMES/00a_SUBSETS/SetsGR.tsv /hpc/group/manoslab/QMACROCARPA_GENOMES/00a_SUBSETS/trios_popsMUE.txt
+Dsuite Dinvestigate -w 2000,2000 /hpc/group/manoslab/QMACROCARPA_GENOMES/14_VARIANTS_MONGOLICA/ALL_LIST.gvcf.gz /hpc/group/manoslab/QMACROCARPA_GENOMES/00a_SUBSETS/SetsGR.tsv /hpc/group/manoslab/QMACROCARPA_GENOMES/00a_SUBSETS/trios_popsLOB.txt
+Dsuite Dinvestigate -w 2000,2000 /hpc/group/manoslab/QMACROCARPA_GENOMES/14_VARIANTS_MONGOLICA/ALL_LIST.gvcf.gz /hpc/group/manoslab/QMACROCARPA_GENOMES/00a_SUBSETS/SetsGR.tsv /hpc/group/manoslab/QMACROCARPA_GENOMES/00a_SUBSETS/trios_popsSTE.txt
+Dsuite Dinvestigate -w 2000,2000 /hpc/group/manoslab/QMACROCARPA_GENOMES/14_VARIANTS_MONGOLICA/ALL_LIST.gvcf.gz /hpc/group/manoslab/QMACROCARPA_GENOMES/00a_SUBSETS/SetsGR.tsv /hpc/group/manoslab/QMACROCARPA_GENOMES/00a_SUBSETS/trios_popsBICLYR.txt

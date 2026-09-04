@@ -1,0 +1,167 @@
+#NEXUS
+begin taxa;
+	dimensions ntax=65;
+	taxlabels
+	'SRR14632928.bam'[&GenomicVoucherID_USE_THIS="Quercus lobata Nee.",Pop="0",Pop_sp="Quercus lobata Nee.",collectionNumber="0",latitude.orig=0.0,longitude.orig=0.0,site="0",state/provIndIowanace="0",substate="0",substateRank="0",!color=#006633]
+	'SRR14632932.bam'[&Taxa="Q. lobata",GenomicVoucherID_USE_THIS="Quercus lobata Nee.",Pop="LOB",Pop_sp="Quercus lobata Nee.",collectionNumber="0",latitude.orig=0.0,longitude.orig=0.0,site="0",state/provIndIowanace="0",substate="0",substateRank="0",!color=#006633]
+	'SRR14632950.bam'[&GenomicVoucherID_USE_THIS="Quercus lobata Nee.",Pop="LOB",Pop_sp="Quercus lobata Nee.",collectionNumber="0",latitude.orig=0.0,longitude.orig=0.0,site="0",state/provIndIowanace="0",substate="0",substateRank="0",!color=#006633]
+	'SRR14632961.bam'[&GenomicVoucherID_USE_THIS="Quercus lobata Nee.",Pop="LOB",Pop_sp="Quercus lobata Nee.",collectionNumber="0",latitude.orig=0.0,longitude.orig=0.0,site="0",state/provIndIowanace="0",substate="0",substateRank="0",!color=#006633]
+	'SRR14632968.bam'[&GenomicVoucherID_USE_THIS="Quercus lobata Nee.",Pop="LOB",Pop_sp="Quercus lobata Nee.",collectionNumber="0",latitude.orig=0.0,longitude.orig=0.0,site="0",state/provIndIowanace="0",substate="0",substateRank="0",!color=#006633]
+	'SRR24768716.bam'[&GenomicVoucherID_USE_THIS="Quercus rubra L.",Pop_sp="Quercus rubra L.",collectionNumber="0"]
+	'SRR24768723.bam'[&Taxa="Q. rubra",GenomicVoucherID_USE_THIS="Quercus rubra L.",Pop_sp="Quercus rubra L.",collectionNumber="0"]
+	'SRR24768736.bam'[&GenomicVoucherID_USE_THIS="Quercus rubra L.",Pop_sp="Quercus rubra L.",collectionNumber="0"]
+	'SRR24768754.bam'[&GenomicVoucherID_USE_THIS="Quercus rubra L.",Pop_sp="Quercus rubra L.",collectionNumber="0"]
+	'SRR24768763.bam'[&GenomicVoucherID_USE_THIS="Quercus rubra L.",Pop_sp="Quercus rubra L.",collectionNumber="0"]
+	'SYST-MOR-0006717.bam'[&GenomicVoucherID_USE_THIS="Quercus michauxii Nutt.",Pop="HP",Pop_sp="Quercus michauxii Nutt.",collectionNumber="IL_HP_MG919_MG",latitude.orig=37.359717,longitude.orig=-88.91752,site="Heron Pond - Little Black Slough Nature Preserve ",state/provIndIowanace="Illinois",substate="Johnson",substateRank="County "]
+	'SYST-MOR-0006718.bam'[&GenomicVoucherID_USE_THIS="Quercus michauxii Nutt.",Pop="HP",Pop_sp="Quercus michauxii Nutt.",collectionNumber="IL_HP_MG920_MG",latitude.orig=37.358862,longitude.orig=-88.917535,site="Heron Pond - Little Black Slough Nature Preserve ",state/provIndIowanace="Illinois",substate="Johnson",substateRank="County "]
+	'SYST-MOR-0006742.bam'[&GenomicVoucherID_USE_THIS="Quercus stellata Wangenh.",Pop="SH",Pop_sp="Quercus stellata Wangenh.",collectionNumber="MO_SH_010_All",latitude.orig=38.46199,longitude.orig=-90.818418,site="Shaw Nature Preserve ",state/provIndIowanace="Missouri",substate="Franklin ",substateRank="County ",!color=#ff9900]
+	'SYST-MOR-0006749.bam'[&GenomicVoucherID_USE_THIS="Quercus stellata Wangenh.",Pop="SH",Pop_sp="Quercus stellata Wangenh.",collectionNumber="MO_SH_017_All",latitude.orig=38.462703,longitude.orig=-90.818742,site="Shaw Nature Preserve ",state/provIndIowanace="Missouri",substate="Franklin ",substateRank="County ",!color=#ff9900]
+	'SYST-MOR-0006751.bam'[&GenomicVoucherID_USE_THIS="Quercus alba L.",Pop="SH",Pop_sp="Quercus alba L.",collectionNumber="MO_SH_019_All",latitude.orig=38.46381,longitude.orig=-90.818731,site="Shaw Nature Preserve ",state/provIndIowanace="Missouri",substate="Franklin ",substateRank="County ",!color=#000066]
+	'SYST-MOR-0006754.bam'[&GenomicVoucherID_USE_THIS="Quercus lyrata Walt.",Pop="OB",Pop_sp="Quercus lyrata Walt.",collectionNumber="IL_OB_022_All",latitude.orig=37.67671977,longitude.orig=-89.41348579,site=""Oakwood Bottoms, Shawnee National Forest"",state/provIndIowanace="Illinois",substate="Jackson",substateRank="County "]
+	'SYST-MOR-0006760.bam'[&GenomicVoucherID_USE_THIS="Quercus lyrata Walt.",Pop="OB",Pop_sp="Quercus lyrata Walt.",collectionNumber="IL_OB_028_All",latitude.orig=37.68524873,longitude.orig=-89.41207203,site=""Oakwood Bottoms, Shawnee National Forest"",state/provIndIowanace="Illinois",substate="Jackson",substateRank="County "]
+	'SYST-MOR-0006768.bam'[&GenomicVoucherID_USE_THIS="Quercus lyrata Walt.",Pop="BOT",Pop_sp="Quercus lyrata Walt.",collectionNumber="MO_BOT_036_All",latitude.orig=36.644699,longitude.orig=-89.294887,site="Big Oak Tree State Park ",state/provIndIowanace="Missouri",substate="Mississipi",substateRank="County "]
+	'SYST-MOR-0006773.bam'[&GenomicVoucherID_USE_THIS="Quercus michauxii Nutt.",Pop="BOT",Pop_sp="Quercus michauxii Nutt.",collectionNumber="MO_BOT_041_All",latitude.orig=36.64423073,longitude.orig=-89.28680646,site="Big Oak Tree State Park ",state/provIndIowanace="Missouri",substate="Mississipi",substateRank="County "]
+	'SYST-MOR-0006787.bam'[&GenomicVoucherID_USE_THIS="Quercus muehlenbergii Engelm.",Pop="LNW",Pop_sp="Quercus muehlenbergii Engelm.",collectionNumber="IA_LNW_055_MG",latitude.orig=40.708616,longitude.orig=-91.787231,site="Lindsay Wilderness",state/provIndIowanace="Iowa",substate="Van Buren",substateRank="County ",!color=#cc00ff]
+	'SYST-MOR-0006835.bam'[&GenomicVoucherID_USE_THIS="Quercus prinoides Willd.",Pop="PSP",Pop_sp="Quercus prinoides Willd.",collectionNumber="MO_PSP_MG923_MG",latitude.orig=37.53218285,longitude.orig=-94.57512656,site="Prairie State Park ",state/provIndIowanace="Missouri",substate="Barton ",substateRank="County ",!color=#cc00ff]
+	'SYST-MOR-0006865.bam'[&GenomicVoucherID_USE_THIS="Quercus stellata Wangenh.",Pop="TGP",Pop_sp="Quercus stellata Wangenh.",collectionNumber="OK_TGP_130_MG",latitude.orig=36.844153,longitude.orig=-96.427088,site="Tallgrass Prairie Preserve ",state/provIndIowanace="Oklahoma",substate="Pawhuska",substateRank="County",!color=#ff9900]
+	'SYST-MOR-0006873.bam'[&GenomicVoucherID_USE_THIS="Quercus macrocarpa Michx.",Pop="BCP",Pop_sp="S_Quercus macrocarpa Michx.",collectionNumber="TN_BCP_151_MG",latitude.orig=36.376501,longitude.orig=-86.352131,site="Bledsoe Creek State Park ",state/provIndIowanace="Tennessee",substate="Sumner",substateRank="County ",!color=#999999]
+	'SYST-MOR-0006886.bam'[&GenomicVoucherID_USE_THIS="Quercus stellata Wangenh.",Pop="CLP",Pop_sp="Quercus stellata Wangenh.",collectionNumber="TN_CLP_164_MG",latitude.orig=36.073057,longitude.orig=-86.313585,site="Cedars of Lebanon State Park ",state/provIndIowanace="Tennessee",substate="Lebanon ",substateRank="County ",!color=#ff9900]
+	'SYST-MOR-0006924.bam'[&GenomicVoucherID_USE_THIS="Quercus michauxii Nutt.",Pop="JJA",Pop_sp="Quercus michauxii Nutt.",collectionNumber="KY_JJA_202_MG",latitude.orig=37.894291,longitude.orig=-87.537803,site="John James Audubon State Park ",state/provIndIowanace="Kentucky",substate="Hendersen",substateRank="County"]
+	'SYST-MOR-0006925.bam'[&GenomicVoucherID_USE_THIS="Quercus lyrata Walt.",Pop="JJA",Pop_sp="Quercus lyrata Walt.",collectionNumber="KY_JJA_203_MG",latitude.orig=37.894409,longitude.orig=-87.537691,site="John James Audubon State Park ",state/provIndIowanace="Kentucky",substate="Hendersen",substateRank="County"]
+	'SYST-MOR-0006970.bam'[&GenomicVoucherID_USE_THIS="Quercus bicolor Willd.",Pop="GLW",Pop_sp="Quercus bicolor Willd.",collectionNumber="OH_GLW_250_MG",latitude.orig=41.553217,longitude.orig=-84.361215,site="Goll Woods",state/provIndIowanace="Ohio",substate="Fulton",substateRank="County",!color=#66ccff]
+	'SYST-MOR-0006984.bam'[&GenomicVoucherID_USE_THIS="Quercus alba L.",Pop="GLW",Pop_sp="Quercus alba L.",collectionNumber="OH_GLW_264_MG",latitude.orig=41.553426,longitude.orig=-84.358202,site="Goll Woods",state/provIndIowanace="Ohio",substate="Fulton",substateRank="County",!color=#000066]
+	'SYST-MOR-0006985.bam'[&GenomicVoucherID_USE_THIS="Quercus prinoides Willd.",Pop="PRA",Pop_sp="Quercus prinoides Willd.",collectionNumber="MI_PRA_265_MG",latitude.orig=42.413184,longitude.orig=-83.988669,site="Pinckney Recreation Area",state/provIndIowanace="Michigan",substate="Washtenaw",substateRank="County",!color=#cc00ff]
+	'SYST-MOR-0006986.bam'[&GenomicVoucherID_USE_THIS="Quercus prinoides Willd.",Pop="PRA",Pop_sp="Quercus prinoides Willd.",collectionNumber="MI_PRA_266_MG",latitude.orig=42.412661,longitude.orig=-83.98834,site="Pinckney Recreation Area",state/provIndIowanace="Michigan",substate="Washtenaw",substateRank="County",!color=#cc00ff]
+	'SYST-MOR-0006994.bam'[&GenomicVoucherID_USE_THIS="Quercus bicolor Willd.",Pop="PRA",Pop_sp="Quercus bicolor Willd.",collectionNumber="MI_PRA_274_MG",latitude.orig=42.416812,longitude.orig=-83.997924,site="Pinckney Recreation Area",state/provIndIowanace="Michigan",substate="Washtenaw",substateRank="County",!color=#66ccff]
+	'SYST-MOR-0007015.bam'[&GenomicVoucherID_USE_THIS="Quercus muehlenbergii Engelm.",Pop="SMP",Pop_sp="Quercus muehlenbergii Engelm.",collectionNumber="KS_SMP_295_MG",latitude.orig=38.980762,longitude.orig=-94.789191,site="Shawnee Mission Park",state/provIndIowanace="Kansas",substate="Johnson",substateRank="County",!color=#cc00ff]
+	'SYST-MOR-0007046.bam'[&GenomicVoucherID_USE_THIS="Quercus muehlenbergii Engelm.",Pop="KZP",Pop_sp="Quercus muehlenbergii Engelm.",collectionNumber="KS_KZP_326_MG",latitude.orig=39.106907,longitude.orig=-96.603869,site="Konza Prairie Biological Station",state/provIndIowanace="Kansas",substate="Riley",substateRank="County",!color=#cc00ff]
+	'SYST-MOR-0007061.bam'[&GenomicVoucherID_USE_THIS="Quercus alba L.",Pop="SSP",Pop_sp="Quercus alba L.",collectionNumber="NY_SSP_341_MG",latitude.orig=42.706592,longitude.orig=-76.900946,site="Sampson State Park ",state/provIndIowanace="New York",substate="Seneca",substateRank="County",!color=#000066]
+	'SYST-MOR-0007080.bam'[&GenomicVoucherID_USE_THIS="Quercus alba L.",Pop="CMB",Pop_sp="Quercus alba L.",collectionNumber="NY_CMB_360_MG",latitude.orig=44.102083,longitude.orig=-76.078217,site="Chaumont Barrens Nature Preserve ",state/provIndIowanace="New York",substate="Jefferson ",substateRank="County ",!color=#000066]
+	'SYST-MOR-0007090.bam'[&GenomicVoucherID_USE_THIS="Quercus montana Willd.",Pop="BKF",Pop_sp="Quercus montana Willd.",collectionNumber="NY_BKF_370_MG",latitude.orig=43.081232,longitude.orig=-73.301638,site="Batten Kill State Forest",state/provIndIowanace="New York",substate="Washington",substateRank="County"]
+	'SYST-MOR-0007092.bam'[&GenomicVoucherID_USE_THIS="Quercus montana Willd.",Pop="BKF",Pop_sp="Quercus montana Willd.",collectionNumber="NY_BKF_372_MG",latitude.orig=43.081209,longitude.orig=-73.296002,site="Batten Kill State Forest",state/provIndIowanace="New York",substate="Washington",substateRank="County"]
+	'SYST-MOR-0007094.bam'[&GenomicVoucherID_USE_THIS="Quercus montana Willd.",Pop="BKF",Pop_sp="Quercus montana Willd.",collectionNumber="NY_BKF_374_MG",latitude.orig=43.08144,longitude.orig=-73.293408,site="Batten Kill State Forest",state/provIndIowanace="New York",substate="Washington",substateRank="County"]
+	'SYST-MOR-0007100.bam'[&GenomicVoucherID_USE_THIS="Quercus prinoides Willd.",Pop="APB",Pop_sp="Quercus prinoides Willd.",collectionNumber="NY_APB_380_MG",latitude.orig=42.717212,longitude.orig=-73.855943,site="Albany Pine Bush Preserve",state/provIndIowanace="New York",substate="Albany",substateRank="County ",!color=#cc00ff]
+	'SYST-MOR-0007104.bam'[&GenomicVoucherID_USE_THIS="Quercus prinoides Willd.",Pop="APB",Pop_sp="Quercus prinoides Willd.",collectionNumber="NY_APB_384_MG",latitude.orig=42.716001,longitude.orig=-73.853819,site="Albany Pine Bush Preserve",state/provIndIowanace="New York",substate="Albany",substateRank="County ",!color=#cc00ff]
+	'SYST-MOR-0007120.bam'[&GenomicVoucherID_USE_THIS="Quercus alba L.",Pop="LKN",Pop_sp="Quercus alba L.",collectionNumber="MA_LKN_400_MG",latitude.orig=42.083771,longitude.orig=-73.368754,site="Mass Audubon Lime Kiln Farm ",state/provIndIowanace="Massachusetts",substate="Berkshire",substateRank="County ",!color=#000066]
+	'SYST-MOR-0007134.bam'[&GenomicVoucherID_USE_THIS="Quercus lyrata Walt.",Pop="BRP",Pop_sp="Quercus lyrata Walt.",collectionNumber="AR_BRP_414_MG",latitude.orig=34.805731,longitude.orig=-92.327413,site=""Burns Park, Little Rock"",state/provIndIowanace="Arkansas",substate="Pulaski",substateRank="County "]
+	'SYST-MOR-0007152.bam'[&GenomicVoucherID_USE_THIS="Quercus macrocarpa Michx.",Pop="BRZ",Pop_sp="S_Quercus macrocarpa Michx.",collectionNumber="TX_BRZ_432_MG",latitude.orig=29.374411,longitude.orig=-95.576747,site="Brazos Bend State Park",state/provIndIowanace="Texas",substate="Fort Bend",substateRank="County ",!color=#999999]
+	'SYST-MOR-0007153.bam'[&Taxa="Q. macrocarpa (N)",GenomicVoucherID_USE_THIS="Quercus macrocarpa Michx.",Pop="BRZ",Pop_sp="S_Quercus macrocarpa Michx.",collectionNumber="TX_BRZ_433_MG",latitude.orig=29.375258,longitude.orig=-95.576691,site="Brazos Bend State Park",state/provIndIowanace="Texas",substate="Fort Bend",substateRank="County ",!color=#999999]
+	'SYST-MOR-0007154.bam'[&GenomicVoucherID_USE_THIS="Quercus michauxii Nutt.",Pop="BRZ",Pop_sp="Quercus michauxii Nutt.",collectionNumber="TX_BRZ_434_MG",latitude.orig=29.375263,longitude.orig=-95.585273,site="Brazos Bend State Park",state/provIndIowanace="Texas",substate="Fort Bend",substateRank="County "]
+	'SYST-MOR-0007160.bam'[&GenomicVoucherID_USE_THIS="Quercus sinuata Walt.",Pop="PLM",Pop_sp="Quercus sinuata Walt.",collectionNumber="TX_PLM_440_MG",latitude.orig=29.588159,longitude.orig=-97.583341,site="Palmetto State Park",state/provIndIowanace="Texas",substate="Gonzales",substateRank="County "]
+	'SYST-MOR-0007162.bam'[&GenomicVoucherID_USE_THIS="Quercus sinuata Walt.",Pop="PLM",Pop_sp="Quercus sinuata Walt.",collectionNumber="TX_PLM_442_MG",latitude.orig=29.587609,longitude.orig=-97.583072,site="Palmetto State Park",state/provIndIowanace="Texas",substate="Gonzales",substateRank="County "]
+	'SYST-MOR-0007166.bam'[&GenomicVoucherID_USE_THIS="Quercus sinuata Walt.",Pop="PLM",Pop_sp="Quercus sinuata Walt.",collectionNumber="TX_PLM_446_MG",latitude.orig=29.588523,longitude.orig=-97.583477,site="Palmetto State Park",state/provIndIowanace="Texas",substate="Gonzales",substateRank="County "]
+	'SYST-MOR-0007167.bam'[&GenomicVoucherID_USE_THIS="Quercus sinuata Walt.",Pop="PLM",Pop_sp="Quercus sinuata Walt.",collectionNumber="TX_PLM_447_MG",latitude.orig=29.589384,longitude.orig=-97.582703,site="Palmetto State Park",state/provIndIowanace="Texas",substate="Gonzales",substateRank="County "]
+	'SYST-MOR-0007173.bam'[&GenomicVoucherID_USE_THIS="Quercus stellata Wangenh.",Pop="CHP",Pop_sp="Quercus stellata Wangenh.",collectionNumber="TX_CHP_453_MG",latitude.orig=32.638394,longitude.orig=-96.979086,site="Cedar Hill State Park ",state/provIndIowanace="Texas",substate="Gonzales",substateRank="County ",!color=#ff9900]
+	'SYST-MOR-0007178.bam'[&GenomicVoucherID_USE_THIS="Quercus sinuata Walt.",Pop="CHP",Pop_sp="Quercus sinuata Walt.",collectionNumber="TX_CHP_458_MG",latitude.orig=32.614039,longitude.orig=-96.996683,site="Cedar Hill State Park ",state/provIndIowanace="Texas",substate="Gonzales",substateRank="County "]
+	'SYST-MOR-0007185.bam'[&GenomicVoucherID_USE_THIS="Quercus bicolor Willd.",Pop="RCA",Pop_sp="Quercus bicolor Willd.",collectionNumber="IL_RCA_465_MG",latitude.orig=42.181709,longitude.orig=-87.90906,site="Ryerson Conservation Area",state/provIndIowanace="Illinois",substate="Lake ",substateRank="County ",!color=#66ccff]
+	'SYST-MOR-0007196.bam'[&GenomicVoucherID_USE_THIS="Quercus bicolor Willd.",Pop="MWT",Pop_sp="Quercus bicolor Willd.",collectionNumber="IN_MWT_476_MG",latitude.orig=40.437622,longitude.orig=-86.932542,site="McCormick Woods Trail ",state/provIndIowanace="Indiana",substate="Tippecanoe",substateRank="County",!color=#66ccff]
+	'SYST-MOR-0007205.bam'[&GenomicVoucherID_USE_THIS="Quercus muehlenbergii Engelm.",Pop="TYL",Pop_sp="Quercus muehlenbergii Engelm.",collectionNumber="IN_TYL_485_MG",latitude.orig=40.457291,longitude.orig=-85.509987,site="Taylor Wilderness",state/provIndIowanace="Indiana",substate="Grant",substateRank="County",!color=#cc00ff]
+	'SYST-MOR-0007212.bam'[&GenomicVoucherID_USE_THIS="Quercus bicolor Willd.",Pop="TYL",Pop_sp="Quercus bicolor Willd.",collectionNumber="IN_TYL_492_MG",latitude.orig=40.455345,longitude.orig=-85.510241,site="Taylor Wilderness",state/provIndIowanace="Indiana",substate="Grant",substateRank="County",!color=#66ccff]
+	'SYST-MOR-0007215.bam'[&GenomicVoucherID_USE_THIS="Quercus muehlenbergii Engelm.",Pop="TYL",Pop_sp="Quercus muehlenbergii Engelm.",collectionNumber="IN_TYL_495_MG",latitude.orig=40.457023,longitude.orig=-85.508851,site="Taylor Wilderness",state/provIndIowanace="Indiana",substate="Grant",substateRank="County",!color=#cc00ff]
+	'SYST-MOR-0007239.bam'[&GenomicVoucherID_USE_THIS="Quercus montana Willd.",Pop="STR",Pop_sp="Quercus montana Willd.",collectionNumber="OH_STR_519_MG",latitude.orig=39.349482,longitude.orig=-82.046768,site="Strouds Run State Park",state/provIndIowanace="Ohio",substate="Athens",substateRank="County"]
+	'SYST-MOR-0007240.bam'[&GenomicVoucherID_USE_THIS="Quercus montana Willd.",Pop="STR",Pop_sp="Quercus montana Willd.",collectionNumber="OH_STR_520_MG",latitude.orig=39.336371,longitude.orig=-82.015625,site="Strouds Run State Park",state/provIndIowanace="Ohio",substate="Athens",substateRank="County"]
+	'SYST-MOR-0007255.bam'[&GenomicVoucherID_USE_THIS="Quercus macrocarpa Michx.",Pop="CDR",Pop_sp="N_Quercus macrocarpa Michx.",collectionNumber="MN_CDR_219_BF",latitude.orig=45.400162,longitude.orig=-93.183261,site="Cedar Creek Research Station",state/provIndIowanace="Minnesota",substate="Anoka",substateRank="County",!color=#666666]
+	'SYST-MOR-0007385.bam'[&GenomicVoucherID_USE_THIS="Quercus macrocarpa Michx.",Pop="ASF",Pop_sp="N_Quercus macrocarpa Michx.",collectionNumber="MB-MG534",latitude.orig=49.85374,longitude.orig=-97.24739,site=""Assiniboine Forest, near trail"",state/provIndIowanace="Manitoba",substate="0",substateRank="0",!color=#666666]
+	'SYST-MOR-0007387.bam'[&GenomicVoucherID_USE_THIS="Quercus macrocarpa Michx.",Pop="RLF",Pop_sp="N_Quercus macrocarpa Michx.",collectionNumber="WI-MG536",latitude.orig=46.02383,longitude.orig=-91.14557,site=""Round Lake, Chequamegon-Nicolet National Forest"",state/provIndIowanace="Wisconsin",substate="Sawyer",substateRank="County",!color=#666666]
+	'SYST-MOR-0007411.bam'[&GenomicVoucherID_USE_THIS="Quercus macrocarpa Michx.",Pop="NOW",Pop_sp="S_Quercus macrocarpa Michx.",collectionNumber="OK-MG374",latitude.orig=35.17722,longitude.orig=-97.44967,site=""Norman, Oliver's Woods, University of Oklahoma campus"",state/provIndIowanace="Oklahoma",substate="Cleveland",substateRank="County",!color=#999999]
+	'SYST-MOR-0007413.bam'[&GenomicVoucherID_USE_THIS="Quercus macrocarpa Michx.",Pop="NOW",Pop_sp="S_Quercus macrocarpa Michx.",collectionNumber="OK-MG376",latitude.orig=35.17688,longitude.orig=-97.4497,site=""Norman, Oliver's Woods, University of Oklahoma campus"",state/provIndIowanace="Oklahoma",substate="Cleveland",substateRank="County",!color=#999999]
+	'SYST-MOR-0007459.bam'[&GenomicVoucherID_USE_THIS="Quercus macrocarpa Michx.",Pop="QPA",Pop_sp="N_Quercus macrocarpa Michx.",collectionNumber="MN-MG774",latitude.orig=45.53011,longitude.orig=-94.23817,site=""Quarry Park State Natural Area, Waite Park"",state/provIndIowanace="Minnesota",substate="Stearns",substateRank="County",!color=#666666]
+	'SYST-MOR-0007464.bam'[&GenomicVoucherID_USE_THIS="Quercus macrocarpa Michx.",Pop="QPA",Pop_sp="N_Quercus macrocarpa Michx.",collectionNumber="MN-MG779",latitude.orig=45.52887,longitude.orig=-94.24085,site=""Quarry Park State Natural Area, Waite Park"",state/provIndIowanace="Minnesota",substate="Stearns",substateRank="County",!color=#666666]
+;
+end;
+
+begin trees;
+	tree tree_1 = [&R] ('SYST-MOR-0007385.bam'[&Pop_sp="Q. macrocarpa"]:1.0,('SYST-MOR-0007255.bam'[&Pop_sp="Q. macrocarpa"]:1.0,('SYST-MOR-0007459.bam'[&Pop_sp="Q. macrocarpa"]:1.0,('SYST-MOR-0007387.bam'[&Pop_sp="Q. macrocarpa"]:1.0,('SYST-MOR-0007464.bam'[&Pop_sp="Q. macrocarpa"]:1.0,(('SYST-MOR-0006873.bam'[&Pop_sp="Q. macrocarpa"]:1.0,('SYST-MOR-0007411.bam'[&Pop_sp="Q. macrocarpa"]:1.0,('SYST-MOR-0007413.bam'[&Pop_sp="Q. macrocarpa"]:1.0,('SYST-MOR-0007153.bam'[&Pop_sp="Q. macrocarpa"]:1.0,'SYST-MOR-0007152.bam'[&Pop_sp="Q. macrocarpa"]:1.0)[&label=1,Pop_sp="Q. macrocarpa"]:0.312711)[&label=0.98,Pop_sp="Q. macrocarpa"]:0.045578)[&label=1,Pop_sp="Q. macrocarpa"]:0.046304)[&label=1,Pop_sp="Q. macrocarpa",!collapse={"collapsed",1.1773279947656778}]:0.306578,((('SRR14632968.bam'[&Pop_sp="Q. lobata"]:1.0,('SRR14632928.bam'[&Pop_sp="Q. lobata"]:1.0,('SRR14632932.bam'[&Pop_sp="Q. lobata"]:1.0,('SRR14632961.bam'[&Pop_sp="Q. lobata"]:1.0,'SRR14632950.bam'[&Pop_sp="Q. lobata"]:1.0)[&label=1,Pop_sp="Q. lobata"]:0.112418)[&label=1,Pop_sp="Q. lobata"]:0.152325)[&label=1,Pop_sp="Q. lobata"]:0.20252)[&label=1,Pop_sp="Q. lobata",!collapse={"collapsed",0.0}]:2.116102,(('SYST-MOR-0007100.bam'[&Pop_sp="Q. muehlenbergii"]:1.0,('SYST-MOR-0007104.bam'[&Pop_sp="Q. muehlenbergii"]:1.0,(('SYST-MOR-0006986.bam'[&Pop_sp="Q. muehlenbergii"]:1.0,'SYST-MOR-0006985.bam'[&Pop_sp="Q. muehlenbergii"]:1.0)[&label=0.72,Pop_sp="Q. muehlenbergii"]:0.018038,('SYST-MOR-0006835.bam'[&Pop_sp="Q. muehlenbergii"]:1.0,('SYST-MOR-0007015.bam'[&Pop_sp="Q. muehlenbergii"]:1.0,('SYST-MOR-0007046.bam'[&Pop_sp="Q. muehlenbergii"]:1.0,('SYST-MOR-0006787.bam'[&Pop_sp="Q. muehlenbergii"]:1.0,('SYST-MOR-0007205.bam'[&Pop_sp="Q. muehlenbergii"]:1.0,'SYST-MOR-0007215.bam'[&Pop_sp="Q. muehlenbergii"]:1.0)[&label=1,Pop_sp="Q. muehlenbergii"]:0.03558)[&label=0.98,Pop_sp="Q. muehlenbergii"]:0.028095)[&label=0.89,Pop_sp="Q. muehlenbergii"]:0.018158)[&label=0.94,Pop_sp="Q. muehlenbergii"]:0.020571)[&label=1,Pop_sp="Q. muehlenbergii"]:0.152592)[&label=1,Pop_sp="Q. muehlenbergii"]:0.101361)[&label=1,Pop_sp="Q. muehlenbergii"]:0.034502)[&label=1,!collapse={"collapsed",1.5467306461009986},Pop_sp="Q. muehlenbergii"]:0.829905,((('SYST-MOR-0007092.bam'[&!name="Q. montana",Pop_sp="Q. montana"]:1.0,('SYST-MOR-0007090.bam'[&!name="Q. montana",Pop_sp="Q. montana"]:1.0,('SYST-MOR-0007240.bam'[&!name="Q. montana",Pop_sp="Q. montana"]:1.0,('SYST-MOR-0007094.bam'[&!name="Q. montana",Pop_sp="Q. montana"]:1.0,'SYST-MOR-0007239.bam'[&!name="Q. montana",Pop_sp="Q. montana"]:1.0)[&label=0.36,!name="Q. montana",Pop_sp="Q. montana"]:9.62E-4)[&label=1,!name="Q. montana",Pop_sp="Q. montana"]:0.036411)[&label=1,!name="Q. montana",Pop_sp="Q. montana"]:0.052317)[&label=1,!collapse={"collapsed",1.108283134888687},!name="Q. montana",Pop_sp="Q. montana"]:1.303519,(('SYST-MOR-0006773.bam'[&!name="Q. michauxii",Pop_sp="Q. michauxii"]:1.0,('SYST-MOR-0006924.bam'[&!name="Q. michauxii",Pop_sp="Q. michauxii"]:1.0,('SYST-MOR-0006718.bam'[&!name="Q. michauxii",Pop_sp="Q. michauxii"]:1.0,('SYST-MOR-0006717.bam'[&!name="Q. michauxii",Pop_sp="Q. michauxii"]:1.0,'SYST-MOR-0007154.bam'[&!name="Q. michauxii",Pop_sp="Q. michauxii"]:1.0)[&label=1,!name="Q. michauxii",Pop_sp="Q. michauxii"]:0.037617)[&label=1,!name="Q. michauxii",Pop_sp="Q. michauxii"]:0.04066)[&label=1,!name="Q. michauxii",Pop_sp="Q. michauxii"]:0.182428)[&label=1,!collapse={"collapsed",1.1779928997308868},!name="Q. michauxii",Pop_sp="Q. michauxii"]:0.633716,('SYST-MOR-0006984.bam'[&Pop_sp="Q. alba"]:1.0,('SYST-MOR-0007080.bam'[&Pop_sp="Q. alba"]:1.0,('SYST-MOR-0006751.bam'[&Pop_sp="Q. alba"]:1.0,('SYST-MOR-0007120.bam'[&Pop_sp="Q. alba"]:1.0,'SYST-MOR-0007061.bam'[&Pop_sp="Q. alba"]:1.0)[&label=0.48,Pop_sp="Q. alba"]:0.007974)[&label=0.86,Pop_sp="Q. alba"]:0.016389)[&label=0.76,Pop_sp="Q. alba"]:0.013619)[&label=1,!collapse={"collapsed",1.3666250272810796},Pop_sp="Q. alba"]:0.667807)[&label=1]:0.429077)[&label=1]:0.339426,(('SRR24768736.bam':1.0,('SRR24768763.bam':1.0,('SRR24768716.bam':1.0,('SRR24768754.bam':1.0,'SRR24768723.bam':1.0)[&label=1]:0.05575)[&label=0.97]:0.02644)[&label=1,!collapse={"collapsed",2.748777453797972}]:0.070168)[&label=1]:6.608728,(('SYST-MOR-0007178.bam'[&Pop_sp="Q. sinuata"]:1.0,('SYST-MOR-0007167.bam'[&Pop_sp="Q. sinuata"]:1.0,('SYST-MOR-0007166.bam'[&Pop_sp="Q. sinuata"]:1.0,('SYST-MOR-0007162.bam'[&Pop_sp="Q. sinuata"]:1.0,'SYST-MOR-0007160.bam'[&Pop_sp="Q. sinuata"]:1.0)[&label=1,Pop_sp="Q. sinuata"]:0.047294)[&label=0.65,Pop_sp="Q. sinuata"]:0.009784)[&label=1,Pop_sp="Q. sinuata"]:0.246759)[&label=1,!collapse={"collapsed",0.9885501508123538},Pop_sp="Q. sinuata"]:0.67328,('SYST-MOR-0007173.bam'[&Pop_sp="Q. stellata"]:1.0,('SYST-MOR-0006749.bam'[&Pop_sp="Q. stellata"]:1.0,('SYST-MOR-0006865.bam'[&Pop_sp="Q. stellata"]:1.0,('SYST-MOR-0006742.bam'[&Pop_sp="Q. stellata"]:1.0,'SYST-MOR-0006886.bam'[&Pop_sp="Q. stellata"]:1.0)[&label=1,Pop_sp="Q. stellata"]:0.043805)[&label=1,Pop_sp="Q. stellata"]:0.063119)[&label=1,Pop_sp="Q. stellata"]:0.108918)[&label=1,!collapse={"collapsed",1.0413539946870998},Pop_sp="Q. stellata"]:0.708471)[&label=1]:0.93547)[&label=1]:0.060218)[&label=1]:0.073423)[&label=1]:0.184129)[&label=1]:0.200576,(('SYST-MOR-0006760.bam'[&!name="Q. lyrata",Pop_sp="Q. lyrata"]:1.0,('SYST-MOR-0006754.bam'[&!name="Q. lyrata",Pop_sp="Q. lyrata"]:1.0,('SYST-MOR-0006768.bam'[&!name="Q. lyrata",Pop_sp="Q. lyrata"]:1.0,('SYST-MOR-0006925.bam'[&!name="Q. lyrata",Pop_sp="Q. lyrata"]:1.0,'SYST-MOR-0007134.bam'[&!name="Q. lyrata",Pop_sp="Q. lyrata"]:1.0)[&label=1,!name="Q. lyrata",Pop_sp="Q. lyrata"]:0.095346)[&label=1,!name="Q. lyrata",Pop_sp="Q. lyrata"]:0.070286)[&label=1,!name="Q. lyrata",Pop_sp="Q. lyrata"]:0.188788)[&label=1,!name="Q. lyrata",Pop_sp="Q. lyrata",!collapse={"collapsed",1.0323083862244733}]:0.253192,('SYST-MOR-0006994.bam'[&Pop_sp="Q. bicolor"]:1.0,('SYST-MOR-0006970.bam'[&Pop_sp="Q. bicolor"]:1.0,('SYST-MOR-0007185.bam'[&Pop_sp="Q. bicolor"]:1.0,('SYST-MOR-0007212.bam'[&Pop_sp="Q. bicolor"]:1.0,'SYST-MOR-0007196.bam'[&Pop_sp="Q. bicolor"]:1.0)[&label=0.67,Pop_sp="Q. bicolor"]:0.01283)[&label=1,Pop_sp="Q. bicolor"]:0.038662)[&label=1,Pop_sp="Q. bicolor"]:0.03313)[&label=1,Pop_sp="Q. bicolor",!collapse={"collapsed",1.2302854656698505}]:0.325013)[&label=1]:0.742869)[&label=1,!collapse={"collapsed",1.1773279947656778},Pop_sp="Q. macrocarpa"]:0.49429)[&label=1,Pop_sp="Q. macrocarpa",!collapse={"collapsed",1.635336782802348}]:0.180915)[&label=0.76,Pop_sp="Q. macrocarpa"]:0.021798)[&label=0.99,Pop_sp="Q. macrocarpa"]:0.030127)[&label=0.9,Pop_sp="Q. macrocarpa"]:0.020324):0.0);
+end;
+
+begin figtree;
+	set appearance.backgroundColorAttribute="Default";
+	set appearance.backgroundColour=#ffffff;
+	set appearance.branchColorAttribute="User selection";
+	set appearance.branchColorGradient=false;
+	set appearance.branchLineWidth=3.0;
+	set appearance.branchMinLineWidth=0.0;
+	set appearance.branchWidthAttribute="Fixed";
+	set appearance.foregroundColour=#000000;
+	set appearance.hilightingGradient=false;
+	set appearance.selectionColour=#2d3680;
+	set branchLabels.colorAttribute="User selection";
+	set branchLabels.displayAttribute="Branch times";
+	set branchLabels.fontName="sansserif";
+	set branchLabels.fontSize=8;
+	set branchLabels.fontStyle=0;
+	set branchLabels.isShown=false;
+	set branchLabels.significantDigits=4;
+	set layout.expansion=553;
+	set layout.layoutType="RECTILINEAR";
+	set layout.zoom=0;
+	set legend.attribute="label";
+	set legend.fontSize=10.0;
+	set legend.isShown=false;
+	set legend.significantDigits=4;
+	set nodeBars.barWidth=4.0;
+	set nodeBars.displayAttribute=null;
+	set nodeBars.isShown=false;
+	set nodeLabels.colorAttribute="User selection";
+	set nodeLabels.displayAttribute="Node ages";
+	set nodeLabels.fontName="sansserif";
+	set nodeLabels.fontSize=8;
+	set nodeLabels.fontStyle=0;
+	set nodeLabels.isShown=false;
+	set nodeLabels.significantDigits=4;
+	set nodeShapeExternal.colourAttribute="User selection";
+	set nodeShapeExternal.isShown=false;
+	set nodeShapeExternal.minSize=10.0;
+	set nodeShapeExternal.scaleType=Width;
+	set nodeShapeExternal.shapeType=Circle;
+	set nodeShapeExternal.size=4.0;
+	set nodeShapeExternal.sizeAttribute="Fixed";
+	set nodeShapeInternal.colourAttribute="User selection";
+	set nodeShapeInternal.isShown=false;
+	set nodeShapeInternal.minSize=10.0;
+	set nodeShapeInternal.scaleType=Width;
+	set nodeShapeInternal.shapeType=Circle;
+	set nodeShapeInternal.size=4.0;
+	set nodeShapeInternal.sizeAttribute="Fixed";
+	set polarLayout.alignTipLabels=false;
+	set polarLayout.angularRange=0;
+	set polarLayout.rootAngle=0;
+	set polarLayout.rootLength=100;
+	set polarLayout.showRoot=true;
+	set radialLayout.spread=0.0;
+	set rectilinearLayout.alignTipLabels=false;
+	set rectilinearLayout.curvature=0;
+	set rectilinearLayout.rootLength=100;
+	set scale.offsetAge=0.0;
+	set scale.rootAge=1.0;
+	set scale.scaleFactor=1.0;
+	set scale.scaleRoot=false;
+	set scaleAxis.automaticScale=true;
+	set scaleAxis.fontSize=8.0;
+	set scaleAxis.isShown=false;
+	set scaleAxis.lineWidth=1.0;
+	set scaleAxis.majorTicks=1.0;
+	set scaleAxis.minorTicks=0.5;
+	set scaleAxis.origin=0.0;
+	set scaleAxis.reverseAxis=false;
+	set scaleAxis.showGrid=true;
+	set scaleBar.automaticScale=true;
+	set scaleBar.fontSize=10.0;
+	set scaleBar.isShown=true;
+	set scaleBar.lineWidth=1.0;
+	set scaleBar.scaleRange=0.0;
+	set tipLabels.colorAttribute="User selection";
+	set tipLabels.displayAttribute="Pop_sp";
+	set tipLabels.fontName="Arial";
+	set tipLabels.fontSize=19;
+	set tipLabels.fontStyle=0;
+	set tipLabels.isShown=true;
+	set tipLabels.significantDigits=4;
+	set trees.order=true;
+	set trees.orderType="increasing";
+	set trees.rooting=true;
+	set trees.rootingType="User Selection";
+	set trees.transform=false;
+	set trees.transformType="cladogram";
+end;
+
